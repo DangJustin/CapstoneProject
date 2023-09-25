@@ -1,5 +1,3 @@
 # Development Plan
 
-The folders and files for this folder are as follows:
-
-Describe ...
+This folder contains the development plan for the Housemates project.
