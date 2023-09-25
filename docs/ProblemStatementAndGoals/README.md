@@ -1,5 +1,3 @@
 # Problem Statement
 
-The folders and files for this folder are as follows:
-
-Describe ...
+This folder contains the problem statement and goals for the Housemates project.
