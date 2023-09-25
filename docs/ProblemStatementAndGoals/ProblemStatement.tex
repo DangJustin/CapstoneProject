@@ -23,8 +23,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 9/25/23 & All & Revision 0\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -39,27 +38,86 @@ Date2 & Name(s) & Description of changes\\
 
 \subsection{Problem}
 
-With the ongoing affordable housing shortage in Canada many people have been forced to find roomates in order to have a place to live in. This is especially common at universities like McMaster where its extremely common to have housemates while in student housing. While having roomates may help ease financial pressures it can lead to a lot of stress in dealing with them. These stresses can be things like dealing with splitting household tasks and grocery costs. An application that helps deal with these common stresses in the roomate life would make it more convenient  for the housemates to live together and overall simplify their lives.
+With the ongoing affordable housing shortage in Canada many people have been forced to find roommates in order to have a place to live in. This is especially common at universities like McMaster where its extremely common to have housemates while in student housing. While having roommates may help ease financial pressures it can lead to a lot of stress in dealing with them. These stresses can include things like dealing with splitting household tasks and grocery costs. An application that helps deal with these common stresses in the roommate life would make it more convenient  for the housemates to live together and overall simplify their lives.
+
+% Amidst the persistent affordable housing shortage in Canada, a growing number of individuals are compelled to seek cohabitation arrangements as a means to secure housing. This phenomenon is particularly prevalent in academic settings, such as McMaster University, where the presence of housemates in student housing has become exceedingly commonplace. While the presence of roommates can alleviate financial constraints, it also introduces a range of stressors associated with navigating shared living arrangements. These challenges encompass issues such as the equitable division of household responsibilities and the management of collective grocery expenditures. The development of a dedicated application designed to address these prevalent challenges in the realm of shared living can significantly enhance the convenience and overall quality of life for cohabitating individuals.
 
 \subsection{Inputs and Outputs}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+\subsubsection{Inputs}
+\begin{center}
+\begin{tabular}{|p{4cm}|p{4.5cm}|p{3.5cm}|}
+\hline
+\textbf{Category} & \textbf{Description} & \textbf{Format} \\
+\hline
+Chore Assignments & Details of assigned household tasks and responsibilities. & Task names, frequency, assignees. \\
+\hline
+Bill Information & Details of shared expenses, such as rent, internet, utilities, groceries, etc. & Bill amounts, due dates, responsible users. \\
+\hline
+Messages & Communication between housemates regarding general household matters. & Text messages, notifications. \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Outputs}
+\begin{center}
+\begin{tabular}{|p{4cm}|p{4.5cm}|p{3.5cm}|}
+\hline
+\textbf{Category} & \textbf{Description} & \textbf{Format} \\
+\hline
+Automated Notification for an Event & Automatic alerts and reminders for important events, such as bill due dates, chore deadlines, or house quiet hours. & Notifications, emails, text messages. \\
+\hline
+Report & Summarized information on expenses, chore completion, and any other house details. & PDF or HTML document. \\
+\hline
+\end{tabular}
+\end{center}
 
 \subsection{Stakeholders}
 
 \begin{itemize}
   \item People with housemates: People with housemates are the primary stakeholders of this application. They can use the application to better simplify life with housemates. As such they will have the greatest influence out of the stakeholders on the requirements of the application during the development process.
-  \item Landlords: Landlords would be a secondary stakeholder for the application. Landlords might be interested in using an application like this for their tenants so that they will better be able to communicate with them with respects to household tasks that are required. As such, they might play a minor role on determining the requirements of the applicaiton during the design process.
+  \item Landlords / Property Manager / Housing Association: Landlords would be a secondary stakeholder for the application. Landlords might be interested in using an application like this for their tenants so that they will better be able to communicate with them with respects to household tasks that are required. As such, they might play a minor role on determining the requirements of the application during the design process.
+  \item Families: Families can also benefit from the app to have a centralized place for all household matters. They can distribute chores evenly and keep track of bills. It promotes talking openly and encourages users to be more responsible about household duties and bills.
 \end{itemize}
 
 \subsection{Environment}
 
-The expected environment for this application will  be on mobile devices (e.g. Android/IOS).
+The expected environment for this application will be mobile devices (Android, iOS), providing a user-friendly and intuitive application that is really simple to use. With goals of expanding to web application, so that we can cater to a much diverse user base using computers with Windows, Max or Linux and web browsers such as Chrome, Edge, Firefox, etc. Users would then have the convenience to access the solution/product on any device they want that suits their needs. 
 % \wss{Hardware and software}
 
 \section{Goals}
 
+\begin{center}
+\begin{tabular}{|p{6cm}|p{6cm}|}
+\hline
+\textbf{Goals} & \textbf{Importance}\\
+\hline The application will have a straightforward and user-friendly interface that is simple to use for all users, regardless of technical ability. & This allows first time users to be interested in our product and a good experience with the overall product. \\
+\hline
+The application will simplify household task management through a task management system. & This allows streamlining the allocation of chores which in return will reduce conflicts and misunderstandings between housemates. \\
+\hline
+The application will streamline expense sharing through a cost management system. & This makes it possible for roommates to monitor their expenditure and prevent overspending. Additionally, it encourages each person to make a fair financial contribution. \\
+\hline
+The application will have a scheduling system that will allow for users to schedule quiet hours & This allows users to focus on their work, sleep, or studies without any interruption. \\
+\hline
+The application will have a calendar to see scheduled events & This allows users to coordinate their schedules and help them in managing their time in a better way. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
 \section{Stretch Goals}
+
+\begin{center}
+\begin{tabular}{|p{6cm}|p{6cm}|}
+\hline
+\textbf{Goals} & \textbf{Importance}\\
+\hline
+The finished product will have Google account integration &  The application having google account integration will allow for users to be able to see events scheduled on the app in their Google calendar.\\
+\hline
+Have the final product be available as a web application & Having the final product be available as a web application will allow users with an even wider range of devices being able to use the final product. \\
+\hline
+\end{tabular}
+\end{center}
 
 \end{document}

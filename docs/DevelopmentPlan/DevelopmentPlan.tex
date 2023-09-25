@@ -33,72 +33,93 @@ This document provides the development plan for the Housemates app. The housemat
 
 \section{Team Meeting Plan}
 
+The team will have a weekly progress check (1 hour on length) on either Monday afternoon during tutorial time (2:30 - 4:30 PM) or Friday afternoon (around 4:00 PM). The purpose of these meetings is to discuss what group member has done for the project in the last week. Additional meetings can be scheduled throughout the week if necessary. At the end of each meeting a discussion of what needs to be accomplished before the next meeting will occur. The details of each meeting will be recorded as an issue on GitHub.
+
+
 \section{Team Communication Plan}
+
+The team will primarily communicate through Microsoft Teams group chat. Discussions regarding specifics of documentation or source code may occur on an issue on GitHub. Group members can also be contacted by their McMaster email if necessary. All group members are expected to be readily available on these communication channels.
 
 \section{Team Member Roles}
 
 \subsection*{Justin Dang}
 
 \begin{itemize}
-	\item Developer
+	\item Database Engineer
+    \item Latex Documentation
 \end{itemize}
 
 \subsection*{Harris Hamid}
 
 \begin{itemize}
-	\item Developer
-	\item Team Liason
+	\item Full stack Developer
+	\item Team Liaison
 \end{itemize}
 
 \subsection*{Fady Marcos}
 
 \begin{itemize}
-	\item Developer
+    \item UI Designer
+	\item  Back-end Developer
 \end{itemize}
 
-\subsection*{Riswan Ahsan}
+\subsection*{Rizwan Ahsan}
 
 \begin{itemize}
+    \item Scrum-master
 	\item Developer
 \end{itemize}
 
 \subsection*{Sheikh Afsar}
 
 \begin{itemize}
-	\item Developer
+	\item UX Developer
+    \item Front-end Developer
 \end{itemize}
 
 
 \section{Workflow Plan}
-
-\begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-	\item How will you be managing issues, including template issues, issue
-	classificaiton, etc.?
-\end{itemize}
+    For the duration of the project, our team will adhere to established guidelines to track and manage all of the code and document modifications. We will also leverage GitHub Actions as our CI tool to automatically build, run tests and enforce coding standards within PRs, which determine whether it passes or fails. The workflow is as follows:
+    \begin{itemize}
+        \item Open and describe a GitHub issue
+        \item Create a new branch to work on the feature/bug
+        \item Work on this feature/bug branch
+        \item Commit changes to new branch
+        \item Create a Pull request for changes
+        \item CI pipeline is triggered
+        \item Review and Approve PR if no test failures
+        \item Merge changes with main branch
+        \item Close GitHub issue
+    \end{itemize}
+    
+% \begin{itemize}
+% 	\item How will you be using git, including branches, pull request, etc.?
+% 	\item How will you be managing issues, including template issues, issue
+% 	classificaiton, etc.?
+% \end{itemize}
 
 \section{Proof of Concept Demonstration Plan}
+    This problem boils down to a few goals, one of which is communication through text. The main risk would be whether we are able to communicate with all our housemates on time through the app. Receiving notifications or an alert remains outside the scope for the purpose of POC Demo, we will only be verifying whether text is received to all housemates within the app.
+    We will showcase a user-friendly interface, emphasizing ease of use and efficient navigation within the application. Positive user feedback during the demonstration will indicate that we are on the right track in terms of user experience design.
+    We will also simulate different user scenarios to test the application's scalability. Demonstrating that the system can handle a reasonable number of users without significant performance degradation will be essential to convince ourselves that it can scale effectively
 
-What is the main risk, or risks, for the success of your project?  What will you
-demonstrate during your proof of concept demonstration to convince yourself that
-you will be able to overcome this risk?
+% What is the main risk, or risks, for the success of your project?  What will you
+% demonstrate during your proof of concept demonstration to convince yourself that
+% you will be able to overcome this risk?
 
 \section{Technology}
 
 \begin{itemize}
-\item Specific programming language
-\item Specific linter tool (if appropriate)
-\item Specific unit testing framework
-\item Investigation of code coverage measuring tools
-\item Specific plans for Continuous Integration (CI), or an explanation that CI
-  is not being done
-\item Specific performance measuring tools (like Valgrind), if
-  appropriate
-\item Libraries you will likely be using?
-\item Tools you will likely be using?
+\item Android Studio: Integrated development environment for developing android applictions.
+\item Kotlin: Statically typed, high-level programming language derived from java, typically used for android app development,.
+\item VSCode: Convenient, good quality IDE to be used for front and back end development.
+\item GitHub: To be used for version control, CI, and collaboration.
+
 \end{itemize}
 
 \section{Coding Standard}
+
+The coding standard we will be following will be similar to Java style coding. This means that all variable and function names will be written in CamelCase and will have neat accurate comments describing functionality. 
 
 \section{Project Scheduling}
 
