@@ -3,6 +3,11 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{float}
+\usepackage{rotating}
+\usepackage{pdflscape} 
+\usepackage{tabularray}
+\usepackage{longtable}
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -18,8 +23,8 @@
 
 \date{}
 
-\input{../Comments}
-\input{../Common}
+\input{Comments}
+\input{Common}
 
 \begin{document}
 
@@ -36,9 +41,7 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+Oct 20 2023 & All & Revision 0\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -51,35 +54,183 @@ Date2 & Name(s) & Description of changes\\
 
 \pagenumbering{arabic}
 
-\wss{You are free to modify this template.}
+% \wss{You are free to modify this template.}
 
 \section{Introduction}
 
-\wss{You can include your definition of what a hazard is here.}
+\subsection{Product}
+The housemates app will allow for its users to better communicate with their housemates.  Additionally the app will have a cost management and chore management system to allow for splitting of chores/costs amongst housemates.
 
-\section{Scope and Purpose of Hazard Analysis}
+\subsection{Document Purpose}
+The purpose of this document is to identify any potential hazards that could exist in the housemates application and to provide elimination/mitigation strategies to help reduce these risks to manageable levels.
 
-\section{System Boundaries and Components}
+\subsection{Scope of Hazard Analysis}
+The scope of this hazard analysis is covering all of the subsystems of the housemates application. Each subsystem will have its own safety considerations and hazards. This will be done with an FMEA (Failure Mode and Effect Analysis)
+
+\subsection{Definition of Hazard}
+
+In this document a hazard is defined to be, any feature or property of the housemates application that gives incorrect information to the user or otherwise negatively affects the user experience.
+
+% \wss{You can include your definition of what a hazard is here.}
+
+\section{System Components}
+
+The following sections are descriptions of each of the subsystems that make up the housemates application. 
+
+\subsection{Task Management System}
+The task management system of the housemates application will allow users to split and delegate common household tasks to their housemates.
+
+\subsection{Bill Management System}
+The bill management system of the housemates application will allow users to split bills with their housemates.
+
+\subsection{Scheduling System}
+The scheduling system of the housemates application will allow users to schedule events to coordinate with their housemates.
+
+\subsection{Account System}
+The account system of the housemates application will manage and store user data.
 
 \section{Critical Assumptions}
 
-\wss{These assumptions that are made about the software or system.  You should
-minimize the number of assumptions that remove potential hazards.  For instance,
-you could assume a part will never fail, but it is generally better to include
-this potential failure mode.}
+\begin{itemize}
+    \item The application is running on devices with Android OS
+    \item The devices running the application are in good condition
+\end{itemize}
+
+% \wss{These assumptions that are made about the software or system.  You should
+% minimize the number of assumptions that remove potential hazards.  For instance,
+% you could assume a part will never fail, but it is generally better to include
+% this potential failure mode.}
+
 
 \section{Failure Mode and Effect Analysis}
+\begin{center}
+\setlength\LTleft{-1.5in}
+\setlength\LTright{-1.5in}
+\begin{longtable}{|p{1.5cm}|p{2cm}|p{2cm}|p{3cm}|p{3.5cm}|p{4cm}|p{1cm}|p{1cm}|}
+\caption{Failure Mode and Effect Analysis Table}
+\label{tab:table3}\\
+\hline
+\textbf{Ref} & \textbf{Failure Mode} & \textbf{Subsystems} & \textbf{Causes of Failure} & \textbf{Effects of Failure} & \textbf{Recommended Actions} & \textbf{Req} \\
+\hline
+HAZ-1 & No Internet & All  & User network issues such as weak WiFi signal or not being connected to the internet & a. Users won't be able to access certain features of the application, which can lead to frustration. \newline b. Once users regain internet access, any changes made offline may not sync properly & a. Store data locally on the device to ensure users can access and modify tasks even without an internet connection \newline b. Implement an offline mode that allows users to access certain features of the application locally on their device & IR-1 \newline AR-3 \\ \hline
+HAZ-2 & Malicious or Invalid Input & All & Failure to sanitize user input can open the app to potential security risks like SQL injection or cross-site scripting attacks & a. Malicious actors can inject SQL code into input fields, potentially gaining unauthorized access to the app's database or executing harmful actions \newline b. Incorrectly sanitized input may lead to unintended changes or corruption of data in the database &  a. Use proper escaping functions to neutralize special characters in user input to prevent them from being interpreted as code \newline b. Implement strict input validation processes to ensure that user input is free from malicious code & IR-2 \\ \hline
+HAZ-3 & App Closes Unexpectedly & All & Device loses power & Unsaved data lost & Store unsaved data locally and resume progress after app is opened again & IR-1\\ \hline
+HAZ-4 & Incorrect Task Input & Task Management & Users may accidentally enter incorrect information for tasks, which can lead to inaccurate records or calculations & a. The task management system may contain tasks with incorrect details, leading to confusion about deadlines, priorities, and responsibilities.\newline b. Reports based on inaccurate input can provide misleading insights about task completion & allow users to review and confirm task details before finalizing. This can help catch and correct any mistakes before they become part of the system. & IR-2\\ \hline
+HAZ-5 & Accidental task deletion by user & Task Management & Users in a hurry may not pay close attention to their actions, potentially leading to accidental deletions  & Accidental deletion can result in the permanent loss of important task details & a. Implement a confirmation dialog box that asks users to confirm their intent before permanently deleting a task \newline b. Implement an archiving system that allows users to recover deleted tasks within a certain time frame & IR-2 \newline IR-5 \\ \hline
+HAZ-6 & Users credentials lost & Account & Invalid login credentials \newline Database failure  & User cannot access features of the application & Allow users to reset their credentials & AR-2\\ \hline
+HAZ-7 & Bill Split Incorrectly & Bill Management  & a. Miscalculation from bill management system \newline b. It isn't possible to split the bill evenly (e.g. \$ 300 split 7 ways) & Bill amount isn't split up evenly & a. Check that bill splits are even \newline b. If even split isn't possible give one of the users the remainder & IR-6 \\ \hline
+HAZ-8 & Bill Split doesn't add up  & Bill Management & Miscalculation from Bill Management system & Bill amount from splits doesn't add up to actual bill amount & Check that bill split adds up to actual bill & IR-6\\ \hline
+HAZ-9 & Round-off error &  Bill Management &  If data is stored as a float in the database this will cause a 64-bit round off error especially when dealing with multiple transactions.  & This will cause all transaction amounts to add up and overestimate the actual bill  & When storing bill amount to the database multiply by 100 to convert it to an integer to avoid round-off errors and when retrieving it from the database divide by 100. & IR-2 \newline IR-6 \\ \hline
+HAZ-10 & Access of Information without Authentication & Account & Failure of authentication systems \newline No internet connection  & Users allowed unauthorized access & If user is unauthenticated block access to the application until authentication occurs & AR-1 \newline AR-4 \newline PR-1 \\ \hline
+HAZ-11 & Overload of Server & Account &  Too many client requests & Client requests in the application will take significantly longer to fulfill & a. Have rate limiting to limit any unusually high amounts of traffic  & IR-4 \\ \hline
+HAZ-12 & Schedule Data Lost & Scheduling, Account &  Database failure  & Scheduled events missed & Automatically back up database at regular intervals & IR-3 \\ \hline
+HAZ-13 & Task Data Lost &  Task Management, Account &  Database failure  & Task information lost  & see HAZ-12 & IR-3\\ \hline
 
-\wss{Include your FMEA table here}
+\end{longtable}
+\end{center}
+
+
+
+
+% \begin{table}[H]
+% 	\centering
+%  \caption{Failure Mode and Effect Analysis Table}
+% 	\makebox[\linewidth]{
+% 	\begin{tabular}{|p{2cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+% 		\multicolumn{6}{c}{}\\
+% 		\hline
+% 		\multicolumn{6}{|c|}{\textbf{Failure Mode and Effects Analysis}}\\
+% 		\hline
+% 		\textbf{Design Function} & \textbf{Failure Modes} & \textbf{Causes of Failure} & \textbf{Effects of Failure} & \textbf{Recommended Actions} & \textbf{SR} \\ \hline
+
+% 	  Task Management System & Incorrect input &  Users may accidentally enter incorrect information for tasks, which can lead to inaccurate records or calculations  & a. The task management system may contain tasks with incorrect details, leading to confusion about deadlines, priorities, and responsibilities.\newline
+%       b. Reports based on inaccurate input can provide misleading insights about task completion & Allow users to review and confirm task details before finalizing. This can help catch and correct any mistakes before they become part of the system.
+%  & f \\ \cline{2-6}
+% 		& Invalid/Malicious input & Failure to sanitize user input can open the app to potential security risks like SQL injection or cross-site scripting attacks & a. Malicious actors can inject SQL code into input fields, potentially gaining unauthorized access to the app's database or executing harmful actions \newline
+%         b. Incorrectly sanitized input may lead to unintended changes or corruption of data in the database & a. Use proper escaping functions to neutralize special characters in user input to prevent them from being interpreted as code \newline b. Implement strict input validation processes to ensure that user input is free from malicious code
+%  & f \\ \cline{2-6}
+% 		& No internet connection & User network issues such as weak wifi signal or not being connected to the internet & a. Users won't be able to access or modify their tasks, which can lead to frustration. \newline
+%         b. Once users regain internet access, any changes made offline may not sync properly
+%  & a. Store task data locally on the device to ensure users can access and modify tasks even without an internet connection \newline
+%  b. Implement an offline mode that allows users to access and edit tasks locally on their device
+%  & f \\ \cline{2-6}
+%  & Accidental task deletion by user & Users in a hurry may not pay close attention to their actions, potentially leading to accidental deletions & Accidental deletion can result in the permanent loss of important task details
+%  & a. Implement a confirmation dialog box that asks users to confirm their intent before permanently deleting a task \newline
+% b. Implement an archiving system that allows users to recover deleted tasks within a certain time frame
+%  & f \\
+ 
+%  \hline
+		
+%         Bill Management System & Invalid input & User may enter a character that is not an integer.  & The system will not be able to perform required calculations on the input which can lead to inconsistencies in the system and may propagate in further calculations. & When user attempts to enter an illegal character, inform the user and not allow to add expense until hazard is removed. & f \\ \cline{2-6}
+% 		& Invalid input & f & fr & f. & f \\ \cline{2-6}
+% 		& No internet connection & f & f & f & f \\ \hline
+
+% 	\end{tabular}
+% }
+% \end{table}
+% \begin{table}[H]
+% 	\centering
+%  \caption{Failure Mode and Effect Analysis Table}
+% 	\makebox[\linewidth]{
+% 	\begin{tabular}{|p{2cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+% 		\multicolumn{6}{c}{}\\
+% 		\hline
+% 		\multicolumn{6}{|c|}{\textbf{Failure Mode and Effects Analysis}}\\
+% 		\hline
+% 		\textbf{Design Function} & \textbf{Failure Modes} & \textbf{Causes of Failure} & \textbf{Effects of Failure} & \textbf{Recommended Actions} & \textbf{SR} \\ \hline
+
+%         Scheduling System & Invalid input & a. Database failure \newline b. User inputs incorrect data type in field \newline & User changes will not be updated in the database and changes will not show in the app for current user and other users included in the schedule. & Display clearly what the required input type is of each field and implement validation checks for each input. & f \\ \cline{2-6}
+% 		& No internet connection & a. User device is disconnected from the internet. \newline b. Connection to database not established. & Any changes to the scheduling system will not be updated to the database. & a. Prompt the user's screen saying the device is not currently connected to the internet. \newline b. Temporarily store data locally if database connection cannot be established  & f \\ \hline
+
+%         Account System & Users cannot log into app  &  Invalid login credentials & User cannot access features of the application & Allow users to reset their credentials & f \\ \cline{2-6}
+% 		& Invalid input & f & fr & f. & f \\ \cline{2-6}
+% 		& No internet connection & f & f & f & f \\ \hline
+
+%        General & App Closes Unexpectedly & Device loses power App instability & Unsaved data lost & Store unsaved data locally and resume progress after app is opened again & S-IN1 \\ \hline
+% 	\end{tabular}
+% }
+% \end{table}
+
+
+
+
+% \wss{Include your FMEA table here}
 
 \section{Safety and Security Requirements}
 
-\wss{Newly discovered requirements.  These should also be added to the SRS.  (A
-rationale design process how and why to fake it.)}
+\subsection{Access Requirements}
+AR-1: Users must log in to access the features of the application. \\
+AR-2: Users should be able to access their own user data. \\ 
+AR-3: Users should be able to access the features of the application offline\\
+AR-4: Only system admins should be able to access user data. \\
+
+
+
+\subsection{Integrity Requirements}
+IR-1: The application should store data locally until data can be uploaded. \\
+IR-2: User input should be validated before introduction of data into the database. \\
+IR-3: The database should be backed up daily. \\
+IR-4: Client requests to the server should be rate limited. \\
+IR-5: User deleted data should temporarily be stored. \\
+IR-6: System output should be validated before given to user. \\
+
+\subsection{Privacy Requirements}
+PR-1: Users should not be able to access other users data. 
+
+\subsection{Audit Requirements}
+N/A
+
+\subsection{Immunity Requirements}
+N/A
+
+% \wss{Newly discovered requirements.  These should also be added to the SRS.  (A
+% rationale design process how and why to fake it.)}
 
 \section{Roadmap}
 
-\wss{Which safety requirements will be implemented as part of the capstone timeline?
-Which requirements will be implemented in the future?}
+This hazard analysis has discovered new safety and security requirements from the section above that will be added to the SRS. Most of these requirements will be implemented in the final application (i.e. Revision 1), but some may not be due the time constraints of this project. 
+
+% \wss{Which safety requirements will be implemented as part of the capstone timeline?
+% Which requirements will be implemented in the future?}
 
 \end{document}
