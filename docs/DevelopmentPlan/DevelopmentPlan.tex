@@ -23,6 +23,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 9/25/23 & All & Revision 0\\
+11/1/23 & Justin Dang & Update to POC demo\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -99,9 +100,11 @@ The team will primarily communicate through Microsoft Teams group chat. Discussi
 % \end{itemize}
 
 \section{Proof of Concept Demonstration Plan}
-    This problem boils down to a few goals, one of which is communication through text. The main risk would be whether we are able to communicate with all our housemates on time through the app. Receiving notifications or an alert remains outside the scope for the purpose of POC Demo, we will only be verifying whether text is received to all housemates within the app.
-    We will showcase a user-friendly interface, emphasizing ease of use and efficient navigation within the application. Positive user feedback during the demonstration will indicate that we are on the right track in terms of user experience design.
-    We will also simulate different user scenarios to test the application's scalability. Demonstrating that the system can handle a reasonable number of users without significant performance degradation will be essential to convince ourselves that it can scale effectively
+    One of the main risks in this project is in the client server interactions that are required for the Housemates application. If the client server interactions fail then the Housemates application will not be able to work correctly. Another risk is that we won't be able to create one of the main features that are outlined in the problem statement document. As such for this POC demo we are going to focus on  the bill splitting feature of the Housemates application. In the POC demo we will have two clients interacting with each other through a server to split a bill. This will show both that we can successfully have client server interactions and that one of the major features of the application works.
+    
+    % This problem boils down to a few goals, one of which is communication through text. The main risk would be whether we are able to communicate with all our housemates on time through the app. Receiving notifications or an alert remains outside the scope for the purpose of POC Demo, we will only be verifying whether text is received to all housemates within the app.
+    % We will showcase a user-friendly interface, emphasizing ease of use and efficient navigation within the application. Positive user feedback during the demonstration will indicate that we are on the right track in terms of user experience design.
+    % We will also simulate different user scenarios to test the application's scalability. Demonstrating that the system can handle a reasonable number of users without significant performance degradation will be essential to convince ourselves that it can scale effectively
 
 % What is the main risk, or risks, for the success of your project?  What will you
 % demonstrate during your proof of concept demonstration to convince yourself that
@@ -110,7 +113,7 @@ The team will primarily communicate through Microsoft Teams group chat. Discussi
 \section{Technology}
 
 \begin{itemize}
-\item Android Studio: Integrated development environment for developing android applictions.
+\item Android Studio: Integrated development environment for developing android applications.
 \item Kotlin: Statically typed, high-level programming language derived from java, typically used for android app development,.
 \item VSCode: Convenient, good quality IDE to be used for front and back end development.
 \item GitHub: To be used for version control, CI, and collaboration.
