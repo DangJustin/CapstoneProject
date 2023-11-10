@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('./user');
+const Group = require('./group');
 
 // Create a router instance
 const router = express.Router();
@@ -84,6 +85,47 @@ router.get('/users', async (req, res) => {
     const users = await User.find();
     // Send a response with the list of users as the response body
     res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Endpoint for retrieving all groups
+router.get('/groups', async (req, res) => {
+  try {
+    // Use the User model to find all groups in the database
+    const groups = await Group.find();
+    // Send a response with the list of groups as the response body
+    res.json(groups);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Endpoint for adding user to group
+router.put('/groups', async (req, res) => {
+  try {
+
+    // Request looks like {"group_name":"group name", "user_name":"user name" }
+    const {group_name} = req.body;
+    const {user_name} = req.body;
+    var group = await Group.findOne({name: group_name});
+    var user = await User.findOne({username: user_name});
+
+    // Look if user is already in group, then add user if not in group
+    const in_group = group.users.some(user.equals,user);
+    if (!in_group){
+      group.users.push(user);
+      await group.save();
+    }
+
+    // Set user's group to group
+    user.group = group.name;
+    await user.save();
+
+    // Send json of group
+    res.json(group)
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
