@@ -1,6 +1,8 @@
 // Importing the Mongoose library for MongoDB interaction
 const mongoose = require('mongoose');
 
+const Group = require('./group'); // Import the Group model
+
 // Define the URI for connecting to the MongoDB database.
 // If the process environment variable MONGODB_URI is set, use it; otherwise, use the provided default URI.
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Capstone:RtGwusQvW1dHS8tt@capstone.jy4joer.mongodb.net/?retryWrites=true&w=majority';
@@ -20,8 +22,28 @@ db.on('error', (error) => {
 });
 
 // Event listener for successful database connection
-db.once('open', () => {
+db.once('open', async () => {
   console.log('Connected to MongoDB');
+
+  // Check if initial data exists in the "Group" collection
+  const existingGroups = await Group.find();
+
+  if (existingGroups.length === 0) {
+    // Initial data doesn't exist; insert it
+
+    const initialGroups = [
+      { name: 'Emerson Group' },
+      { name: 'Westdale Group' },
+      { name: 'Norfolk Group' },
+    ];
+
+    try {
+      await Group.create(initialGroups);
+      console.log('Initial groups inserted successfully.');
+    } catch (error) {
+      console.error('Error inserting initial groups:', error);
+    }
+  }
 });
 
 // Export the database connection object for use in other parts of the application

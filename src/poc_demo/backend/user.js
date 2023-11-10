@@ -8,6 +8,14 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  group: {
+    type: String,
+    default: ''
+  },
+  amount: {
+    type: Number,
+    default: 0.0
+  }
 });
 
 // Create a Mongoose model named 'User' using the userSchema
