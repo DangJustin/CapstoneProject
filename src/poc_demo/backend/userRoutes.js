@@ -4,46 +4,59 @@ const User = require('./user');
 // Create a router instance
 const router = express.Router();
 
-router.post('/', async(req,res) => {
+// Handle POST requests to the root endpoint ('/')
+router.post('/', async (req, res) => {
+  
+  // Extract the 'username' from the request body
   const { username } = req.body;
 
-  try{
+  try {
+    // Check if a user with the provided username already exists in the database
     const check = await User.findOne({ username: username });
 
-    if(check){
-        res.json(check);
-    }
-    else{
-        res.json("notexist");
+    // If a user with the given username exists, return the user details
+    if (check) {
+      res.json(check);
+    } else {
+      // If no user with the given username is found, return 'notexist'
+      res.json("notexist");
     }
 
-  }
-  catch(e){
-      res.json("fail");
+  } catch (e) {
+    // If an error occurs during the database query or any other operation, return 'fail'
+    res.json("fail");
   }
 
 });
 
-router.post('/newusers', async(req, res) => {
+// Handle POST requests to the '/newusers' endpoint
+router.post('/newusers', async (req, res) => {
+  
+  // Extract the 'username' from the request body
   const { username } = req.body;
   
   try {
+    // Check if a user with the provided username already exists in the database
     const check = await User.findOne({ username: username });
 
-    if(check){
+    // If a user with the given username already exists, return 'exist'
+    if (check) {
       res.json("exist");
-    }
-    else{
+    } else {
+      // If no user with the given username is found, create a new user
+
       // Create a new user using the User model and the request body
       const user = new User(req.body);
       
-      // Save the user to the database
+      // Save the new user to the database
       await user.save();
 
-      res.json(check);
+      // Return the details of the newly created user
+      res.json(user);
     }
   }
-  catch(e){
+  catch (e) {
+    // If an error occurs during the database query or any other operation, return 'fail'
     res.json("fail");
   }
 });

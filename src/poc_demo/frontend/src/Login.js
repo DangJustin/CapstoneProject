@@ -2,80 +2,80 @@ import React, { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
-
 function Login() {
-
+    // React hook to manage navigation between pages
     const navigate = useNavigate();
 
-    const [username, setUsername]=useState('');
+    // State variables for managing input values and error messages
+    const [username, setUsername] = useState('');
     const [userDoesntExistMessage, setUserDoesntExistMessage] = useState('');
     const [userExistsMessage, setUserExistsMessage] = useState('');
 
-
-    async function handleLoginSubmit(e){
+    // Function to handle form submission for logging in
+    async function handleLoginSubmit(e) {
         e.preventDefault();
 
-        try{
-
-            await axios.post("http://localhost:5000/api/",{
+        try {
+            // Making a POST request to the login endpoint
+            await axios.post("http://localhost:5000/api/", {
                 username
             })
-            .then(res=>{
-                if(typeof res.data === "object"){
+            .then(res => {
+                // If a user object is returned, set the username in local storage and navigate to the '/users' page
+                if (typeof res.data === "object") {
                     localStorage.setItem('username', res.data.username);
                     navigate("/users");
                 }
-                else if(res.data === "notexist"){
+                // If the response indicates that the user doesn't exist, display an error message
+                else if (res.data === "notexist") {
                     setUserDoesntExistMessage("User doesn't exist. Enter correct username or create a new user.");
                 }
             })
-            .catch(e=>{
+            .catch(e => {
                 setUserDoesntExistMessage("User doesn't exist. Enter correct username or create a new user.")
                 console.log(e);
             })
-
         }
-        catch(e){
+        catch(e) {
             console.log(e);
-
         }
-
     }
 
+    // Function to handle form submission for creating a new user
     async function handleNewUserSubmit(e) {
         e.preventDefault();
 
-        try{
-
-            await axios.post("http://localhost:5000/api/newusers",{
+        try {
+            // Making a POST request to the new user creation endpoint
+            await axios.post("http://localhost:5000/api/newusers", {
                 username
             })
-            .then(res=>{
-                if(res.data === "exist") {
+            .then(res => {
+                // If the response indicates that the user already exists, display an error message
+                if (res.data === "exist") {
                     setUserExistsMessage("User already exists.");
                 }
-                else if(typeof res.data === "object") {
+                // If a user object is returned, set the username in local storage and navigate to the '/users' page
+                else if (typeof res.data === "object") {
                     localStorage.setItem('username', username);
                     navigate("/users");
                 }
             })
-            .catch(e=>{
+            .catch(e => {
                 console.log(e);
             })
-
         }
-        catch(e){
+        catch(e) {
             console.log(e);
-
         }
     }
 
-
+    // JSX rendering of the Login component
     return (
         <div className="login">
-
             <h1>Login Page</h1>
 
+            {/* Form for creating a new user */}
             <div>
                 <h2>Create New User</h2>
                 <form onSubmit={handleNewUserSubmit}>
@@ -91,6 +91,7 @@ function Login() {
                 {userExistsMessage && <p>{userExistsMessage}</p>}
             </div>
 
+            {/* Form for logging in with an existing username */}
             <div>
                 <h2>Login with Existing Username</h2>
                 <form action="POST" onSubmit={handleLoginSubmit}>
@@ -102,12 +103,13 @@ function Login() {
                     />
 
                     <input type="submit" value="Submit" />
-
                 </form>
+
                 {userDoesntExistMessage && <p>{userDoesntExistMessage}</p>}
             </div>
         </div>
     )
 }
 
+// Export the Login component as the default export
 export default Login;
