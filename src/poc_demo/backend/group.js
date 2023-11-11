@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./user')
 
 const groupSchema = new mongoose.Schema({
   name: {
@@ -8,7 +9,7 @@ const groupSchema = new mongoose.Schema({
   // Reference to the User model
   users: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'user'
   }]
 });
 

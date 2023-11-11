@@ -120,6 +120,25 @@ router.get('/users/:username/groups', async (req, res) => {
   }
 });
 
+// Endpoint for retrieving all users for a specific group by groupname
+router.get('/groups/:groupname/users', async (req, res) => {
+  const groupname = req.params.groupname;
+  console.log(groupname)
+
+  try {
+    // Use the User model to find the user by username
+    const group = await Group.findOne({name: groupname }).populate('users');
+
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+    
+    res.json(group);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Endpoint for adding user to group
 router.put('/groups', async (req, res) => {
   try {
@@ -137,12 +156,27 @@ router.put('/groups', async (req, res) => {
       await group.save();
     }
 
-    // Set user's group to group
-    user.group = group.name;
-    await user.save();
 
     // Send json of group
     res.json(group)
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Endpoint for emptying group
+router.post('/groups/delete', async (req, res) => {
+  try {
+
+    // Request looks like {"group_name":"group name" }
+    const {group_name} = req.body;
+    console.log(group_name);
+    var group = await Group.findOne({name: group_name});
+    
+    group.users = [];
+    await group.save();
+    res.json(group);
     
   } catch (error) {
     res.status(500).json({ message: error.message });

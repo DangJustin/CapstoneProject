@@ -25,7 +25,15 @@ const UsersList = () => {
   
 
   const handleGroupChange = (event) => {
-    setSelectedGroup(event.target.value);
+    // Fetch Users for Selected Group
+    fetch(`http://localhost:5000/api/groups/${event.target.value}/users`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Received data:', data); // Log the received data
+          setSelectedGroup(data);
+          localStorage.setItem('groupname',data.name);
+        })
+        .catch(error => console.error('Error fetching user groups:', error));
   };
 
   return (
@@ -43,10 +51,25 @@ const UsersList = () => {
       </select>
 
       {/* Render details or perform actions based on the selected group */}
-      {selectedGroup && (
+      {selectedGroup.name && (
         <div>
-          <h3>Details for {selectedGroup}</h3>
-          {/* Add more details or actions based on the selected group */}
+          <h3>Details for {selectedGroup.name}</h3>
+          <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {selectedGroup.users.map((user) => (
+          <tr key={user._id}>
+            <td>{user.username}</td>
+            <td>{user.amount}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
         </div>
       )}
 
