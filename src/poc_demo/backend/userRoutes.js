@@ -102,6 +102,24 @@ router.get('/groups', async (req, res) => {
   }
 });
 
+// Endpoint for retrieving all groups for a specific user by username
+router.get('/users/:username/groups', async (req, res) => {
+  const username = req.params.username;
+
+  try {
+    // Use the User model to find the user by username
+    const user = await User.findOne({ username }).populate('group');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json(user.group);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Endpoint for adding user to group
 router.put('/groups', async (req, res) => {
   try {

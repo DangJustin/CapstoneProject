@@ -8,10 +8,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  group: {
-    type: String,
-    default: ''
-  },
+  group: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Group'
+  }],
   amount: {
     type: Number,
     default: 0.0
