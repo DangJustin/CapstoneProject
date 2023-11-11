@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const UsersList = () => {
   const [groups, setGroups] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem('username');
@@ -47,6 +49,10 @@ const UsersList = () => {
           {/* Add more details or actions based on the selected group */}
         </div>
       )}
+
+      <button style={{ position: 'absolute', bottom: '20px', right: '20px', width: '150px', height: '50px', fontSize: '16px'}} type="button" onClick={() => navigate("/expense")}>
+          Add Expense
+      </button>
     </div>
   );
 };
