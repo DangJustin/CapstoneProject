@@ -31,7 +31,7 @@ const UsersList = () => {
         .then(data => {
           console.log('Received data:', data); // Log the received data
           setSelectedGroup(data);
-          localStorage.setItem('groupname',data.name);
+          localStorage.setItem('groupname',data.name); // Store selected group's name
         })
         .catch(error => console.error('Error fetching user groups:', error));
   };
@@ -50,7 +50,7 @@ const UsersList = () => {
         ))}
       </select>
 
-      {/* Render details or perform actions based on the selected group */}
+      {/* Table of User Details for Selected Group */}
       {selectedGroup.name && (
         <div>
           <h3>Details for {selectedGroup.name}</h3>
@@ -73,6 +73,7 @@ const UsersList = () => {
         </div>
       )}
 
+      {/* Button to navigate to Expense Page */}
       <button style={{ position: 'absolute', bottom: '20px', right: '20px', width: '150px', height: '50px', fontSize: '16px'}} type="button" onClick={() => navigate("/expense")}>
           Add Expense
       </button>
