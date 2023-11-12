@@ -123,7 +123,6 @@ router.get('/users/:username/groups', async (req, res) => {
 // Endpoint for retrieving all users for a specific group by groupname
 router.get('/groups/:groupname/users', async (req, res) => {
   const groupname = req.params.groupname;
-  console.log(groupname)
 
   try {
     // Use the User model to find the user by username
@@ -171,7 +170,6 @@ router.post('/groups/delete', async (req, res) => {
 
     // Request looks like {"group_name":"group name" }
     const {group_name} = req.body;
-    console.log(group_name);
     var group = await Group.findOne({name: group_name});
     
     group.users = [];

@@ -17,7 +17,6 @@ const UsersList = () => {
       fetch(`http://localhost:5000/api/users/${user}/groups`)
         .then(response => response.json())
         .then(data => {
-          console.log('Received data:', data); // Log the received data
           setGroups(data);
         })
         .catch(error => console.error('Error fetching user groups:', error));
@@ -30,7 +29,6 @@ const UsersList = () => {
     fetch(`http://localhost:5000/api/groups/${event.target.value}/users`)
         .then(response => response.json())
         .then(data => {
-          console.log('Received data:', data); // Log the received data
           setSelectedGroup(data);
           localStorage.setItem('groupname',data.name); // Store selected group's name
         })

@@ -16,7 +16,6 @@ const Expense = () => {
       fetch(`http://localhost:5000/api/groups/${groupname}/users`)
         .then(response => response.json())
         .then(data => {
-          console.log('Received group data:', data);
           setSelectedGroup(data);
         })
         .catch(error => console.error('Error fetching group information:', error));
