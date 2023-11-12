@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import './styles/login.css'
 
 function Login() {
     // React hook to manage navigation between pages
@@ -73,7 +74,7 @@ function Login() {
     // JSX rendering of the Login component
     return (
         <div className="login">
-            <h1>Login Page</h1>
+            <h1>Welcome to Housemates!</h1>
 
             {/* Form for creating a new user */}
             <div>
@@ -88,7 +89,7 @@ function Login() {
                     <input type="submit" value="Submit" />
                 </form>
 
-                {userExistsMessage && <p>{userExistsMessage}</p>}
+                {userExistsMessage && <p id="error">{userExistsMessage}</p>}
             </div>
 
             {/* Form for logging in with an existing username */}
@@ -105,7 +106,7 @@ function Login() {
                     <input type="submit" value="Submit" />
                 </form>
 
-                {userDoesntExistMessage && <p>{userDoesntExistMessage}</p>}
+                {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
             </div>
         </div>
     )

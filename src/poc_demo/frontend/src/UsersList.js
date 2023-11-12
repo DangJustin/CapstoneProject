@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import './styles/usersList.css';
 
 const UsersList = () => {
   const [groups, setGroups] = useState([]);
@@ -37,7 +38,7 @@ const UsersList = () => {
   };
 
   return (
-    <div>
+    <div className="usersList">
       <h1>Current user logged in: {loggedInUser}</h1>
       <h3>Select group to view more details</h3>
       <h2>Group List</h2>

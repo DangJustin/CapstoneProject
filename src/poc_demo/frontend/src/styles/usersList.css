@@ -1,0 +1,53 @@
+/* usersList.css */
+  .usersList {
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  select {
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd; /* Light gray border */
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #3498db; /* Blue header background */
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray background for even rows */
+  }
+  
+  tr:hover {
+    background-color: #e0e0e0; /* Lighter gray background on hover */
+  }
+  
+  button {
+    background-color: #3498db; /* Blue button background */
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+  }

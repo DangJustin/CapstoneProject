@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import './styles/expense.css';
 
 const Expense = () => {
   const navigate = useNavigate();
@@ -40,10 +41,10 @@ const Expense = () => {
   };
 
   return (
-    <div>
+    <div className="expense">
       <h2>Expense Form</h2>
       {selectedGroup && (
-        <p>Selected Group: {selectedGroup.name}</p>
+        <p id='group-text'><strong>Selected Group:</strong> {selectedGroup.name}</p>
       )}
       <form onSubmit={handleSubmit}>
         <label>
