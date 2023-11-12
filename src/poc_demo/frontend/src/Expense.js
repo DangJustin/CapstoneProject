@@ -12,7 +12,7 @@ const Expense = () => {
     const groupname = localStorage.getItem('groupname');
 
     if (groupname) {
-      fetch(`http://localhost:5000/api/groups/${groupname}`)
+      fetch(`http://localhost:5000/api/groups/${groupname}/users`)
         .then(response => response.json())
         .then(data => {
           console.log('Received group data:', data);
@@ -27,10 +27,7 @@ const Expense = () => {
 
     try {
       // Make a request to localhost:5000/api with the amount
-      const res = await axios.post('http://localhost:5000/api', { amount, group: selectedGroup });
-
-      // Assuming the server returns a user object
-      const user = res.data.user;
+      const res = await axios.put('http://localhost:5000/api/groups/bill_split', { amount: amount, group: selectedGroup });
 
       // Set the amount in local storage
       localStorage.setItem('amount', amount);

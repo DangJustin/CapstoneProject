@@ -183,5 +183,32 @@ router.post('/groups/delete', async (req, res) => {
   }
 });
 
+// Endpoint for splitting bill
+router.put('/groups/bill_split', async (req, res) => {
+  try {
+
+      // Get amount and group name from request
+      const {amount} = req.body;
+      const {group} = req.body;
+
+      // Get fixed amount to split amongst group
+      const amount_add = Number((amount/group.users.length).toFixed(2));
+      
+      // Update user amount + split amount
+      for (let i = 0; i < group.users.length; i++){
+        user = await User.findOne({_id: group.users[i]._id})
+        user.amount = user.amount + amount_add;
+        await user.save();
+      }
+
+      // Send back amount added for everybody;
+      res.json(amount_add);
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 module.exports = router;
