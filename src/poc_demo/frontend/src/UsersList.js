@@ -57,14 +57,14 @@ const UsersList = () => {
       <thead>
         <tr>
           <th>Name</th>
-          <th>Amount</th>
+          <th>Amount Owed</th>
         </tr>
       </thead>
       <tbody>
         {selectedGroup.users.map((user) => (
           <tr key={user._id}>
             <td>{user.username}</td>
-            <td>{user.amount}</td>
+            <td>${(user.amount).toFixed(2)}</td>
           </tr>
         ))}
       </tbody>
