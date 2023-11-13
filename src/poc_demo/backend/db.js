@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 
 const Group = require('./group'); // Import the Group model
+const User = require('./user'); // Import the User model
 
 // Define the URI for connecting to the MongoDB database.
 // If the process environment variable MONGODB_URI is set, use it; otherwise, use the provided default URI.
@@ -44,6 +45,17 @@ db.once('open', async () => {
       console.error('Error inserting initial groups:', error);
     }
   }
+
+  // Reset User Amounts to 0
+  const RESET_AMOUNTS = 0;
+  if (RESET_AMOUNTS){
+    try {
+      await User.updateMany({},{amount: 0});
+      console.log("Reset User Amounts to 0.")
+    } catch (error){
+      console.error('Error resetting amounts:', error);
+    }
+  } 
 });
 
 // Export the database connection object for use in other parts of the application
