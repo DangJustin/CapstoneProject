@@ -47,7 +47,7 @@ const Expense = () => {
       )}
       <form onSubmit={handleSubmit}>
         <label>
-          Amount: 
+          Amount:
           <input
             type="number"
             value={amount}

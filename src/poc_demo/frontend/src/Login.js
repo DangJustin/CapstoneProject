@@ -21,23 +21,23 @@ function Login() {
             await axios.post("http://localhost:5000/api/", {
                 username
             })
-            .then(res => {
-                // If a user object is returned, set the username in local storage and navigate to the '/users' page
-                if (typeof res.data === "object") {
-                    localStorage.setItem('username', res.data.username);
-                    navigate("/users");
-                }
-                // If the response indicates that the user doesn't exist, display an error message
-                else if (res.data === "notexist") {
-                    setUserDoesntExistMessage("User doesn't exist. Enter correct username or create a new user.");
-                }
-            })
-            .catch(e => {
-                setUserDoesntExistMessage("User doesn't exist. Enter correct username or create a new user.")
-                console.log(e);
-            })
+                .then(res => {
+                    // If a user object is returned, set the username in local storage and navigate to the '/users' page
+                    if (typeof res.data === "object") {
+                        localStorage.setItem('username', res.data.username);
+                        navigate("/users");
+                    }
+                    // If the response indicates that the user doesn't exist, display an error message
+                    else if (res.data === "notexist") {
+                        setUserDoesntExistMessage("User doesn't exist. Enter correct username or create a new user.");
+                    }
+                })
+                .catch(e => {
+                    setUserDoesntExistMessage("User doesn't exist. Enter correct username or create a new user.")
+                    console.log(e);
+                })
         }
-        catch(e) {
+        catch (e) {
             console.log(e);
         }
     }
@@ -51,22 +51,22 @@ function Login() {
             await axios.post("http://localhost:5000/api/newusers", {
                 username
             })
-            .then(res => {
-                // If the response indicates that the user already exists, display an error message
-                if (res.data === "exist") {
-                    setUserExistsMessage("User already exists.");
-                }
-                // If a user object is returned, set the username in local storage and navigate to the '/users' page
-                else if (typeof res.data === "object") {
-                    localStorage.setItem('username', username);
-                    navigate("/users");
-                }
-            })
-            .catch(e => {
-                console.log(e);
-            })
+                .then(res => {
+                    // If the response indicates that the user already exists, display an error message
+                    if (res.data === "exist") {
+                        setUserExistsMessage("User already exists.");
+                    }
+                    // If a user object is returned, set the username in local storage and navigate to the '/users' page
+                    else if (typeof res.data === "object") {
+                        localStorage.setItem('username', username);
+                        navigate("/users");
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                })
         }
-        catch(e) {
+        catch (e) {
             console.log(e);
         }
     }
@@ -96,11 +96,11 @@ function Login() {
             <div>
                 <h2>Login with Existing Username</h2>
                 <form action="POST" onSubmit={handleLoginSubmit}>
-                    <input 
-                        type="text" 
-                        onChange={(e) => { setUsername(e.target.value) }} 
+                    <input
+                        type="text"
+                        onChange={(e) => { setUsername(e.target.value) }}
                         placeholder="Enter Existing Username"
-                        required 
+                        required
                     />
 
                     <input type="submit" value="Submit" />
