@@ -16,8 +16,8 @@
     urlcolor=blue
 }
 
-\input{../../Comments}
-\input{../../Common}
+\input{Comments}
+\input{Common}
 
 \newcounter{acnum}
 \newcommand{\actheacnum}{AC\theacnum}
@@ -46,8 +46,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+January 17, 2024 & 1.0 & Revision 0\\
 \bottomrule
 \end{tabularx}
 
@@ -70,11 +69,9 @@ This section records information for easy reference.
   MG & Module Guide \\
   OS & Operating System \\
   R & Requirement\\
-  SC & Scientific Computing \\
   SRS & Software Requirements Specification\\
-  \progname & Explanation of program name\\
+  Housemates & Explanation of program name\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
   \bottomrule
 \end{tabular}\\
 
@@ -139,7 +136,7 @@ modules. Section \ref{SecMD} gives a detailed description of the
 modules. Section \ref{SecTM} includes two traceability matrices. One checks
 the completeness of the design against the requirements provided in the SRS. The
 other shows the relation between anticipated changes and the modules. Section
-\ref{SecUse} describes the use relation between modules.
+\ref{SecUse} describes the use relation between modules.  Section \ref{Timeline} describes the timeline to complete revision 0 of \progname{}. Section \ref{Reflection} contains the reflection for the design stage of \progname{}.
 
 \section{Anticipated and Unlikely Changes} \label{SecChange}
 
@@ -159,24 +156,24 @@ change.
 \begin{description}
 \item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
   hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the initial input data.
+\item[\refstepcounter{acnum} \actheacnum \label{acAccount}:] The algorithms used for account verification.
+\item[\refstepcounter{acnum} \actheacnum \label{acBillManagement}:] The algorithms used to determine how bills are split between users.
+\item[\refstepcounter{acnum} \actheacnum \label{acTaskManagement}:] The algorithms used in the task management system.
+\item[\refstepcounter{acnum} \actheacnum \label{acScheduling}:] The algorithms used in the scheduling system.
 \end{description}
 
 \subsection{Unlikely Changes} \label{SecUchange}
 
-The module design should be as general as possible. However, a general system is
-more complex. Sometimes this complexity is not necessary. Fixing some design
-decisions at the system architecture stage can simplify the software design. If
-these decision should later need to be changed, then many parts of the design
-will potentially need to be modified. Hence, it is not intended that these
-decisions will be changed.
+The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design
+decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.
 
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
   (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucReact}:] Changes in the use of the interface design module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucDatabase}:] Changes in the use of the database  module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucNetwork}:] Changes in the network libraries used.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -188,7 +185,14 @@ actually be implemented.
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
-\item ...
+\item [\refstepcounter{mnum} \mthemnum \label{mT}:] Task Management Module
+\item [\refstepcounter{mnum} \mthemnum \label{mB}:] Bill Management Module
+\item [\refstepcounter{mnum} \mthemnum \label{mS}:] Scheduling Module
+\item [\refstepcounter{mnum} \mthemnum \label{mA}:] Account Module
+\item [\refstepcounter{mnum} \mthemnum \label{mI}:] Interface Design Module
+\item [\refstepcounter{mnum} \mthemnum \label{mC}:] Cryptography Module
+\item [\refstepcounter{mnum} \mthemnum \label{mD}:] Database Interface Module
+\item [\refstepcounter{mnum} \mthemnum \label{mN}:] Network Interface Module
 \end{description}
 
 
@@ -202,19 +206,19 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\ 
-& ?\\
+\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} 
+& Task Management Module\\
+& Bill Management Module\\
+& Scheduling Module\\
+& Account Module\\
+& Interface Design Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {?}\\
-& ?\\
-& ?\\
+\multirow{3}{0.3\textwidth}{Software Decision Module}
+& Cryptography Module\\
+& Database Interface Module\\
+& Database Module\\
+& Network Interface Module\\
 \bottomrule
 
 \end{tabular}
@@ -267,18 +271,53 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Format Module (\mref{mInput})}
+
+\subsubsection{Task Management Module (\mref{mT})}
 
 \begin{description}
-\item[Secrets:]The format and structure of the input data.
-\item[Services:]Converts the input data into the data structure used by the
-  input parameters module.
-\item[Implemented By:] [Your Program Name Here]
-\item[Type of Module:] [Record, Library, Abstract Object, or Abstract Data Type]
-  [Information to include for leaf modules in the decomposition by secrets tree.]
+\item[Secrets:]The format and structure of the input data. The algorithms used for the task management functionality.
+\item[Services:] Provides the task management functionality of the application. Converts the input data into the data structure used by the database interface module. 
+\item[Implemented By:] \progname{}
+\item[Type of Module:] Library
 \end{description}
 
-\subsubsection{Etc.}
+
+\subsubsection{Bill Management Module (\mref{mB})}
+
+\begin{description}
+\item[Secrets:]The format and structure of the input data. The algorithms used for the bill splitting functionality.
+\item[Services:] Provides the bill management and bill splitting functionality of the application. Converts the input data into the data structure used by the database interface module. 
+\item[Implemented By:] \progname{}
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Scheduling Module (\mref{mS})}
+
+\begin{description}
+\item[Secrets:] The format and structure of the input data. The algorithms used for the scheduling functionality.
+\item[Services:] Provides the scheduling functionality of the application. Converts the input data into the data structure used by the database interface module. 
+\item[Implemented By:] \progname{}
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Account Module (\mref{mA})}
+
+\begin{description}
+\item[Secrets:] The format and structure of the input data. The algorithms used for the account verification.
+\item[Services:] Provides the account functionality of the application. Converts the input data into the data structure used by the database interface module. 
+\item[Implemented By:] \progname{}
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Interface Design Module (\mref{mI})}
+\begin{description}
+\item[Secrets:] The specific algorithms used in the user interface.
+\item[Services:] The user interface of the application.
+  % Changes in these modules are more likely to be motivated by a desire to
+  % improve performance than by externally imposed changes.
+\item[Implemented By:]  React, \progname{}
+\end{description}
+
 
 
 \subsection{Software Decision Module}
@@ -294,12 +333,36 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{Cryptography Module (\mref{mC})}
+\begin{description}
+\item[Secrets:] The specific details of the cryptographic algorithms.
+\item[Services:] Cryptographic algorithms used in the application. 
+  % Changes in these modules are more likely to be motivated by a desire to
+  % improve performance than by externally imposed changes.
+\item[Implemented By:] Crypto (node.js)
+\end{description}
+
+\subsubsection{Database Interface Module (\mref{mD})}
+\begin{description}
+\item[Secrets:] The specific details of connecting to database.
+\item[Services:] Object Modelling, Connecting to database. 
+  % Changes in these modules are more likely to be motivated by a desire to
+  % improve performance than by externally imposed changes.
+\item[Implemented By:] Mongoose, \progname{}
+\end{description}
+
+\subsubsection{Network Interface Module (\mref{mN})}
+\begin{description}
+\item[Secrets:] The specific details of implementing RESTful API.
+\item[Services:] Allows for creation of RESTful API to use in application and connecting to that API. 
+  % Changes in these modules are more likely to be motivated by a desire to
+  % improve performance than by externally imposed changes.
+\item[Implemented By:] Axios, Express
+\end{description}
 
 \section{Traceability Matrix} \label{SecTM}
 
-This section shows two traceability matrices: between the modules and the
-requirements and between the modules and the anticipated changes.
+This section shows two traceability matrices: between the modules and the requirements as seen in \citep{SRS} and between the modules and the anticipated changes.
 
 % the table should use mref, the requirements should be named, use something
 % like fref
@@ -309,17 +372,23 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+TM1-5 & \mref{mT}\\
+BM1-7 & \mref{mB}\\
+SS1-3 & \mref{mS}\\
+AS1-5 & \mref{mA}\\
+LF-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
+UH-E1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
+UH-P1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
+UH-L1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
+UH-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
+P-SL1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}, \mref{mC}, \mref{mD}, \mref{mN}\\
+P-PA1 & \mref{mB}\\
+P-RFT1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}, \mref{mN}\\
+P-C1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}, \mref{mN}\\
+OE-PE1 & \mref{mHH}\\
+S-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mC}\\
+S-IN1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}, \mref{mC}\\
+S-P1 & \mref{mI}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -333,17 +402,11 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
-\acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
-\acref{acPlot} & \mref{mPlot}\\
+\acref{acInput} & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+\acref{acAccount} & \mref{mA}\\
+\acref{acBillManagement} & \mref{mB}\\
+\acref{acTaskManagement} & \mref{mT}\\
+\acref{acScheduling} & \mref{mS}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -353,28 +416,79 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \section{Use Hierarchy Between Modules} \label{SecUse}
 
 In this section, the uses hierarchy between modules is
-provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
-correct execution of B may be necessary for A to complete the task described in
-its specification. That is, A {\em uses} B if there exist situations in which
-the correct functioning of A depends upon the availability of a correct
-implementation of B.  Figure \ref{FigUH} illustrates the use relation between
-the modules. It can be seen that the graph is a directed acyclic graph
-(DAG). Each level of the hierarchy offers a testable and usable subset of the
-system, and modules in the higher level of the hierarchy are essentially simpler
+provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A {\em uses} B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B.  Figure \ref{FigUH} illustrates the use relation between the modules. It can be seen that the graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler
 because they use modules from the lower levels.
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
 
-%\section*{References}
 
-\bibliographystyle {plainnat}
-\bibliography{../../../refs/References}
+\section{Timeline for Revision 0} \label{Timeline}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|>{\raggedright}p{0.2\textwidth}|p{0.4\textwidth}|p{0.125\textwidth}|p{0.2\textwidth}|}
+    \hline
+    \textbf{Modules} & \textbf{Rev 0 Implementation Tasks} & \textbf{Deadline} & \textbf{Team Members Responsible}\\
+    \hline
+     Hardware-Hiding Module & Provided by OS & N/A & N/A\\
+    \hline
+     Task Management Module & Implement all the functions included in the module & February 4, 2024 & Justin, Harris\\
+    \hline
+    Bill Management Module & Implement all the functions included in the module & February 4, 2024 & Harris, Fardeen\\
+    \hline
+    Scheduling Module & Implement all the functions included in the module & February 4, 2024 & Rizwan, Fady\\
+    \hline
+    Account Module & Implement all the functions included in the module & February 1, 2024 & Fardeen, Rizwan\\
+    \hline
+    Interface Design Module & Implement all the functions included in the module & February 4, 2024 & Fady, Justin\\
+    \hline
+    Database Interface  Module & Set up MongoDB Schema and Mongoose objects & February 1, 2024 & Fardeen, Rizwan\\
+    \hline
+    Testing and Verification & Unit testing of functions in modules & February 6, 2024 & Everyone\\
+    \hline
+     Network Interface Module & Set up API Routes as required & February 4, 2024 & Everyone\\
+    \hline
+     Cryptography Module & Provided by external libraries & N/A & N/A\\
+    \hline
+    \end{tabular}
+    \caption{Timeline}
+    \label{tab:timeline}
+\end{table}
+
+Though team members are designated to specific modules and tasks, it's crucial to understand that this doesn't create rigid boundaries. The assignments highlight primary responsibilities and leadership roles in developing particular components. While certain individuals lead the charge for specific modules, all team members actively contribute, albeit with varying degrees of impact. The designated leads play a central role in shaping the direction of development for their respective areas, encouraging a collaborative approach within the team.
+
+
+\section{Reflection} \label{Reflection}
+
+The information in this section will be used to evaluate the team members on the graduate attribute of Problem Analysis and Design.  Please answer the following questions:
+
+\begin{enumerate}
+  \item What are the limitations of your solution?  Put another way, given unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)
+  \\
+  \\
+  The main limitations of the Housemates application right now is the lack of integration that Housemates has with other software at the current moment. For example, the scheduling feature of the Housemates application could be integrated with popular calendar services like Google calendar. With unlimited resources the Housemates application would have these types of integrations with other software, which would make it more useful to our stakeholders.
+  \\
+  \\
+  \item Give a brief overview of other design solutions you considered.  What are the benefits and tradeoffs of those other designs compared with the chosen design?  From all the potential options, why did you select documented design? (LO\_Explores)
+  \\
+  \\
+  The first design solution that we considered for this Housemates application was creating a native mobile version of the application using Kotlin. This would have the advantage of having better performance for users on mobile devices as well as having a more adaptable UI for different mobile devices. The main reason that we went with a web app using React is that it allows stakeholders to access the Housemates application on a variety of different devices (desktop and mobile). Additionally, we already have familiarity with creating webapps, which means that we can focus more on specifics of Housemates rather than learning Kotlin.
+
+  \end{enumerate}
 
 \newpage{}
+
+% \section*{References}
+
+\bibliographystyle {plainnat}
+\bibliography{MG.bib}
+
+
+
 
 \end{document}
