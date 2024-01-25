@@ -4,16 +4,23 @@ import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const goToTaskManagement = () => {
+  const goToLogin = () => {
     navigate('/page1');
   };
-
-  const goToScheduling = () => {
+  const goToAccount = () => {
     navigate('/page2');
   };
 
-  const goToBillManagement = () => {
+  const goToTaskManagement = () => {
     navigate('/page3');
+  };
+
+  const goToScheduling = () => {
+    navigate('/page4');
+  };
+
+  const goToBillManagement = () => {
+    navigate('/page5');
   };
 
   return (
@@ -21,6 +28,10 @@ const HomePage = () => {
       <h2>Home Page</h2>
       
       {/* Use navigate to go to different pages */}
+      <button onClick={goToLogin}>Go to Login</button>
+      <br />
+      <button onClick={goToAccount}>Go to Account</button>
+      <br />
       <button onClick={goToTaskManagement}>Go to Task Management</button>
       <br />
       <button onClick={goToScheduling}>Go to Scheduling</button>
