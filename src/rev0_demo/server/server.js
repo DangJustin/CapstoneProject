@@ -1,14 +1,13 @@
-const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const userRoutes = require('./routes/indexRoutes');
 
-const PORT = process.env.PORT || 5000
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://housemates783:Capstone100@housematesapp.jecbapz.mongodb.net/?retryWrites=true&w=majority'
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://housemates783:Capstone100@housematesapp.jecbapz.mongodb.net/?retryWrites=true&w=majority';
 
-// Example of api request and response. TODO: Delete later
-app.get("/api", (req, res) => {
-    res.json({ "users": ["userOne"]})
-})
+app.use(express.json());
+app.use('/api', userRoutes);
 
 // Connect to DB
 mongoose.connect(MONGO_URI)
