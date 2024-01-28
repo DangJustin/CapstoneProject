@@ -2,11 +2,9 @@ const express = require('express');
 
 // Create a router instance
 const router = express.Router();
+const accountController = require('../controllers/accountController')
 
 
-router.get('/', async (req, res) => {
-  console.log("Account");
-  res.status(200).send("This is the account");
-});
+router.get('/', accountController.index);
 
 module.exports = router;

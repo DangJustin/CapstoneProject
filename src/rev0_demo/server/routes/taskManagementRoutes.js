@@ -2,11 +2,9 @@ const express = require('express');
 
 // Create a router instance
 const router = express.Router();
+const taskManagementController = require('../controllers/taskManagementController');
 
 
-router.get('/', async (req, res) => {
-  console.log("Task Management");
-  res.status(200).send("This is the task management");
-});
+router.get('/', taskManagementController.index);
 
 module.exports = router;

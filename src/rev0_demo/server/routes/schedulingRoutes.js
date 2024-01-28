@@ -2,11 +2,9 @@ const express = require('express');
 
 // Create a router instance
 const router = express.Router();
+const schedulingController = require('../controllers/schedulingController');
 
 
-router.get('/', async (req, res) => {
-  console.log("Scheduling");
-  res.status(200).send("This is the scheduling");
-});
+router.get('/', schedulingController.index);
 
 module.exports = router;
