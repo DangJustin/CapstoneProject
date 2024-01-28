@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 // import axios from "axios"
 import { useNavigate } from "react-router-dom"
-import { auth } from "./firebase"
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth"
-import AuthDetails from "./AuthDetails"
+import { auth } from "../firebase"
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth"
+import AuthDetails from "../AuthDetails"
 
 
 function Login() {
@@ -38,6 +38,15 @@ function Login() {
         console.log(error);
       })
   }
+
+  // Function to handle form submission for signing out user
+  async function handleLogout(e) {
+    e.preventDefault();
+    auth.signOut().then(() => {
+      console.log("success");
+    }).catch((error)=>
+    console.log(error));
+}
 
 
   return (
@@ -87,6 +96,7 @@ function Login() {
 
         {userExistsMessage && <p id="error">{userExistsMessage}</p>}
     </div>
+    <button onClick={handleLogout}>Sign Out</button>
     <AuthDetails />
 </div>
   );

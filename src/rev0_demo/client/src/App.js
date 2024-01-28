@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './Homepage';
-import Login from './Login';
-import Account from './Account';
-import TaskManagement from './TaskManagement';
-import Scheduling from './Scheduling';
-import BillManagement from './BillManagement';
+import Login from './account/Login';
+import Account from './account/Account';
+import TaskManagement from './taskManagement/TaskManagement';
+import Scheduling from './scheduling/Scheduling';
+import BillManagement from './billManagement/BillManagement';
 
 {/* Will change links later appropriately */}
 const App = () => {
@@ -13,11 +13,11 @@ const App = () => {
     <Router>
       <Routes>
         <Route exact path="/" element={<HomePage/>} /> {/* Home page */}
-        <Route path="/page1" element={<Login/>} /> {/* Task Management work */}
-        <Route path="/page2" element={<Account/>} /> {/* Scheduling work */}
-        <Route path="/page3" element={<TaskManagement/>} /> {/* Task Management work */}
-        <Route path="/page4" element={<Scheduling/>} /> {/* Scheduling work */}
-        <Route path="/page5" element={<BillManagement/>} /> {/* Bill Management work */}
+        <Route path="account" element={<Account/>} /> {/* Account work */}
+        <Route path="account/login" element={<Login/>} /> {/* Task Management work */}
+        <Route path="taskManagement" element={<TaskManagement/>}/> {/* Task Management Work*/}
+        <Route path="scheduling" element={<Scheduling/>} /> {/* Scheduling work */}
+        <Route path="billManagement" element={<BillManagement/>} /> {/* Bill Management work */}
       </Routes>
     </Router>
   );

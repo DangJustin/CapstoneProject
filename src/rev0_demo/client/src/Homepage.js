@@ -5,22 +5,22 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const goToLogin = () => {
-    navigate('/page1');
+    navigate('/account/login');
   };
   const goToAccount = () => {
-    navigate('/page2');
+    navigate('/account');
   };
 
   const goToTaskManagement = () => {
-    navigate('/page3');
+    navigate('/taskManagement');
   };
 
   const goToScheduling = () => {
-    navigate('/page4');
+    navigate('/scheduling');
   };
 
   const goToBillManagement = () => {
-    navigate('/page5');
+    navigate('/billManagement');
   };
 
   return (
