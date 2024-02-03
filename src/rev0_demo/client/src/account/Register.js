@@ -13,7 +13,11 @@ function Login() {
   // State variables for managing input values and error messages
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userDoesntExistMessage, setUserDoesntExistMessage] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [phone, setPhone] = useState('');
+
   const [userExistsMessage, setUserExistsMessage] = useState('');
 
   // Function to handle form submission for logging in
@@ -28,17 +32,7 @@ function Login() {
 
   }
 
-    // Function to handle form submission for logging in
-    async function handleForgotPassword(e) {
-      e.preventDefault();
-    }
-
-    const handleRegister = () => {
-      navigate('/account/register');
-    };
-
   // Function to handle form submission for creating a new user
-  // MOVE to REGISTER MODULE
   async function handleNewUserSubmit(e) {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
@@ -64,13 +58,15 @@ function Login() {
       <h1>Welcome to Housemates!</h1>
 
       {/* Form for logging in with an existing username */}
+
+      {/* Form for creating a new user */}
       <div>
-        <h2>Login with Existing User</h2>
-        <form action="POST" onSubmit={handleLoginSubmit}>
+        <h2>Create New User</h2>
+        <form onSubmit={handleNewUserSubmit}>
           <div>
             <input
               type="text"
-              onChange={(e) => { setEmail(e.target.value) }}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter Your Email"
               required
             />
@@ -78,32 +74,52 @@ function Login() {
           <div>
             <input
               type="text"
-              onChange={(e) => { setPassword(e.target.value) }}
-              placeholder="Enter Your Password"
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter New Password"
               required
             />
           </div>
-
           <div>
-                    <button type="button" onClick={handleForgotPassword}>
-                        Forgot Password?
-                    </button>
-                </div>
-          <input type="submit" value="Login" />
+            <input
+              type="text"
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Choose A Username"
+              required
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              onChange={(e) => setFirstname(e.target.value)}
+              placeholder="Enter Your First Name"
+              required
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              onChange={(e) => setLastname(e.target.value)}
+              placeholder="Enter Your Last Name"
+              required
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Enter Your Phone Number"
+              required
+            />
+          </div>
+          <input type="submit" value="Submit" />
         </form>
 
-        {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
+        <div>
+          {userExistsMessage && <p id="error">{userExistsMessage}</p>}
+        </div>
       </div>
 
-      <button onClick={handleLogout}>Sign Out</button>
-      <div className="register-container">
-  <button onClick={handleRegister} className="register-button">
-    New User? Register
-  </button>
-</div>
-
       <AuthDetails />
-      
     </div>
   );
 }
