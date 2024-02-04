@@ -2,7 +2,7 @@ export function getTask(taskID) {
     // TODO
 }
 
-export function getTasks(userID){
+export function getUserTasks(userID){
     // TODO
 }
 

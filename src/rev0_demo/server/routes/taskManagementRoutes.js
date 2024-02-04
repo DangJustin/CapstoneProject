@@ -7,7 +7,7 @@ const taskManagementController = require('../controllers/taskManagementControlle
 
 router.get('/', taskManagementController.index);
 router.post('/addTask',taskManagementController.addTask)
-router.get('/tasks',taskManagementController.getTasks);
+router.get('/tasks',taskManagementController.getUserTasks);
 router.get('/tasks/task/:id',taskManagementController.getTask);
 router.put('/tasks/task/:id',taskManagementController.editTask);
 router.put('/tasks/task/:id/complete',taskManagementController.completeTask);

@@ -9,7 +9,7 @@ exports.addTask = async (req, res, next) => {
   //TODO
 }
 
-exports.getTasks = async (req, res, next) => {
+exports.getUserTasks = async (req, res, next) => {
   console.log("Task Management getTasks");
   res.status(200).send("This is the getTasks for the Task Management module");
   //TODO
