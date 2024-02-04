@@ -1,12 +1,14 @@
 import React, { useState } from "react"
 // import axios from "axios"
+import axios from 'axios';
+
 import { useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import AuthDetails from "../AuthDetails"
 
 
-function Login() {
+function Register() {
   // React hook to manage navigation between pages
   const navigate = useNavigate();
 
@@ -20,26 +22,41 @@ function Login() {
 
   const [userExistsMessage, setUserExistsMessage] = useState('');
 
-  // Function to handle form submission for logging in
-  async function handleLoginSubmit(e) {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        console.log(userCredentials);
-      }).catch((error) => {
-        console.log(error);
-      })
-
-  }
-
   // Function to handle form submission for creating a new user
   async function handleNewUserSubmit(e) {
     e.preventDefault();
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        console.log(userCredentials);
+        console.log(userCredentials.user.uid);
+        // axios post email, uid, username first and last name and phone
+        const userData = {
+          "userID": userCredentials.user.uid,
+          "email": email,
+          "username": username,
+          "firstname": firstname,
+          "lastname": lastname,
+          "phone": phone,
+          "amount": 0.0
+        };
+        const tnp = 0.0
+        const tmp = (userCredentials.user.uid)
+        console.log(userData.userID)
+        console.log(typeof userData.userID)
+
+
+        axios.post('http://localhost:5000/api/account', userData )
+        .then(response => {
+          // Handle the response from your server here
+          console.log('User added to the database', response.data);
+        })
+        .catch(error => {
+          // Handle any errors from your server here
+          console.error('Error adding user to the database', error);
+        });
       }).catch((error) => {
         console.log(error);
+
       })
   }
 
@@ -124,4 +141,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

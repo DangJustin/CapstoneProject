@@ -17,7 +17,7 @@ router.use((req, res, next) => {
 })
 
 router.use('/taskManagement',taskManagementRoutes);
-router.use('/api/account',accountRoutes);
+router.use('/account',accountRoutes);
 router.use('/billManagement',billManagementRoutes);
 router.use('/scheduling',schedulingRoutes);
 
