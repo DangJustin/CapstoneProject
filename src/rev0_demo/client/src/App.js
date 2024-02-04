@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './Homepage';
 import Login from './account/Login';
+import Register from './account/Register';
 import Account from './account/Account';
 import TaskManagement from './taskManagement/TaskManagement';
 import AddTask from './taskManagement/AddTask';
@@ -18,6 +19,7 @@ const App = () => {
         <Route exact path="/" element={<HomePage/>} /> {/* Home page */}
         <Route path="account" element={<Account/>} /> {/* Account work */}
         <Route path="account/login" element={<Login/>} /> {/* Task Management work */}
+        <Route path="account/register" element={<Register/>} />
         <Route path="taskManagement" element={<TaskManagement/>}/> {/* Task Management Work*/}
         <Route path="taskManagement/addTask" element={<AddTask/>}/> {/*Add Task Page*/}
         <Route path="taskManagement/tasks" element={<Tasks/>}/> {/*View Tasks Page*/}
