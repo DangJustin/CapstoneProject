@@ -1,26 +1,34 @@
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
-  TaskID: {
+  taskID: {
     type: Number,
     required: true,
     unique: true,
   },
-  Taskname: {
+  taskname: {
     type: String,
     required: true,
   },
-  GroupID: {
-    type: Number,
+  description: {
+    type: String,
+  },
+  groupID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Group',
     required: true,
   },
-  UserID: {
-    type: Number,
-    required: true,
-  },
-  Completed: {
+  completed: {
     type: Boolean,
     default: false,
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now,
+  },
+  deadlineDate: {
+    type: Date,
+    required: true,
   },
 });
 
