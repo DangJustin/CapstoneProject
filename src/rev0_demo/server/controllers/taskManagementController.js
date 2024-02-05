@@ -1,3 +1,5 @@
+const taskManagementService = require('../services/taskManagementService');
+
 exports.index = async (req, res, next) => {
     console.log("Task Management index");
     res.status(200).send("This is the index for the Task Management module");
@@ -5,9 +7,19 @@ exports.index = async (req, res, next) => {
 
 exports.addTask = async (req, res, next) => {
   console.log("Task Management addTask");
-  res.status(200).send("This is the addTasks for the Task Management module");
-  //TODO
-}
+  try {
+    const { taskName, groupID, deadlineDate, description } = req.body;
+
+    const savedTask = await taskManagementService.addTask(taskName, groupID, deadlineDate, description);
+
+    // Send a response with the saved task or any other appropriate response
+    res.status(201).json(savedTask);
+  } catch (error) {
+    // Handle any errors and send an error response
+    console.error('Error adding task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 exports.getUserTasks = async (req, res, next) => {
   console.log("Task Management getTasks");
