@@ -29,18 +29,15 @@ function BillManagement() {
           return;
         }
 
-        const usersResponse = await axios.get('http://localhost:5000/api/database/users');
         const groupsResponse = await axios.get(`http://localhost:5000/api/database/user-groups/${currentUser.uid}`);
 
-        if (!usersResponse || !groupsResponse) {
+        if (!groupsResponse) {
           console.error('Failed to fetch user or group data');
           return;
         }
 
-        const usersData = usersResponse.data;
         const groupsData = groupsResponse.data;
 
-        setAllParticipants(usersData);
         setGroups(groupsData);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -49,6 +46,30 @@ function BillManagement() {
 
     fetchUserData();
   }, [currentUser]);
+
+  const fetchGroupParticipants = async (groupId) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/database/group-participants/${groupId}/user/${currentUser.uid}`);
+      if (!response || !response.data) {
+        console.error('Failed to fetch group participants:', response);
+        return [];
+      }
+
+      const groupParticipants = response.data;
+
+      // Update state with only the participants of the selected group
+      setAllParticipants(groupParticipants);
+
+      return groupParticipants;
+    } catch (error) {
+      console.error('Error fetching group participants:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    fetchGroupParticipants(selectedGroup);
+  }, [selectedGroup]);
 
   const handleAddExpense = async () => {
     try {
@@ -73,6 +94,10 @@ function BillManagement() {
       }
   
       console.log(data.message);
+  
+      // Fetch participants based on the selected group
+      fetchGroupParticipants(selectedGroup);
+  
       setAmount('');
       setDescription('');
       setSelectedParticipants([]);
@@ -81,6 +106,7 @@ function BillManagement() {
       console.error('Error adding expense. Details:', error);
     }
   };
+  
 
   return (
     <div>
@@ -103,10 +129,13 @@ function BillManagement() {
           <div>
             <label>
               Participants:
-              <select multiple value={selectedParticipants} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => option.value))}>
-                {allParticipants.map((user) => (
-                  <option key={user._id} value={user._id}>{user.email}</option>
-                ))}
+              <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
+                {/* Conditionally render participants based on whether a group is selected or not */}
+                {selectedGroup
+                  ? allParticipants.map((user) => (
+                      <option key={user._id} value={user._id}>{user.email}</option>
+                    ))
+                  : null}
               </select>
             </label>
           </div>
