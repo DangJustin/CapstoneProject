@@ -28,14 +28,14 @@ function Login() {
 
   }
 
-    // Function to handle form submission for logging in
-    async function handleForgotPassword(e) {
-      e.preventDefault();
-    }
+  // Function to handle form submission for logging in
+  async function handleForgotPassword(e) {
+    e.preventDefault();
+  }
 
-    const handleRegister = () => {
-      navigate('/account/register');
-    };
+  const handleRegister = () => {
+    navigate('/account/register');
+  };
 
   // Function to handle form submission for creating a new user
   // MOVE to REGISTER MODULE
@@ -54,17 +54,23 @@ function Login() {
     e.preventDefault();
     auth.signOut().then(() => {
       console.log("success");
+      goToHomePage()
     }).catch((error) =>
       console.log(error));
   }
 
+    // Function to redirect to home page
+    const goToHomePage = () => {
+      navigate('/');
+    };
 
   return (
     <div className="login">
       <h1>Welcome to Housemates!</h1>
 
       {/* Form for logging in with an existing username */}
-      <div>
+      {!auth.currentUser && (
+        <div>
         <h2>Login with Existing User</h2>
         <form action="POST" onSubmit={handleLoginSubmit}>
           <div>
@@ -85,25 +91,34 @@ function Login() {
           </div>
 
           <div>
-                    <button type="button" onClick={handleForgotPassword}>
-                        Forgot Password?
-                    </button>
-                </div>
+            <button type="button" onClick={handleForgotPassword}>
+              Forgot Password?
+            </button>
+          </div>
           <input type="submit" value="Login" />
         </form>
 
         {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
+
+      {/* <button onClick={handleLogout}>Sign Out</button> */}
+      <div className="register-container">
+        <button onClick={handleRegister} className="register-button">
+          New User? Register
+        </button>
+      </div>
       </div>
 
-      <button onClick={handleLogout}>Sign Out</button>
-      <div className="register-container">
-  <button onClick={handleRegister} className="register-button">
-    New User? Register
-  </button>
-</div>
+      )}
 
+      {auth.currentUser && (
+        <div>
+
+          <button onClick={goToHomePage}>Go to Home Page</button>
+          <button onClick={handleLogout}>Sign Out</button>
+        </div>
+      )}
       <AuthDetails />
-      
+
     </div>
   );
 }
