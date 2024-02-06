@@ -13,7 +13,7 @@ exports.addTask = async (req, res, next) => {
     const savedTask = await taskManagementService.addTask(taskName, groupID, deadlineDate, description);
 
     // Send a response with the saved task or any other appropriate response
-    res.status(201).json(savedTask);
+    res.status(200).json(savedTask);
   } catch (error) {
     // Handle any errors and send an error response
     console.error('Error adding task:', error);
