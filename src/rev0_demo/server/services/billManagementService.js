@@ -58,7 +58,7 @@ const splitExpense = async ({
     await newBill.save();
 
     // Update user's amount
-    userA.amount += parseFloat(amount);
+    userA.amount += amount - (amount / (participants.length + 1));
     await userA.save();
 
     // Update participants' amounts
@@ -66,7 +66,7 @@ const splitExpense = async ({
       participants.map(async (participantID) => {
         const participant = await User.findById(participantID);
         if (participant) {
-          participant.amount -= amount / participants.length;
+          participant.amount -= amount / (participants.length + 1);
           await participant.save();
         }
       })

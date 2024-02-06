@@ -57,7 +57,7 @@ function AddBill() {
 
       const groupParticipants = response.data;
 
-      // Update state with only the participants of the selected group
+      // Update state with only the participants of the selected group 
       setAllParticipants(groupParticipants);
 
       return groupParticipants;
@@ -145,7 +145,7 @@ function AddBill() {
               <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
                 <option value="">Select a Group</option>
                 {groups.map((group) => (
-                  <option key={group._id} value={group._id}>{group.name}</option>
+                  <option key={group._id} value={group._id}>{group.groupName}</option>
                 ))}
               </select>
             </label>
