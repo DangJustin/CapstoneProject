@@ -1,11 +1,13 @@
-import React, { useEffect, useState }  from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import axios from 'axios';
 
+const auth = getAuth();
 
 function TaskManagement() {
-  const [user,setUser] = useState([]);
-  const [tasks,setTasks] = useState([{_id:1, taskName:'task1', description:'This is a task', groupID:0, completed:false, createdDate:Date.now, deadlineDate:Date.now}, 
-  {_id:2, taskName:'task2', description:'This is a 2nd task', groupID:0, completed:true, createdDate:Date.now, deadlineDate:Date.now}]);
+  const [currentUser, setCurrentUser] = useState('');
+  const [tasks,setTasks] = useState([]);
   const navigate = useNavigate();
   const goToAddTask = () => {
     navigate('addTask');
@@ -13,10 +15,46 @@ function TaskManagement() {
   const handleSelectChange = (event) =>{
     navigate('tasks/task/'+String(event.target.value));
   };
-  useEffect(() => {},[]);
+
+  //Checking if user is logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Grab User tasks 
+  useEffect(() => {
+    const fetchTasksData = async () => {
+      try {
+        if (!currentUser) {
+          console.error('No user currently logged in.');
+          return;
+        }
+
+        const tasksResponse = await axios.get(`http://localhost:5000/api/taskManagement/tasks/user/${currentUser.uid}`);
+
+        if (!tasksResponse) {
+          console.error('Failed to fetch task data for user');
+          return;
+        }
+
+        const tasksData = tasksResponse.data;
+
+        setTasks(tasksData);
+        console.log(tasksData);
+      } catch (error) {
+        console.error('Error fetching tasks data:', error);
+      }
+    };
+
+    fetchTasksData();
+  }, [currentUser]);
   return (
     <div>
-      <h1>Task Management Page</h1>
+      <h1>Task Management Page for user: {currentUser.email}</h1>
+      
       {/*Table to show all tasks*/}
       <div>
       <table border="1">
@@ -40,8 +78,8 @@ function TaskManagement() {
                         <td>{task.description}</td>
                         <td>{task.groupID}</td>
                         <td>{String(task.completed)}</td>
-                        <td>{Date(task.createdDate)}</td>
-                        <td>{Date(task.deadlineDate)}</td>
+                        <td>{task.createdDate}</td>
+                        <td>{task.deadlineDate}</td>
                     </tr>
                 )
             })}
