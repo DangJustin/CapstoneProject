@@ -10,6 +10,8 @@ import Tasks from './taskManagement/Tasks';
 import Task from './taskManagement/Task';
 import Scheduling from './scheduling/Scheduling';
 import BillManagement from './billManagement/BillManagement';
+import AddBill from './billManagement/AddBill';
+import ViewBill from './billManagement/ViewBill'
 
 {/* Will change links later appropriately */}
 const App = () => {
@@ -26,6 +28,8 @@ const App = () => {
         <Route path="taskManagement/tasks/task/:id" element={<Task/>}/> {/*View Tasks Page*/}
         <Route path="scheduling" element={<Scheduling/>} /> {/* Scheduling work */}
         <Route path="billManagement" element={<BillManagement/>} /> {/* Bill Management work */}
+        <Route path="billManagement/addExpense" element={<AddBill/>} /> {/* Bill Management work */}
+        <Route path="billManagement/viewExpenses" element={<ViewBill/>} /> {/* Bill Management work */}
       </Routes>
     </Router>
   );
