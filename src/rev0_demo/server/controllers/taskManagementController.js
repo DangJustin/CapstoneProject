@@ -13,7 +13,7 @@ exports.addTask = async (req, res, next) => {
     const savedTask = await taskManagementService.addTask(taskName, groupID, deadlineDate, description);
 
     // Send a response with the saved task or any other appropriate response
-    res.status(201).json(savedTask);
+    res.status(200).json(savedTask);
   } catch (error) {
     // Handle any errors and send an error response
     console.error('Error adding task:', error);
@@ -22,15 +22,28 @@ exports.addTask = async (req, res, next) => {
 };
 
 exports.getUserTasks = async (req, res, next) => {
-  console.log("Task Management getTasks");
-  res.status(200).send("This is the getTasks for the Task Management module");
-  //TODO
+  const userID = req.params.id;
+  console.log("Task Management getUserTasks: " + String(userID));
+  try{
+    tasks = await taskManagementService.getUserTasks(userID);
+    console.log(tasks);
+    res.status(200).json(tasks);
+  } catch (error){
+    // Handle any errors and send an error response
+    console.error('Error getting tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
 
 exports.getTask = async (req, res, next) => {
   const taskID = req.params.id;
   console.log("Task Management getTask: " + String(taskID));
-  res.status(200).send("This is the getTask for the Task Management module, taskID: " + String(taskID));
+  try {
+    const task = await taskManagementService.getTask(taskID);
+    res.status(200).json(task);
+  } catch (error){
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
   //TODO
 }
 
