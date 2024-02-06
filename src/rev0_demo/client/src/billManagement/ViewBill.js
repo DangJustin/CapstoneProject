@@ -37,7 +37,7 @@ function ViewBill() {
     <div>
       <h1>View Expenses</h1>
       <h2>Bills</h2>
-      <table className="bill-table">
+      <table className="bill-table" border="1">
         <thead>
           <tr>
             <th>Date</th>
