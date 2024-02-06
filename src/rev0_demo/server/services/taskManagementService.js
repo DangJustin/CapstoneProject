@@ -1,6 +1,13 @@
 const Task = require('../models/taskModel');
 
-function getTask(taskID) {
+async function getTask(taskID) {
+  try {
+    const task = await Task.findById(taskID);
+    return task;
+  } catch (error){
+    console.log("Error getting task: ", taskID, error);
+    throw error; // You may want to handle errors in a more specific way
+  }
     // TODO
 }
 

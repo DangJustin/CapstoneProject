@@ -30,7 +30,12 @@ exports.getUserTasks = async (req, res, next) => {
 exports.getTask = async (req, res, next) => {
   const taskID = req.params.id;
   console.log("Task Management getTask: " + String(taskID));
-  res.status(200).send("This is the getTask for the Task Management module, taskID: " + String(taskID));
+  try {
+    const task = await taskManagementService.getTask(taskID);
+    res.status(200).json(task);
+  } catch (error){
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
   //TODO
 }
 
