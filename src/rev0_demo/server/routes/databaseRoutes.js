@@ -1,35 +1,50 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/userModel');
-const Group = require('../models/groupModel')
-
-router.get('/users', async (req, res) => {
-    try {
-      const users = await User.find({}, '_id email'); // Adjust the projection to include the necessary fields
-      res.json(users);
-    } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+const User = require("../models/userModel");
+const Group = require("../models/groupModel");
 
 // Endpoint to get all groups that a user is involved in
-router.get('/user-groups/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
+router.get("/user-groups/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
 
-        // Find the user by ID
-        const user = await User.findOne({ userID: userId });
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Retrieve the user's groups
-        const userGroups = await Group.find({ users: user._id });
-        res.json(userGroups);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+    // Find the user by ID
+    const user = await User.findOne({ userID: userId });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
+
+    // Retrieve the user's groups
+    const userGroups = await Group.find({ users: user._id });
+    res.json(userGroups);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
+// Endpoint to get all users involved in a group except request user
+router.get("/group-participants/:groupId/user/:userId", async (req, res) => {
+  try {
+    const groupId = req.params.groupId;
+    const userId = req.params.userId;
+
+    // Fetch the group by ID
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    // Fetch participants of the group (excluding the current user)
+    const participants = await User.find(
+      { _id: { $in: group.users }, userID: { $ne: userId } },
+      "_id email"
+    );
+
+    res.json(participants);
+  } catch (error) {
+    console.error("Error fetching group participants:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
