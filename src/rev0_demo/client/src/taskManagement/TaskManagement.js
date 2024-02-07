@@ -64,9 +64,10 @@ function TaskManagement() {
                 <th>Task Name</th>
                 <th>Task Description</th>
                 <th>Group ID</th>
-                <th>Completion Status</th>
+                <th>Completed</th>
                 <th>Date Created</th>
                 <th>Deadline Date</th>
+                <th>Overdue</th>
             </tr>
         </thead>
         <tbody>
@@ -77,9 +78,10 @@ function TaskManagement() {
                         <td>{task.taskName}</td>
                         <td>{task.description}</td>
                         <td>{task.groupID}</td>
-                        <td>{String(task.completed)}</td>
-                        <td>{task.createdDate}</td>
-                        <td>{task.deadlineDate}</td>
+                        <td>{task.completed?"Yes":"No"}</td>
+                        <td>{new Date(task.createdDate).toLocaleDateString()}</td>
+                        <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
+                        <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
                     </tr>
                 )
             })}
