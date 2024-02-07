@@ -28,9 +28,13 @@ function Task() {
     navigate('edit');
   }
 
-  const complete = () =>{
-    setTask({...task,completed:true})
-    // TODO add complete on backend
+  const complete = async () =>{
+    try {
+      await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${id}/complete`);
+      setTask({...task,completed:true})
+    } catch (error){
+      console.error('Error adding task: ', error)
+    }
   }
 
   return (
@@ -45,7 +49,7 @@ function Task() {
       <p>Description: {task.description}</p>
       <div>
       <button onClick={goToEdit}>Edit Task</button>
-      <button onClick={complete}>Complete</button>
+      {!task.completed && (<button onClick={complete}>Complete</button>)}
       </div>
     </div>
   );

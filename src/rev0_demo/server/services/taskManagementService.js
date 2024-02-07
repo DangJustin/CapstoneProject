@@ -50,8 +50,16 @@ async function addTask(taskName, groupID, deadlineDate, description){
       }
 }
 
-function completeTask(taskID){
-    //TODO
+async function completeTask(taskID){
+    try {
+      const task = await getTask(taskID);
+      task.completed = true;
+      await task.save();
+    } catch (error) {
+      // Handle any errors during the task completion
+      console.error('Error completing task:', error);
+      throw error; // You may want to handle errors in a more specific way
+    }
 }
 
 module.exports = { getTask, getUserTasks, addTask, completeTask };
