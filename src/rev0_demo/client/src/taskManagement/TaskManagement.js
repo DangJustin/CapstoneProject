@@ -77,9 +77,9 @@ function TaskManagement() {
                         <td>{task.taskName}</td>
                         <td>{task.description}</td>
                         <td>{task.groupID}</td>
-                        <td>{String(task.completed)}</td>
-                        <td>{task.createdDate}</td>
-                        <td>{task.deadlineDate}</td>
+                        <td>{task.completed?"Complete":"Incomplete"}</td>
+                        <td>{new Date(task.createdDate).toLocaleDateString()}</td>
+                        <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
                     </tr>
                 )
             })}
