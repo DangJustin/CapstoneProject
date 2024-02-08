@@ -108,12 +108,6 @@ function AddTask() {
     navigate('/taskManagement');
   };
 
-  // Event handler for selecting users responsible
-  const handleUsersResponsibleChange = (e) => {
-    const selectedUserIds = Array.from(e.target.selectedOptions, (option) => option.value);
-    setUsersResponsible(selectedUserIds);
-  };
-
   return (
     <div>
       <h1>Add Task Page</h1>
