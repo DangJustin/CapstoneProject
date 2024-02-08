@@ -37,8 +37,7 @@ router.get("/group-participants/:groupId/user/:userId", async (req, res) => {
 
     // Fetch participants of the group (excluding the current user)
     const participants = await User.find(
-      { _id: { $in: group.users }, userID: { $ne: userId } },
-      "_id email"
+      { _id: { $in: group.users }, userID: { $ne: userId } }
     );
 
     res.json(participants);
