@@ -83,7 +83,7 @@ function TaskManagement() {
                         <td>{new Date(task.createdDate).toLocaleDateString()}</td>
                         <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
                         <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
-                        <td>{task.usersResponsible.toString()}</td>
+                        <td>{task.usersResponsible.join(", ")}</td>
                     </tr>
                 )
             })}
