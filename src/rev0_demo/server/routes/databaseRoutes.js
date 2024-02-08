@@ -253,4 +253,50 @@ router.delete("/bills/:billId", async (req, res) => {
   }
 });
 
+// Route to fetch all user debts
+router.get("/userDebts/:userID", async (req, res) => {
+  const userID = req.params.userID;
+  try {
+    // Find the user by userID
+    const user = await User.findOne({ userID: userID });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Retrieve debts where the user is owed money (user is the 'to' user)
+    const debtsToUser = await UserDebt.find({ to: user._id }).populate(
+      "from",
+      "email"
+    );
+
+    // Retrieve debts where the user owes money (user is the 'from' user)
+    const debtsFromUser = await UserDebt.find({ from: user._id }).populate(
+      "to",
+      "email"
+    );
+
+    // Calculate net debt relation for the user
+    let netDebts = {};
+
+    debtsToUser.forEach((debt) => {
+      if (!netDebts[debt.from.email]) {
+        netDebts[debt.from.email] = 0;
+      }
+      console.log("debt", debt)
+      netDebts[debt.from.email] -= debt.amount;
+    });
+    debtsFromUser.forEach((debt) => {
+      if (!netDebts[debt.to.email]) {
+        netDebts[debt.to.email] = 0;
+      }
+      console.log("debt2", debt.amount)
+      netDebts[debt.to.email] += debt.amount;
+    });
+    res.json({ userAmount: user.amount, netDebts: netDebts });
+  } catch (error) {
+    console.error("Error fetching user debts:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
