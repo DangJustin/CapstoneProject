@@ -9,7 +9,6 @@ async function getTask(taskID) {
     console.log("Error getting task: ", taskID, error);
     throw error; // You may want to handle errors in a more specific way
   }
-    // TODO
 }
 
 async function getUserTasks(userID){
@@ -63,4 +62,18 @@ async function completeTask(taskID){
     }
 }
 
-module.exports = { getTask, getUserTasks, addTask, completeTask };
+async function editTask(taskData){
+  try {
+    const task = await Task.findById(taskData._id);
+    task.taskName = taskData.taskName;
+    task.description = taskData.description;
+    task.deadlineDate = taskData.deadlineDate;
+    await task.save();
+  } catch (error) {
+    // Handle any errors during the task completion
+    console.error('Error updating task:', error);
+    throw error; // You may want to handle errors in a more specific way
+  }
+}
+
+module.exports = { getTask, getUserTasks, addTask, completeTask, editTask };

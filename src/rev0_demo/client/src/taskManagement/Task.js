@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function Task() {
@@ -7,7 +7,8 @@ function Task() {
   const [form,setForm] = useState([]);
   const [edit,setEdit] = useState(false);
   let {id} = useParams();
-  const navigate = useNavigate();
+
+  // Get task data
   useEffect(() => {
     const fetchTaskData = async () => {
       try {
@@ -26,15 +27,14 @@ function Task() {
     fetchTaskData();
   },[id]);
 
-  const goToEdit = () => {
-    navigate('edit');
-  }
 
+  // Show/Hide Edit form
   const turnOnEdit = () => {
     setEdit(!edit);
     setForm(task);
   }
 
+  // Complete task
   const complete = async () =>{
     try {
       await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${id}/complete`);
@@ -44,6 +44,7 @@ function Task() {
     }
   }
 
+  // Change fields in form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({
@@ -52,10 +53,13 @@ function Task() {
     }));
   }
 
-  const handleSubmit = (e) => {
+  // Change task to edited values
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setTask(form);
+    await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${id}`,form);
     console.log('Updated Task:', form);
+    turnOnEdit();
   };
 
   return (
