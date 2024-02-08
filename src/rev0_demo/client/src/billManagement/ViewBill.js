@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import EditBill from "./EditBill";
 
@@ -96,10 +96,14 @@ function ViewBill() {
                       ))}
                     </ul>
                   </td>
-                  <td>{bill.group ? bill.group.groupName : 'None'}</td>
+                  <td>{bill.group ? bill.group.groupName : "None"}</td>
                   <td>
-                    <button onClick={() => handleEditBill(bill._id)}>Edit</button>
-                    <button onClick={() => handleDeleteBill(bill._id)}>Delete</button>
+                    <button onClick={() => handleEditBill(bill._id)}>
+                      Edit
+                    </button>
+                    <button onClick={() => handleDeleteBill(bill._id)}>
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
