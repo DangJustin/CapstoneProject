@@ -48,9 +48,15 @@ exports.getTask = async (req, res, next) => {
 
 exports.editTask = async (req, res, next) => {
   const taskID = req.params.id;
+  const taskData = req.body;
   console.log("Task Management editTask: " + String(taskID));
-  res.status(200).send("This is the editTask for the Task Management module, taskID: " + String(taskID));
-  //TODO
+  console.log(taskData);
+  try{
+    await taskManagementService.editTask(taskData);
+    res.status(200).send("Success");
+  } catch (error){
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
 
 exports.completeTask = async (req, res, next) => {
