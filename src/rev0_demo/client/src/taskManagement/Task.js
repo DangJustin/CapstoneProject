@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function Task() {
   const [task,setTask] = useState([]);
+  const [form,setForm] = useState([]);
+  const [edit,setEdit] = useState(false);
   let {id} = useParams();
-  const navigate = useNavigate();
+
+  // Get task data
   useEffect(() => {
     const fetchTaskData = async () => {
       try {
@@ -24,10 +27,14 @@ function Task() {
     fetchTaskData();
   },[id]);
 
-  const goToEdit = () => {
-    navigate('edit');
+
+  // Show/Hide Edit form
+  const turnOnEdit = () => {
+    setEdit(!edit);
+    setForm(task);
   }
 
+  // Complete task
   const complete = async () =>{
     try {
       await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${id}/complete`);
@@ -36,6 +43,24 @@ function Task() {
       console.error('Error adding task: ', error)
     }
   }
+
+  // Change fields in form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  }
+
+  // Change task to edited values
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setTask(form);
+    await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${id}`,form);
+    console.log('Updated Task:', form);
+    turnOnEdit();
+  };
 
   return (
     <div>
@@ -48,9 +73,54 @@ function Task() {
       {!task.completed && (<h3>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h3>)} 
       <p>Description: {task.description}</p>
       <div>
-      <button onClick={goToEdit}>Edit Task</button>
+      <button onClick={turnOnEdit}>Edit Task</button>
       {!task.completed && (<button onClick={complete}>Complete</button>)}
       </div>
+      {edit && (<div>
+        <h1>Edit task: {task.taskName}</h1>
+        <form onSubmit={handleSubmit}>
+        <label>
+          ID:
+          <input
+            type="text"
+            name="id"
+            value={form._id}
+            onChange={handleInputChange}
+            readOnly
+          />
+        </label>
+        <br />
+        <label>
+          Name:
+          <input
+            type="text"
+            name="taskName"
+            value={form.taskName}
+            onChange={handleInputChange}
+          />
+        </label>
+        <br />
+        <label>
+          Description:
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleInputChange}
+          />
+        </label>
+        <br />
+        <label>
+          Deadline Date: <input 
+          type="date"
+          name="deadlineDate"  
+          value={form.deadlineDate}
+           onChange={handleInputChange} 
+           />
+        </label>
+        <br />
+        <button type="submit">Save</button>
+      </form>
+      </div>)}
     </div>
   );
 }
