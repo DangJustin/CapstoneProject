@@ -56,6 +56,7 @@ function AddBill() {
       }
 
       const groupParticipants = response.data;
+      console.log("GG", groupParticipants);
 
       // Update state with only the participants of the selected group 
       setAllParticipants(groupParticipants);

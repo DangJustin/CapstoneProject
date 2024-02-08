@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Bill = require("../models/billModel");
 const Group = require("../models/groupModel");
+const UserDebt = require("../models/userDebtModel");
 
 const splitExpense = async ({
   userID,
@@ -50,6 +51,12 @@ const splitExpense = async ({
           // Add the bill's ID to the participant's bills field
           participant.bills.push(newBill._id);
           await participant.save();
+
+          await UserDebt.findOneAndUpdate(
+            { from: userA._id, to: participant._id },
+            { $inc: { amount: amount / (participants.length + 1) } },
+            { upsert: true }
+          );
         }
       })
     );

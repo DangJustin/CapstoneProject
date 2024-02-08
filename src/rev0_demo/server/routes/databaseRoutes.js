@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/userModel");
 const Group = require("../models/groupModel");
 const Bill = require("../models/billModel");
+const UserDebt = require("../models/userDebtModel");
 
 // Endpoint to get all groups that a user is involved in
 router.get("/user-groups/:userId", async (req, res) => {
@@ -102,7 +103,6 @@ router.put("/edit-bill/:billId", async (req, res) => {
       // Extract user IDs from oldUsers
       const oldUserIds = oldUsers.map((user) => user.user.toString());
 
-      console.log("old", oldUsers);
       // Find users present in oldUsers but not in newUsers using filter and includes
       const usersNotInNewList = oldUsers.filter(
         (user) =>
@@ -118,6 +118,8 @@ router.put("/edit-bill/:billId", async (req, res) => {
         newUsers.some((newUser) => newUser.user === user.user.toString())
       );
 
+      const firstUserId = bill.users[0].user;
+
       if (usersNotInNewList) {
         await Promise.all(
           usersNotInNewList.map(async (userData) => {
@@ -126,6 +128,12 @@ router.put("/edit-bill/:billId", async (req, res) => {
               user.amount += oldBillAmount / oldBillLen;
               await user.save();
             }
+
+            await UserDebt.findOneAndUpdate(
+              { from: firstUserId, to: userData.user },
+              { $inc: { amount: -(oldBillAmount / oldBillLen) } },
+              { upsert: true }
+            );
           })
         );
       }
@@ -138,6 +146,12 @@ router.put("/edit-bill/:billId", async (req, res) => {
               user.amount -= bill.totalAmount / (newUsers.length + 1);
               await user.save();
             }
+
+            await UserDebt.findOneAndUpdate(
+              { from: firstUserId, to: userData.user },
+              { $inc: { amount: bill.totalAmount / (newUsers.length + 1) } },
+              { upsert: true }
+            );
           })
         );
       }
@@ -146,20 +160,21 @@ router.put("/edit-bill/:billId", async (req, res) => {
         await Promise.all(
           usersInBothLists.map(async (userData) => {
             const user = await User.findById(userData.user);
+            const newAmount = bill.totalAmount / (newUsers.length + 1);
+            const oldAmount = oldBillAmount / oldBillLen;
             if (user) {
-              newAmount = bill.totalAmount / (newUsers.length + 1);
-              oldAmount = oldBillAmount / oldBillLen;
               user.amount -= newAmount - oldAmount;
-              console.log("new", newAmount);
-              console.log("old", oldAmount);
-              console.log("user", user.amount);
-
               await user.save();
             }
+
+            await UserDebt.findOneAndUpdate(
+              { from: firstUserId, to: userData.user },
+              { $inc: { amount: newAmount - oldAmount } },
+              { upsert: true }
+            );
           })
         );
       }
-      const firstUserId = bill.users[0].user;
       const userA = await User.findById(firstUserId);
       if (userA) {
         newAmount = bill.totalAmount - bill.totalAmount / (newUsers.length + 1);
@@ -193,6 +208,7 @@ router.put("/edit-bill/:billId", async (req, res) => {
 router.delete("/bills/:billId", async (req, res) => {
   const billId = req.params.billId;
   const billDetails = await Bill.findById(billId);
+  const firstUserId = billDetails.users[0].user;
 
   // Iterate through each user in the bill's user list
   for (const [index, user] of billDetails.users.entries()) {
@@ -207,6 +223,11 @@ router.delete("/bills/:billId", async (req, res) => {
       await User.findOneAndUpdate(
         { _id: user.user },
         { $inc: { amount: user.amountOwed } }
+      );
+
+      await UserDebt.findOneAndUpdate(
+        { from: firstUserId, to: user.user },
+        { $inc: { amount: -user.amountOwed } }
       );
     }
 
