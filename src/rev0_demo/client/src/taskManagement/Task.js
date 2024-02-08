@@ -72,6 +72,7 @@ function Task() {
       <h3>Completed: {task.completed?"Yes":"No"}</h3>
       {!task.completed && (<h3>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h3>)} 
       <p>Description: {task.description}</p>
+      <h3>Users Responsible: {Array(task.usersResponsible).toString()}</h3>
       <div>
       <button onClick={turnOnEdit}>Edit Task</button>
       {!task.completed && (<button onClick={complete}>Complete</button>)}
