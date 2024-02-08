@@ -8,9 +8,9 @@ exports.index = async (req, res, next) => {
 exports.addTask = async (req, res, next) => {
   console.log("Task Management addTask");
   try {
-    const { taskName, groupID, deadlineDate, description } = req.body;
+    const { taskName, groupID, deadlineDate, description, usersResponsible } = req.body;
 
-    const savedTask = await taskManagementService.addTask(taskName, groupID, deadlineDate, description);
+    const savedTask = await taskManagementService.addTask(taskName, groupID, deadlineDate, description, usersResponsible);
 
     // Send a response with the saved task or any other appropriate response
     res.status(200).json(savedTask);
