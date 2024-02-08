@@ -54,6 +54,9 @@ const splitExpense = async ({
       })
     );
 
+    userA.bills.push(newBill._id);
+    await userA.save();
+
     // Save the bill
     await newBill.save();
 

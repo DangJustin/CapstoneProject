@@ -40,6 +40,19 @@ function ViewBill() {
     setEditBill(billToEdit);
   };
 
+  const handleDeleteBill = async (billId) => {
+    try {
+      // Send a DELETE request to delete the bill
+      await axios.delete(`http://localhost:5000/api/database/bills/${billId}`);
+
+      // Remove the deleted bill from the bills array
+      const updatedBills = bills.filter((bill) => bill._id !== billId);
+      setBills(updatedBills);
+    } catch (error) {
+      console.error("Error deleting bill:", error);
+    }
+  };
+
   const handleSaveBill = (updatedBill) => {
     // Update the bill in the bills array
     const updatedBills = bills.map((bill) =>
@@ -86,6 +99,7 @@ function ViewBill() {
                   <td>{bill.group ? bill.group.groupName : 'None'}</td>
                   <td>
                     <button onClick={() => handleEditBill(bill._id)}>Edit</button>
+                    <button onClick={() => handleDeleteBill(bill._id)}>Delete</button>
                   </td>
                 </tr>
               ))}

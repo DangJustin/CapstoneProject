@@ -147,7 +147,7 @@ router.put("/edit-bill/:billId", async (req, res) => {
           usersInBothLists.map(async (userData) => {
             const user = await User.findById(userData.user);
             if (user) {
-              newAmount = bill.totalAmount / (newUsers.length + 1)
+              newAmount = bill.totalAmount / (newUsers.length + 1);
               oldAmount = oldBillAmount / oldBillLen;
               user.amount -= newAmount - oldAmount;
               console.log("new", newAmount);
@@ -162,8 +162,8 @@ router.put("/edit-bill/:billId", async (req, res) => {
       const firstUserId = bill.users[0].user;
       const userA = await User.findById(firstUserId);
       if (userA) {
-        newAmount = bill.totalAmount - (bill.totalAmount / (newUsers.length + 1))
-        oldAmount = oldBillAmount - (oldBillAmount / oldBillLen);
+        newAmount = bill.totalAmount - bill.totalAmount / (newUsers.length + 1);
+        oldAmount = oldBillAmount - oldBillAmount / oldBillLen;
         userA.amount += newAmount - oldAmount;
         await userA.save();
       }
@@ -174,7 +174,6 @@ router.put("/edit-bill/:billId", async (req, res) => {
       }));
 
       // Update user amounts
-
     }
     if (updatedData.group) {
       bill.group = updatedData.group;
@@ -187,6 +186,48 @@ router.put("/edit-bill/:billId", async (req, res) => {
     res.json(updatedBill);
   } catch (error) {
     console.error("Error updating bill:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.delete("/bills/:billId", async (req, res) => {
+  const billId = req.params.billId;
+  const billDetails = await Bill.findById(billId);
+
+  // Iterate through each user in the bill's user list
+  for (const [index, user] of billDetails.users.entries()) {
+    if (index === 0) {
+      // Update the amount for the first user
+      await User.findOneAndUpdate(
+        { _id: user.user },
+        { $inc: { amount: -user.amountOwed } }
+      );
+    } else {
+      // For other users, update their amount owed
+      await User.findOneAndUpdate(
+        { _id: user.user },
+        { $inc: { amount: user.amountOwed } }
+      );
+    }
+
+    // Delete the bill ID from the user's bills array
+    await User.findOneAndUpdate(
+      { _id: user.user },
+      { $pull: { bills: billId } }
+    );
+  }
+
+  try {
+    // Find the bill by ID and delete it
+    const deletedBill = await Bill.findByIdAndDelete(billId);
+
+    if (!deletedBill) {
+      return res.status(404).json({ error: "Bill not found" });
+    }
+
+    res.status(200).json({ message: "Bill deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting bill:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
