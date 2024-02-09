@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useParams } from 'react-router-dom';
 import axios from 'axios';
+import Layout from '../Layout';
 
 function Task() {
   const [task,setTask] = useState([]);
@@ -64,66 +65,68 @@ function Task() {
 
 
   return (
-    <div>
-      <h1>Individual Task Page for {task.taskName}</h1>
-      <h3>ID: {id}</h3>
-      <h3>Group ID: {task.groupID}</h3>
-      <h3>Start date: {new Date(task.createdDate).toLocaleDateString()}</h3>
-      <h3>Deadline date: {new Date(task.deadlineDate).toLocaleDateString()}</h3>
-      <h3>Completed: {task.completed?"Yes":"No"}</h3>
-      {!task.completed && (<h3>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h3>)} 
-      <p>Description: {task.description}</p>
-      {task.usersResponsible && (<h3>Users Responsible: {task.usersResponsible.join(', ')}</h3>)}
+    <Layout>
       <div>
-      <button onClick={turnOnEdit}>Edit Task</button>
-      {!task.completed && (<button onClick={complete}>Complete</button>)}
+        <h1>Individual Task Page for {task.taskName}</h1>
+        <h3>ID: {id}</h3>
+        <h3>Group ID: {task.groupID}</h3>
+        <h3>Start date: {new Date(task.createdDate).toLocaleDateString()}</h3>
+        <h3>Deadline date: {new Date(task.deadlineDate).toLocaleDateString()}</h3>
+        <h3>Completed: {task.completed?"Yes":"No"}</h3>
+        {!task.completed && (<h3>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h3>)} 
+        <p>Description: {task.description}</p>
+        {task.usersResponsible && (<h3>Users Responsible: {task.usersResponsible.join(', ')}</h3>)}
+        <div>
+        <button onClick={turnOnEdit}>Edit Task</button>
+        {!task.completed && (<button onClick={complete}>Complete</button>)}
+        </div>
+        {edit && (<div>
+          <h1>Edit task: {task.taskName}</h1>
+          <form onSubmit={handleSubmit}>
+          <label>
+            ID:
+            <input
+              type="text"
+              name="id"
+              value={form._id}
+              onChange={handleInputChange}
+              readOnly
+            />
+          </label>
+          <br />
+          <label>
+            Name:
+            <input
+              type="text"
+              name="taskName"
+              value={form.taskName}
+              onChange={handleInputChange}
+            />
+          </label>
+          <br />
+          <label>
+            Description:
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleInputChange}
+            />
+          </label>
+          <br />
+          <label>
+            Deadline Date: <input 
+            type="date"
+            name="deadlineDate"  
+            value={form.deadlineDate}
+            onChange={handleInputChange} 
+            />
+          </label>
+          <br />
+          <button type="submit">Save</button>
+        </form>
+        </div>)}
       </div>
-      {edit && (<div>
-        <h1>Edit task: {task.taskName}</h1>
-        <form onSubmit={handleSubmit}>
-        <label>
-          ID:
-          <input
-            type="text"
-            name="id"
-            value={form._id}
-            onChange={handleInputChange}
-            readOnly
-          />
-        </label>
-        <br />
-        <label>
-          Name:
-          <input
-            type="text"
-            name="taskName"
-            value={form.taskName}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Description:
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Deadline Date: <input 
-          type="date"
-          name="deadlineDate"  
-          value={form.deadlineDate}
-           onChange={handleInputChange} 
-           />
-        </label>
-        <br />
-        <button type="submit">Save</button>
-      </form>
-      </div>)}
-    </div>
+    </Layout>
   );
 }
 

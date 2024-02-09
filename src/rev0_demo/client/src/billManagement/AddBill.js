@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+import Layout from '../Layout';
 
 const auth = getAuth();
 
@@ -56,6 +57,7 @@ function AddBill() {
       }
 
       const groupParticipants = response.data;
+      console.log("GG", groupParticipants);
 
       // Update state with only the participants of the selected group 
       setAllParticipants(groupParticipants);
@@ -109,56 +111,58 @@ function AddBill() {
   
 
   return (
-    <div>
-      {currentUser ? (
-        <div>
-          <h1>Bill Management Page</h1>
-          <p>Welcome, {currentUser.email}!</p>
+    <Layout>
+      <div>
+        {currentUser ? (
           <div>
-            <label>
-              Amount:
-              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
-            </label>
+            <h1>Bill Management Page</h1>
+            <p>Welcome, {currentUser.email}!</p>
+            <div>
+              <label>
+                Amount:
+                <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Description:
+                <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Participants:
+                <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
+                  {/* Conditionally render participants based on whether a group is selected or not */}
+                  {selectedGroup
+                    ? allParticipants.map((user) => (
+                        <option key={user._id} value={user._id}>{user.email}</option>
+                      ))
+                    : null}
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>
+                Group:
+                <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
+                  <option value="">Select a Group</option>
+                  {groups.map((group) => (
+                    <option key={group._id} value={group._id}>{group.groupName}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <button onClick={handleAddExpense}>Add Expense</button>
           </div>
+        ) : (
           <div>
-            <label>
-              Description:
-              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-            </label>
+            <h1>Bill Management Page</h1>
+            <p>No user currently logged in.</p>
           </div>
-          <div>
-            <label>
-              Participants:
-              <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
-                {/* Conditionally render participants based on whether a group is selected or not */}
-                {selectedGroup
-                  ? allParticipants.map((user) => (
-                      <option key={user._id} value={user._id}>{user.email}</option>
-                    ))
-                  : null}
-              </select>
-            </label>
-          </div>
-          <div>
-            <label>
-              Group:
-              <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
-                <option value="">Select a Group</option>
-                {groups.map((group) => (
-                  <option key={group._id} value={group._id}>{group.groupName}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <button onClick={handleAddExpense}>Add Expense</button>
-        </div>
-      ) : (
-        <div>
-          <h1>Bill Management Page</h1>
-          <p>No user currently logged in.</p>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      </Layout>
   );
 }
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import AuthDetails from "../AuthDetails"
+import Layout from "../Layout"
 
 
 function Login() {
@@ -60,51 +61,53 @@ function Login() {
 
 
   return (
-    <div className="login">
-      <h1>Welcome to Housemates!</h1>
+    <Layout>
+      <div className="login">
+        <h1>Welcome to Housemates!</h1>
 
-      {/* Form for logging in with an existing username */}
-      <div>
-        <h2>Login with Existing User</h2>
-        <form action="POST" onSubmit={handleLoginSubmit}>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => { setEmail(e.target.value) }}
-              placeholder="Enter Your Email"
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => { setPassword(e.target.value) }}
-              placeholder="Enter Your Password"
-              required
-            />
-          </div>
+        {/* Form for logging in with an existing username */}
+        <div>
+          <h2>Login with Existing User</h2>
+          <form action="POST" onSubmit={handleLoginSubmit}>
+            <div>
+              <input
+                type="text"
+                onChange={(e) => { setEmail(e.target.value) }}
+                placeholder="Enter Your Email"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                onChange={(e) => { setPassword(e.target.value) }}
+                placeholder="Enter Your Password"
+                required
+              />
+            </div>
 
-          <div>
-                    <button type="button" onClick={handleForgotPassword}>
-                        Forgot Password?
-                    </button>
-                </div>
-          <input type="submit" value="Login" />
-        </form>
+            <div>
+                      <button type="button" onClick={handleForgotPassword}>
+                          Forgot Password?
+                      </button>
+                  </div>
+            <input type="submit" value="Login" />
+          </form>
 
-        {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
+          {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
+        </div>
+
+        <button onClick={handleLogout}>Sign Out</button>
+        <div className="register-container">
+    <button onClick={handleRegister} className="register-button">
+      New User? Register
+    </button>
+  </div>
+
+        <AuthDetails />
+        
       </div>
-
-      <button onClick={handleLogout}>Sign Out</button>
-      <div className="register-container">
-  <button onClick={handleRegister} className="register-button">
-    New User? Register
-  </button>
-</div>
-
-      <AuthDetails />
-      
-    </div>
+      </Layout>
   );
 }
 
