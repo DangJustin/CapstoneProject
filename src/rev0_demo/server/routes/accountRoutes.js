@@ -38,4 +38,14 @@ router.post('/addGroup', async (req, res) => {
     }
 })
 
+// GET group based off group._id
+router.get('/groups/group/:id',accountController.getGroup);
+
+
+// GET user based off user.userID
+router.get('/users/user/:id',accountController.getUser);
+
+// GET user based off user._id
+router.get('/users/id/:id',accountController.getUserOffID);
+
 module.exports = router;
