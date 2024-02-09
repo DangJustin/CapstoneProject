@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+import { getGroupName, getUserNames } from '../utils/nameConversions';
 import Layout from '../Layout';
 
 const auth = getAuth();
@@ -9,6 +10,7 @@ const auth = getAuth();
 function TaskManagement() {
   const [currentUser, setCurrentUser] = useState('');
   const [tasks,setTasks] = useState([]);
+  const [displayTasks,setDisplayTasks] = useState([]);
   const navigate = useNavigate();
   const goToAddTask = () => {
     navigate('addTask');
@@ -49,9 +51,26 @@ function TaskManagement() {
         console.error('Error fetching tasks data:', error);
       }
     };
-
+    
     fetchTasksData();
   }, [currentUser]);
+
+  // Update display with group names and user names
+  useEffect(()=>{
+    const changeTaskData = async() =>{
+      const modifiedTasks = [...tasks];
+      for (let i = 0; i < tasks.length; i++){
+        modifiedTasks[i] = {
+          ...modifiedTasks[i],
+          groupID: await getGroupName(modifiedTasks[i].groupID),
+          usersResponsible: await getUserNames(modifiedTasks[i].usersResponsible)
+        }
+      }
+      setDisplayTasks(modifiedTasks);
+    }
+    changeTaskData();
+  },[tasks])
+
   return (
     <Layout>
       <div>
@@ -61,13 +80,13 @@ function TaskManagement() {
             
             {/*Table to show all tasks*/}
             <div>
-            <table border="1">
+            <table class="table table-bordered">
               <thead>
                   <tr>
                       <th>Task ID</th>
                       <th>Task Name</th>
                       <th>Task Description</th>
-                      <th>Group ID</th>
+                      <th>Group Name</th>
                       <th>Completed</th>
                       <th>Date Created</th>
                       <th>Deadline Date</th>
@@ -76,7 +95,7 @@ function TaskManagement() {
                   </tr>
               </thead>
               <tbody>
-                  {tasks.map((task) => {
+                  {displayTasks.map((task) => {
                       return(
                           <tr key={task._id}>
                               <td>{task._id}</td>

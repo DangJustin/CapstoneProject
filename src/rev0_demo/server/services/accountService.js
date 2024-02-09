@@ -18,4 +18,49 @@ async function getUserGroups(userID){
     }
 }
 
-module.exports = {getUserGroups};
+// Method to find specific user based off user.userID
+async function getUser(userID){
+    try {
+        // Find User
+        const user = await User.findOne({ userID: userID });
+        if (!user){
+            throw new Error('User with ID: ' + String(userID) + ' Not found')
+        }
+        return user;
+    } catch (error){
+        console.error('Error trying to find group:', error);
+        throw error; // You may want to handle errors in a more specific way
+    }
+}
+
+// Method to find specific user based off user._id
+async function getUserOffID(userID){
+    try {
+        // Find User
+        const user = await User.findById(userID);
+        if (!user){
+            throw new Error('User with ID: ' + String(userID) + ' Not found')
+        }
+        return user;
+    } catch (error){
+        console.error('Error trying to find group:', error);
+        throw error; // You may want to handle errors in a more specific way
+    }
+}
+
+// Method to find specific group based off group._id
+async function getGroup(groupID){
+    try {
+        // Find User
+        const group = await Group.findById(groupID);
+        if (!group){
+            throw new Error('Group with ID: ' + String(groupID) + ' Not found')
+        }
+        return group;
+    } catch (error){
+        console.error('Error trying to find group:', error);
+        throw error; // You may want to handle errors in a more specific way
+    }
+}
+
+module.exports = {getUserGroups,getUser,getUserOffID,getGroup};

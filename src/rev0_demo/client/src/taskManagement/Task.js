@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {useParams } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../Layout';
+import { getGroupName, getUserNames } from '../utils/nameConversions';
 
 function Task() {
   const [task,setTask] = useState([]);
+  const [groupName,setGroupName] = useState('');
+  const [users,setUsers] = useState([]);
   const [form,setForm] = useState([]);
   const [edit,setEdit] = useState(false);
   let {id} = useParams();
@@ -27,6 +30,21 @@ function Task() {
     }
     fetchTaskData();
   },[id]);
+
+    // Get group name and users
+    useEffect(() => {
+      const fetchTaskData = async () => {
+        try {
+          const group = await getGroupName(task.groupID);
+          const users_task = await getUserNames(task.usersResponsible);
+          setGroupName(group);
+          setUsers(users_task);
+        } catch (error) {
+          console.error('Error fetching task data:', error);
+        }
+      }
+      fetchTaskData();
+    },[task]);
 
 
   // Show/Hide Edit form
@@ -69,13 +87,13 @@ function Task() {
       <div>
         <h1>Individual Task Page for {task.taskName}</h1>
         <h3>ID: {id}</h3>
-        <h3>Group ID: {task.groupID}</h3>
+        <h3>Group Name: {groupName}</h3>
+        <h3>Description: {task.description}</h3>
         <h3>Start date: {new Date(task.createdDate).toLocaleDateString()}</h3>
         <h3>Deadline date: {new Date(task.deadlineDate).toLocaleDateString()}</h3>
         <h3>Completed: {task.completed?"Yes":"No"}</h3>
         {!task.completed && (<h3>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h3>)} 
-        <p>Description: {task.description}</p>
-        {task.usersResponsible && (<h3>Users Responsible: {task.usersResponsible.join(', ')}</h3>)}
+        {users && (<h3>Users Responsible: {users.join(', ')}</h3>)}
         <div>
         <button onClick={turnOnEdit}>Edit Task</button>
         {!task.completed && (<button onClick={complete}>Complete</button>)}
