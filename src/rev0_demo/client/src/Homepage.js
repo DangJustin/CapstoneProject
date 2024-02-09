@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Layout from './Layout';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -24,20 +25,22 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      <h2>Home Page</h2>
-      
-      {/* Use navigate to go to different pages */}
-      <button onClick={goToLogin}>Go to Login</button>
-      <br />
-      <button onClick={goToAccount}>Go to Account</button>
-      <br />
-      <button onClick={goToTaskManagement}>Go to Task Management</button>
-      <br />
-      <button onClick={goToScheduling}>Go to Scheduling</button>
-      <br />
-      <button onClick={goToBillManagement}>Go to Bill Management</button>
-    </div>
+    <Layout>
+      <div>
+        <h2>Home Page</h2>
+        
+        {/* Use navigate to go to different pages */}
+        <button onClick={goToLogin}>Go to Login</button>
+        <br />
+        <button onClick={goToAccount}>Go to Account</button>
+        <br />
+        <button onClick={goToTaskManagement}>Go to Task Management</button>
+        <br />
+        <button onClick={goToScheduling}>Go to Scheduling</button>
+        <br />
+        <button onClick={goToBillManagement}>Go to Bill Management</button>
+      </div>
+    </Layout>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+import Layout from '../Layout';
 
 const auth = getAuth();
 
@@ -52,56 +53,67 @@ function TaskManagement() {
     fetchTasksData();
   }, [currentUser]);
   return (
-    <div>
-      <h1>Task Management Page for user: {currentUser.email}</h1>
-      
-      {/*Table to show all tasks*/}
+    <Layout>
       <div>
-      <table border="1">
-        <thead>
-            <tr>
-                <th>Task ID</th>
-                <th>Task Name</th>
-                <th>Task Description</th>
-                <th>Group ID</th>
-                <th>Completed</th>
-                <th>Date Created</th>
-                <th>Deadline Date</th>
-                <th>Overdue</th>
-                <th>Users Responsible</th>
-            </tr>
-        </thead>
-        <tbody>
-            {tasks.map((task) => {
-                return(
-                    <tr key={task._id}>
-                        <td>{task._id}</td>
-                        <td>{task.taskName}</td>
-                        <td>{task.description}</td>
-                        <td>{task.groupID}</td>
-                        <td>{task.completed?"Yes":"No"}</td>
-                        <td>{new Date(task.createdDate).toLocaleDateString()}</td>
-                        <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
-                        <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
-                        <td>{task.usersResponsible.join(", ")}</td>
-                    </tr>
-                )
-            })}
-        </tbody>
-        </table>
-      </div>
+        {currentUser ? (
+          <div>
+            <h1>Task Management Page for user: {currentUser.email}</h1>
+            
+            {/*Table to show all tasks*/}
+            <div>
+            <table border="1">
+              <thead>
+                  <tr>
+                      <th>Task ID</th>
+                      <th>Task Name</th>
+                      <th>Task Description</th>
+                      <th>Group ID</th>
+                      <th>Completed</th>
+                      <th>Date Created</th>
+                      <th>Deadline Date</th>
+                      <th>Overdue</th>
+                      <th>Users Responsible</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {tasks.map((task) => {
+                      return(
+                          <tr key={task._id}>
+                              <td>{task._id}</td>
+                              <td>{task.taskName}</td>
+                              <td>{task.description}</td>
+                              <td>{task.groupID}</td>
+                              <td>{task.completed?"Yes":"No"}</td>
+                              <td>{new Date(task.createdDate).toLocaleDateString()}</td>
+                              <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
+                              <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
+                              <td>{task.usersResponsible.join(", ")}</td>
+                          </tr>
+                      )
+                  })}
+              </tbody>
+              </table>
+            </div>
 
-      <div>
-        <select value={""} onChange={handleSelectChange}>
-          <option value="">Select a task</option>
-          {tasks.map(task => (
-            <option key={task._id} value={task._id}>{task.taskName}</option>
-          ))}
-        </select>
-      </div>
+            <div>
+              <select value={""} onChange={handleSelectChange}>
+                <option value="">Select a task</option>
+                {tasks.map(task => (
+                  <option key={task._id} value={task._id}>{task.taskName}</option>
+                ))}
+              </select>
+            </div>
 
-      <button onClick={goToAddTask}>Add Task</button>
-    </div>
+            <button onClick={goToAddTask}>Add Task</button>
+          </div>
+        ) : (
+          <div>
+            <h1>Task Management Page</h1>
+            <p>No user currently logged in.</p>
+          </div>
+        )}
+      </div>
+    </Layout>
   );
 }
 
