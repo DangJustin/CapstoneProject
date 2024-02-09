@@ -9,6 +9,7 @@ const splitExpense = async ({
   description,
   participants,
   groupID,
+  individualAmounts // Added parameter for individual expense amounts
 }) => {
   try {
     // Find the user initiating the expense (User A)
@@ -26,13 +27,17 @@ const splitExpense = async ({
       }
     }
 
+    if (!individualAmounts) {
+      individualAmounts = Array.from({ length: participants.length }, () => amount / (participants.length + 1));
+    }
+
     // Create a new bill
     const newBill = new Bill({
       totalAmount: amount,
       users: [
         {
           user: userA._id,
-          amountOwed: amount - amount / (participants.length + 1),
+          amountOwed: amount - (individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0)), // Adjusted amount owed for User A
         },
       ],
       group: groupID || null,
@@ -40,12 +45,12 @@ const splitExpense = async ({
 
     // Add participants to the bill
     await Promise.all(
-      participants.map(async (participantID) => {
+      participants.map(async (participantID, index) => {
         const participant = await User.findById(participantID);
         if (participant) {
           newBill.users.push({
             user: participant._id,
-            amountOwed: amount / (participants.length + 1),
+            amountOwed: parseFloat(individualAmounts[index]), // Use individual amount for each participant
           });
 
           // Add the bill's ID to the participant's bills field
@@ -54,7 +59,7 @@ const splitExpense = async ({
 
           await UserDebt.findOneAndUpdate(
             { from: userA._id, to: participant._id },
-            { $inc: { amount: amount / (participants.length + 1) } },
+            { $inc: { amount: parseFloat(individualAmounts[index]) } }, // Increment debt amount by individual amount
             { upsert: true }
           );
         }
@@ -68,25 +73,23 @@ const splitExpense = async ({
     await newBill.save();
 
     // Update user's amount
-    userA.amount += amount - (amount / (participants.length + 1));
+    userA.amount += (individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0)); // Adjust user's amount
     await userA.save();
 
     // Update participants' amounts
     await Promise.all(
-      participants.map(async (participantID) => {
+      participants.map(async (participantID, index) => {
         const participant = await User.findById(participantID);
         if (participant) {
-          participant.amount -= amount / (participants.length + 1);
+          participant.amount -= parseFloat(individualAmounts[index]); // Subtract individual amount from participant's amount
           await participant.save();
         }
       })
     );
-    // If the bill is associated with a group, update group details IF NEEDED
 
     return { success: true, message: "Expense added successfully" };
   } catch (error) {
     console.error("Error adding expense:", error);
-    // Assuming an error occurred
     throw new Error("Internal Server Error");
   }
 };

@@ -13,6 +13,7 @@ function AddBill() {
   const [selectedParticipants, setSelectedParticipants] = useState([]);
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState('');
+  const [splitUnevenly, setSplitUnevenly] = useState(false); // State variable for uneven split
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -57,9 +58,7 @@ function AddBill() {
       }
 
       const groupParticipants = response.data;
-      console.log("GG", groupParticipants);
 
-      // Update state with only the participants of the selected group 
       setAllParticipants(groupParticipants);
 
       return groupParticipants;
@@ -75,13 +74,26 @@ function AddBill() {
 
   const handleAddExpense = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/billManagement/split-expense', {
+      let expenseData = {
         userID: currentUser.uid,
         amount: amount,
         description,
         participants: selectedParticipants,
         groupID: selectedGroup,
-      });
+      };
+
+      // If split unevenly, include individual expense amounts
+      if (splitUnevenly) {
+        const individualAmounts = selectedParticipants.map(participant => participant.individualAmount);
+        const totalIndividualAmounts = individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0);
+        if (totalIndividualAmounts > parseFloat(amount)) {
+          console.error('Individual expense amounts exceed the total amount.');
+          return;
+        }
+        expenseData.individualAmounts = individualAmounts;
+      }
+      
+      const response = await axios.post('http://localhost:5000/api/billManagement/split-expense', expenseData);
   
       if (response.status !== 200) {
         console.error('Unexpected response status:', response.status);
@@ -97,13 +109,13 @@ function AddBill() {
   
       console.log(data.message);
   
-      // Fetch participants based on the selected group
       fetchGroupParticipants(selectedGroup);
   
       setAmount('');
       setDescription('');
       setSelectedParticipants([]);
       setSelectedGroup('');
+      setSplitUnevenly(false); // Reset splitUnevenly state
     } catch (error) {
       console.error('Error adding expense. Details:', error);
     }
@@ -112,57 +124,82 @@ function AddBill() {
 
   return (
     <Layout>
-      <div>
-        {currentUser ? (
+    <div>
+      {currentUser ? (
+        <div>
+          <h1>Bill Management Page</h1>
+          <p>Welcome, {currentUser.email}!</p>
           <div>
-            <h1>Bill Management Page</h1>
-            <p>Welcome, {currentUser.email}!</p>
-            <div>
-              <label>
-                Amount:
-                <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
-              </label>
-            </div>
-            <div>
-              <label>
-                Description:
-                <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-              </label>
-            </div>
-            <div>
-              <label>
-                Participants:
-                <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
-                  {/* Conditionally render participants based on whether a group is selected or not */}
-                  {selectedGroup
-                    ? allParticipants.map((user) => (
-                        <option key={user._id} value={user._id}>{user.email}</option>
-                      ))
-                    : null}
-                </select>
-              </label>
-            </div>
-            <div>
-              <label>
-                Group:
-                <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
-                  <option value="">Select a Group</option>
-                  {groups.map((group) => (
-                    <option key={group._id} value={group._id}>{group.groupName}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <button onClick={handleAddExpense}>Add Expense</button>
+            <label>
+              Amount:
+              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            </label>
           </div>
-        ) : (
           <div>
-            <h1>Bill Management Page</h1>
-            <p>No user currently logged in.</p>
+            <label>
+              Description:
+              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+            </label>
           </div>
-        )}
-      </div>
-      </Layout>
+          <div>
+            <label>
+              Participants:
+              <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
+                {selectedGroup
+                  ? allParticipants.map((user) => (
+                      <option key={user._id} value={user._id}>{user.email}</option>
+                    ))
+                  : null}
+              </select>
+            </label>
+          </div>
+          <div>
+            <label>
+              Group:
+              <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
+                <option value="">Select a Group</option>
+                {groups.map((group) => (
+                  <option key={group._id} value={group._id}>{group.groupName}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div>
+            <label>
+              Split Unevenly:
+              <input type="checkbox" checked={splitUnevenly} onChange={() => setSplitUnevenly(!splitUnevenly)} />
+            </label>
+          </div>
+          {splitUnevenly && (
+            <div>
+              {selectedParticipants.map(participant => (
+                <div key={participant._id}>
+                  <label>
+                    {participant.email}:
+                    <input type="text" value={participant.individualAmount || ''} onChange={(e) => {
+                      const updatedParticipants = selectedParticipants.map(p => {
+                        if (p._id === participant._id) {
+                          return { ...p, individualAmount: e.target.value };
+                        }
+                        return p;
+                      });
+                      setSelectedParticipants(updatedParticipants);
+                    }} />
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+          <button onClick={handleAddExpense}>Add Expense</button>
+        </div>
+      ) : (
+        <div>
+          <h1>Bill Management Page</h1>
+          <p>No user currently logged in.</p>
+        </div>
+      )}
+    </div>
+    </Layout>
   );
 }
 
