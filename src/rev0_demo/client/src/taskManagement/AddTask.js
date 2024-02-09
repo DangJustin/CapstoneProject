@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import Layout from '../Layout';
+import Multiselect from 'multiselect-react-dropdown';
 
 const auth = getAuth();
 
@@ -111,67 +112,78 @@ function AddTask() {
 
   return (
     <Layout>
-      <div>
-        <h1>Add Task Page</h1>
-        <form onSubmit={(e) => { e.preventDefault(); handleAddTask(); goToTaskManagement();}}>
-          <label>
-            Task Name:
-            <input type="text" required value={taskName} onChange={(e) => setTaskName(e.target.value)} />
-          </label>
-          <br />
+      <h1 className="text-center pb-3 pt-3">Add New Task</h1>
+      <form onSubmit={(e) => { e.preventDefault(); handleAddTask(); goToTaskManagement();}}>
+        <div className="row">
+          {/* First Column */}
+          <div className="col-md-6">
+            <div class="w-75 mx-auto d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label">Task Name:</label>
+                <input type="text" className="form-control" required value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+              </div>
+              
+              <div className="mb-3">
+                <label className="form-label">Deadline Date:</label>
+                <input type="date" className="form-control" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
+              </div>
 
-          <label>
-            Select Group:
-            <select value={selectedGroup} required onChange={(e) => setSelectedGroup(e.target.value)}>
-              <option value="" disabled>Select a group</option>
-              {groups.map((group) => (
-                <option key={group._id} value={group._id}>{group.groupName}</option>
-              ))}
-            </select>
-          </label>
-          <br />
-
-          <label>
-            Deadline Date:
-            <input type="date" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
-          </label>
-          <br />
-
-          <div>
-            <label>
-              Select Users Responsible:
-              <select multiple value={usersResponsible} onChange={(e) => setUsersResponsible(Array.from(e.target.selectedOptions, option => option.value))}>
-                {/* Conditionally render participants based on whether a group is selected or not */}
-                {selectedGroup
-                  ? allParticipants.map((user) => (
-                      <option key={user._id} value={user._id}>{user.username}</option>
-                    ))
-                  : null}
-              </select>
-            </label>
+            </div>
+            
           </div>
 
-          {/* Show selected users responsible as text */}
-          <div>
-            Users: 
-            {usersResponsible.map(userId => {
-              // Find the user object with the corresponding ID
-              const user = allParticipants.find(participant => participant._id === userId);
-              // Return the username if user object is found, otherwise return an empty string
-              return user ? <span key={userId}> {user.username} </span> : null;
-            })}
+          {/* Second Column */}
+          <div className="col-md-6">
+            <div class="w-75 mx-auto d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label">Select Group:</label>
+                  <select className="form-select" value={selectedGroup} required onChange={(e) => setSelectedGroup(e.target.value)}>
+                    <option value="" disabled>Select a group</option>
+                    {groups.map((group) => (
+                      <option key={group._id} value={group._id}>{group.groupName}</option>
+                    ))}
+                  </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Select Users Responsible:</label>
+                  <Multiselect
+                    options={allParticipants.map((user) => ({ value: user._id, label: user.username }))}
+                    selectedValues={usersResponsible.map((userId) => ({ value: userId, label: allParticipants.find((user) => user._id === userId).username }))}
+                    onSelect={(selectedList) => setUsersResponsible(selectedList.map((user) => user.value))}
+                    onRemove={(selectedList) => setUsersResponsible(selectedList.map((user) => user.value))}
+                    displayValue="label"
+                    showCheckbox={true}
+                    closeIcon="cancel"
+                    placeholder={selectedGroup ? "Select users" : "Select group first"}
+                    required
+                  />
+                  
+              </div>
+
+            </div>
+
           </div>
 
-          <label>
-            Description:
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-          </label>
-          <br />
+          {/* Description Box Spanning Both Columns */}
+          <div className="row">
+            <div className="col-md-12">
+              <div class="w-75 mx-auto d-flex flex-column justify-content-center">
+                <div className="mb-3">
+                  <label className="form-label">Description:</label>
+                  <textarea className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <button type="submit">Add Task</button>
-          <button type="button" onClick={goToTaskManagement}>Cancel</button>
-        </form>
-      </div>
+          {/* Move the buttons to the center */}
+          <div className="d-flex justify-content-center pt-">
+              <button type="submit" className="btn btn-primary me-2">Add Task</button>
+              <button type="button" className="btn btn-secondary" onClick={goToTaskManagement}>Cancel</button>
+            </div>
+        </div>
+      </form>
     </Layout>
   );
 }
