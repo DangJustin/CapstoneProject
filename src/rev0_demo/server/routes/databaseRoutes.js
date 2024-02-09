@@ -5,6 +5,25 @@ const Group = require("../models/groupModel");
 const Bill = require("../models/billModel");
 const UserDebt = require("../models/userDebtModel");
 
+// Endpoint to get current logged in user's info
+router.get('/user/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+
+      // Fetch the user from the database based on the user ID
+      const user = await User.findOne({ userID: userId });
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      // Return the user info in the response
+      res.json(user);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 // Endpoint to get all groups that a user is involved in
 router.get("/user-groups/:userId", async (req, res) => {
   try {
@@ -38,8 +57,7 @@ router.get("/group-participants/:groupId/user/:userId", async (req, res) => {
 
     // Fetch participants of the group (excluding the current user)
     const participants = await User.find(
-      { _id: { $in: group.users }, userID: { $ne: userId } },
-      "_id email"
+      { _id: { $in: group.users }, userID: { $ne: userId } }
     );
 
     res.json(participants);
@@ -48,6 +66,28 @@ router.get("/group-participants/:groupId/user/:userId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Endpoint to get all users involved in a group including user
+router.get("/group-participants/:groupId/all-users/:userId", async (req, res) => {
+    try {
+      const groupId = req.params.groupId;
+      const userId = req.params.userId;
+  
+      // Fetch the group by ID
+      const group = await Group.findById(groupId);
+      if (!group) {
+        return res.status(404).json({ error: "Group not found" });
+      }
+  
+      // Fetch all participants of the group
+      const participants = await User.find({ _id: { $in: group.users } });
+  
+      res.json(participants);
+    } catch (error) {
+      console.error("Error fetching group participants:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 // Get all bills associated with a user
 router.get("/user-bills/:userId", async (req, res) => {

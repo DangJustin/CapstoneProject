@@ -27,7 +27,7 @@ async function getUserTasks(userID){
   }
 }
 
-async function addTask(taskName, groupID, deadlineDate, description){
+async function addTask(taskName, groupID, deadlineDate, description, usersResponsible){
     try {
         // Create a new task instance
         const newTask = new Task({
@@ -35,8 +35,9 @@ async function addTask(taskName, groupID, deadlineDate, description){
           groupID,
           deadlineDate,
           description,
+          usersResponsible,
         });
-    
+        
         // Save the new task to the database
         const savedTask = await newTask.save();
     

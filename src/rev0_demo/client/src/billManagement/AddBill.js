@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+import Layout from '../Layout';
 
 const auth = getAuth();
 
@@ -122,6 +123,7 @@ function AddBill() {
   
 
   return (
+    <Layout>
     <div>
       {currentUser ? (
         <div>
@@ -197,6 +199,7 @@ function AddBill() {
         </div>
       )}
     </div>
+    </Layout>
   );
 }
 
