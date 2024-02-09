@@ -38,8 +38,7 @@ router.get("/group-participants/:groupId/user/:userId", async (req, res) => {
 
     // Fetch participants of the group (excluding the current user)
     const participants = await User.find(
-      { _id: { $in: group.users }, userID: { $ne: userId } },
-      "_id email"
+      { _id: { $in: group.users }, userID: { $ne: userId } }
     );
 
     res.json(participants);
@@ -48,6 +47,28 @@ router.get("/group-participants/:groupId/user/:userId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Endpoint to get all users involved in a group including user
+router.get("/group-participants/:groupId/all-users/:userId", async (req, res) => {
+    try {
+      const groupId = req.params.groupId;
+      const userId = req.params.userId;
+  
+      // Fetch the group by ID
+      const group = await Group.findById(groupId);
+      if (!group) {
+        return res.status(404).json({ error: "Group not found" });
+      }
+  
+      // Fetch all participants of the group
+      const participants = await User.find({ _id: { $in: group.users } });
+  
+      res.json(participants);
+    } catch (error) {
+      console.error("Error fetching group participants:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 // Get all bills associated with a user
 router.get("/user-bills/:userId", async (req, res) => {

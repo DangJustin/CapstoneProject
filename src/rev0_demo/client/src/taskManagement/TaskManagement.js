@@ -68,6 +68,7 @@ function TaskManagement() {
                 <th>Date Created</th>
                 <th>Deadline Date</th>
                 <th>Overdue</th>
+                <th>Users Responsible</th>
             </tr>
         </thead>
         <tbody>
@@ -82,6 +83,7 @@ function TaskManagement() {
                         <td>{new Date(task.createdDate).toLocaleDateString()}</td>
                         <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
                         <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
+                        <td>{task.usersResponsible.join(", ")}</td>
                     </tr>
                 )
             })}
