@@ -5,6 +5,25 @@ const Group = require("../models/groupModel");
 const Bill = require("../models/billModel");
 const UserDebt = require("../models/userDebtModel");
 
+// Endpoint to get current logged in user's info
+router.get('/user/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+
+      // Fetch the user from the database based on the user ID
+      const user = await User.findOne({ userID: userId });
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      // Return the user info in the response
+      res.json(user);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 // Endpoint to get all groups that a user is involved in
 router.get("/user-groups/:userId", async (req, res) => {
   try {

@@ -1,10 +1,13 @@
 import React from 'react';
+import Layout from '../Layout';
 
 function Scheduling() {
   return (
-    <div>
-      <h1>Scheduling Page</h1>
-    </div>
+    <Layout>
+      <div>
+        <h1>Scheduling Page</h1>
+      </div>
+    </Layout>
   );
 }
 

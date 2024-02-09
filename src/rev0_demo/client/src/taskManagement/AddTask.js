@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+import Layout from '../Layout';
 
 const auth = getAuth();
 
@@ -109,67 +110,69 @@ function AddTask() {
   };
 
   return (
-    <div>
-      <h1>Add Task Page</h1>
-      <form onSubmit={(e) => { e.preventDefault(); handleAddTask(); goToTaskManagement();}}>
-        <label>
-          Task Name:
-          <input type="text" required value={taskName} onChange={(e) => setTaskName(e.target.value)} />
-        </label>
-        <br />
-
-        <label>
-          Select Group:
-          <select value={selectedGroup} required onChange={(e) => setSelectedGroup(e.target.value)}>
-            <option value="" disabled>Select a group</option>
-            {groups.map((group) => (
-              <option key={group._id} value={group._id}>{group.groupName}</option>
-            ))}
-          </select>
-        </label>
-        <br />
-
-        <label>
-          Deadline Date:
-          <input type="date" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
-        </label>
-        <br />
-
-        <div>
+    <Layout>
+      <div>
+        <h1>Add Task Page</h1>
+        <form onSubmit={(e) => { e.preventDefault(); handleAddTask(); goToTaskManagement();}}>
           <label>
-            Select Users Responsible:
-            <select multiple value={usersResponsible} onChange={(e) => setUsersResponsible(Array.from(e.target.selectedOptions, option => option.value))}>
-              {/* Conditionally render participants based on whether a group is selected or not */}
-              {selectedGroup
-                ? allParticipants.map((user) => (
-                    <option key={user._id} value={user._id}>{user.username}</option>
-                  ))
-                : null}
+            Task Name:
+            <input type="text" required value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+          </label>
+          <br />
+
+          <label>
+            Select Group:
+            <select value={selectedGroup} required onChange={(e) => setSelectedGroup(e.target.value)}>
+              <option value="" disabled>Select a group</option>
+              {groups.map((group) => (
+                <option key={group._id} value={group._id}>{group.groupName}</option>
+              ))}
             </select>
           </label>
-        </div>
+          <br />
 
-        {/* Show selected users responsible as text */}
-        <div>
-          Users: 
-          {usersResponsible.map(userId => {
-            // Find the user object with the corresponding ID
-            const user = allParticipants.find(participant => participant._id === userId);
-            // Return the username if user object is found, otherwise return an empty string
-            return user ? <span key={userId}> {user.username} </span> : null;
-          })}
-        </div>
+          <label>
+            Deadline Date:
+            <input type="date" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
+          </label>
+          <br />
 
-        <label>
-          Description:
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-        </label>
-        <br />
+          <div>
+            <label>
+              Select Users Responsible:
+              <select multiple value={usersResponsible} onChange={(e) => setUsersResponsible(Array.from(e.target.selectedOptions, option => option.value))}>
+                {/* Conditionally render participants based on whether a group is selected or not */}
+                {selectedGroup
+                  ? allParticipants.map((user) => (
+                      <option key={user._id} value={user._id}>{user.username}</option>
+                    ))
+                  : null}
+              </select>
+            </label>
+          </div>
 
-        <button type="submit">Add Task</button>
-        <button type="button" onClick={goToTaskManagement}>Cancel</button>
-      </form>
-    </div>
+          {/* Show selected users responsible as text */}
+          <div>
+            Users: 
+            {usersResponsible.map(userId => {
+              // Find the user object with the corresponding ID
+              const user = allParticipants.find(participant => participant._id === userId);
+              // Return the username if user object is found, otherwise return an empty string
+              return user ? <span key={userId}> {user.username} </span> : null;
+            })}
+          </div>
+
+          <label>
+            Description:
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+          </label>
+          <br />
+
+          <button type="submit">Add Task</button>
+          <button type="button" onClick={goToTaskManagement}>Cancel</button>
+        </form>
+      </div>
+    </Layout>
   );
 }
 
