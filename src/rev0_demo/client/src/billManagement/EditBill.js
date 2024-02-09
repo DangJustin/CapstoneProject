@@ -9,6 +9,7 @@ function EditBill({ bill, onSave }) {
   const [updatedBill, setUpdatedBill] = useState(bill);
   const [allParticipants, setAllParticipants] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(bill.group._id);
+  const [splitUnevenly, setSplitUnevenly] = useState(false); // State to track uneven split option
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -19,10 +20,8 @@ function EditBill({ bill, onSave }) {
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
-      fetchGroupParticipants(selectedGroup);
-    }
-  }, [selectedGroup, currentUser]);
+    fetchGroupParticipants(selectedGroup);
+  }, [currentUser]);
 
   const fetchGroupParticipants = async (groupId) => {
     try {
@@ -46,16 +45,6 @@ function EditBill({ bill, onSave }) {
     }
   };
 
-  useEffect(() => {
-    if (currentUser) {
-      fetchGroupParticipants(selectedGroup);
-    }
-  }, [selectedGroup, currentUser]);
-
-  useEffect(() => {
-    fetchGroupParticipants(selectedGroup);
-  }, [selectedGroup]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUpdatedBill({ ...updatedBill, [name]: value });
@@ -71,7 +60,7 @@ function EditBill({ bill, onSave }) {
         },
         ...updatedBill.users.map((user) => ({
           user: user._id, // Assuming user._id is the correct user ID field
-          amountOwed: user.amountOwed || 0, // Defaulting to 0 if amountOwed is missing
+          amountOwed: splitUnevenly ?  user.individualAmount : (updatedBill.totalAmount / (updatedBill.users.length + 1)) || 0, // Defaulting to 0 if amountOwed is missing
         })),
       ];
 
@@ -115,7 +104,7 @@ function EditBill({ bill, onSave }) {
           <input
             type="text"
             name="description"
-            value={updatedBill.totalAmount}
+            value={updatedBill.description}
             onChange={handleChange}
           />
         </label>
@@ -155,6 +144,41 @@ function EditBill({ bill, onSave }) {
           />
         </label>
       </div>
+      <div>
+        <label>
+          Uneven Split:
+          <input
+            type="checkbox"
+            checked={splitUnevenly}
+            onChange={() => setSplitUnevenly(!splitUnevenly)}
+          />
+        </label>
+      </div>
+      {/* Only show individual amount inputs if split unevenly is selected */}
+      {splitUnevenly && (
+        <div>
+          {updatedBill.users.map((user, index) => (
+            <div key={user._id}>
+              <label>
+                {user.email}:
+                <input
+                  type="text"
+                  value={user.individualAmount || ""}
+                  onChange={(e) => {
+                    const newUser = {
+                      ...user,
+                      individualAmount: e.target.value,
+                    };
+                    const newUsers = [...updatedBill.users];
+                    newUsers[index] = newUser;
+                    setUpdatedBill({ ...updatedBill, users: newUsers });
+                  }}
+                />
+              </label>
+            </div>
+          ))}
+        </div>
+      )}
       <button onClick={handleSave}>Save</button>
     </div>
   );
