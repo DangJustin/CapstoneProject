@@ -30,7 +30,11 @@ const userSchema = new mongoose.Schema({
     amount: {
         type: Number,
         default: 0.0
-    }
+    },
+    bills: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'bills'
+      }]
 });
 
 // Create a Mongoose model named 'User' using the userSchema

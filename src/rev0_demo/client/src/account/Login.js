@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import AuthDetails from "../AuthDetails"
+import Layout from "../Layout"
 
 
 function Login() {
@@ -120,6 +121,7 @@ function Login() {
       <AuthDetails />
 
     </div>
+
   );
 }
 

@@ -3,6 +3,7 @@ const taskManagementRoutes = require('./taskManagementRoutes');
 const accountRoutes = require('./accountRoutes');
 const billManagementRoutes = require('./billManagementRoutes');
 const schedulingRoutes = require('./schedulingRoutes');
+const databaseRoutes = require('./databaseRoutes');
 
 // Create a router instance
 const router = express.Router();
@@ -20,6 +21,7 @@ router.use('/taskManagement',taskManagementRoutes);
 router.use('/account',accountRoutes);
 router.use('/billManagement',billManagementRoutes);
 router.use('/scheduling',schedulingRoutes);
+router.use('/database',databaseRoutes);
 
 router.get('/', async (req, res) => {
   console.log("test");

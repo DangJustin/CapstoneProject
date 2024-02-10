@@ -5,8 +5,12 @@ import Login from './account/Login';
 import Register from './account/Register';
 import Account from './account/Account';
 import TaskManagement from './taskManagement/TaskManagement';
+import AddTask from './taskManagement/AddTask';
+import Task from './taskManagement/Task';
 import Scheduling from './scheduling/Scheduling';
 import BillManagement from './billManagement/BillManagement';
+import AddBill from './billManagement/AddBill';
+import ViewBill from './billManagement/ViewBill'
 
 {/* Will change links later appropriately */}
 const App = () => {
@@ -18,8 +22,12 @@ const App = () => {
         <Route path="account/login" element={<Login/>} /> {/* Task Management work */}
         <Route path="account/register" element={<Register/>} />
         <Route path="taskManagement" element={<TaskManagement/>}/> {/* Task Management Work*/}
+        <Route path="taskManagement/addTask" element={<AddTask/>}/> {/*Add Task Page*/}
+        <Route path="taskManagement/tasks/task/:id" element={<Task/>}/> {/*View Individual Page*/}
         <Route path="scheduling" element={<Scheduling/>} /> {/* Scheduling work */}
         <Route path="billManagement" element={<BillManagement/>} /> {/* Bill Management work */}
+        <Route path="billManagement/addExpense" element={<AddBill/>} /> {/* Bill Management work */}
+        <Route path="billManagement/viewExpenses" element={<ViewBill/>} /> {/* Bill Management work */}
       </Routes>
     </Router>
   );
