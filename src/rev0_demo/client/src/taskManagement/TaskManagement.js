@@ -15,9 +15,9 @@ function TaskManagement() {
   const goToAddTask = () => {
     navigate('addTask');
   };
-  const handleSelectChange = (event) =>{
-    navigate('tasks/task/'+String(event.target.value));
-  };
+  const handleSelect = (task) => {
+    navigate('tasks/task/'+String(task))
+  }
 
   //Checking if user is logged in
   useEffect(() => {
@@ -113,17 +113,35 @@ function TaskManagement() {
               </tbody>
               </table>
             </div>
-
-            <div>
-              <select value={""} onChange={handleSelectChange}>
-                <option value="">Select a task</option>
-                {tasks.map(task => (
-                  <option key={task._id} value={task._id}>{task.taskName}</option>
-                ))}
-              </select>
+            
+            <div className="btn-toolbar">
+            {/* Dropdown Menu to Select Task */}
+              <button type="button" className="btn btn-primary me-1" onClick={goToAddTask}>Add Task</button>
+              <div className ='dropdown' >
+                <button className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                {'Select a task'}
+                </button>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {tasks.map((task) => (
+                    <button
+                      key={task._id}
+                      className="dropdown-item"
+                      onClick={() => handleSelect(task._id)}
+                    >
+                      {task.taskName}
+                    </button>
+                  ))}
+                  </div>
+              </div>
             </div>
 
-            <button onClick={goToAddTask}>Add Task</button>
+
           </div>
         ) : (
           <div>
