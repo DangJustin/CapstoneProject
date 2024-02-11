@@ -23,6 +23,7 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         console.log(userCredentials);
+        goToHomePage()
       }).catch((error) => {
         console.log(error);
       })

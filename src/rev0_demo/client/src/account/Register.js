@@ -29,6 +29,7 @@ function Register() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         console.log(userCredentials.user.uid);
+        goToHomePage()
         // axios post email, uid, username first and last name and phone
         const userData = {
           "userID": userCredentials.user.uid,
@@ -68,6 +69,10 @@ function Register() {
     }).catch((error) =>
       console.log(error));
   }
+
+  const goToHomePage = () => {
+    navigate('/');
+  };
 
 
   return (

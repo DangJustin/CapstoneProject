@@ -24,6 +24,34 @@ router.post('/', async (req, res) => {
     }
 })
 
+// GET a user by email
+router.get('/user', async (req, res) => {
+    const { email } = req.query; // Access the email sent as a query parameter
+
+    // Validate that email is not empty
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+
+    try {
+        // Find the user by email
+        const user = await User.findOne({ email: email }).exec();
+
+        // If a user is found, respond with the user's name
+        if (user) {
+            res.status(200).json({ userID: user.userID, email: user.email, username: user.username, firstname: user.firstname, lastname: user.lastname, phone: user.phone, amount: user.amount });
+        } else {
+            // If no user is found, respond with an appropriate message
+            res.status(404).json({ message: "User not found" });
+        }
+    } catch (error) {
+        // If there's an error, log it and respond with an error message
+        console.error(error);
+        res.status(500).json({ message: "Error fetching user", error: error });
+    }
+});
+
+
 // POST a new group
 router.post('/addGroup', async (req, res) => {
     const { name, users } = req.body
