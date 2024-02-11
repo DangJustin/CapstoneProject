@@ -85,63 +85,45 @@ function Task() {
   return (
     <Layout>
       <div>
-        <h1>Individual Task Page for {task.taskName}</h1>
-        <h3>ID: {id}</h3>
-        <h3>Group Name: {groupName}</h3>
-        <h3>Description: {task.description}</h3>
-        <h3>Start date: {new Date(task.createdDate).toLocaleDateString()}</h3>
-        <h3>Deadline date: {new Date(task.deadlineDate).toLocaleDateString()}</h3>
-        <h3>Completed: {task.completed?"Yes":"No"}</h3>
-        {!task.completed && (<h3>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h3>)} 
-        {users && (<h3>Users Responsible: {users.join(', ')}</h3>)}
-        <div>
-        <button onClick={turnOnEdit}>Edit Task</button>
-        {!task.completed && (<button onClick={complete}>Complete</button>)}
+        {/* Display Task Info */}
+        <h1>{task.taskName}</h1>
+        <h5>ID: {id}</h5>
+        <hr></hr>
+        <h5>Group Name: {groupName}</h5>
+        <h5>Description: {task.description}</h5>
+        <h5>Start date: {new Date(task.createdDate).toLocaleDateString()}</h5>
+        <h5>Deadline date: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
+        <h5>Completed: {task.completed?"Yes":"No"}</h5>
+        {!task.completed && (<h5>Overdue: {(new Date(task.deadlineDate)<Date.now())?"Yes":"No"}</h5>)} 
+        {users && (<h5>Users Responsible: {users.join(', ')}</h5>)}
+        <div className="btn-toolbar">
+        {!task.completed && (<button className="btn btn-primary me-1" onClick={complete}>Complete</button>)}
+        <button className="btn btn-warning me-1" onClick={turnOnEdit}>Edit Task</button>
         </div>
+        {/* Form to edit task */}
         {edit && (<div>
-          <h1>Edit task: {task.taskName}</h1>
+          <hr></hr>
+          <h1>Edit Task: {task.taskName}</h1>
           <form onSubmit={handleSubmit}>
-          <label>
-            ID:
-            <input
-              type="text"
-              name="id"
-              value={form._id}
-              onChange={handleInputChange}
-              readOnly
+            <div className="mb-3 w-25">
+                  <label className="form-label">Task Name:</label>
+                  <input type="text" name="taskName"  className="form-control" value={form.taskName} onChange={handleInputChange} />
+            </div>
+            <div className="mb-3 w-25">
+                  <label className="form-label">Description:</label>
+                  <textarea name="description" className="form-control" rows="3" value={form.description} onChange={handleInputChange}
             />
-          </label>
-          <br />
-          <label>
-            Name:
-            <input
-              type="text"
-              name="taskName"
-              value={form.taskName}
-              onChange={handleInputChange}
-            />
-          </label>
-          <br />
-          <label>
-            Description:
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleInputChange}
-            />
-          </label>
-          <br />
-          <label>
-            Deadline Date: <input 
-            type="date"
-            name="deadlineDate"  
-            value={form.deadlineDate}
-            onChange={handleInputChange} 
-            />
-          </label>
-          <br />
-          <button type="submit">Save</button>
-        </form>
+            </div>
+            <div className="mb-3 w-25">
+                  <label className="form-label">Deadline Date:</label>
+                  <input type="date" className="form-control" name="deadlineDate"  value={form.deadlineDate} onChange={handleInputChange} />
+            </div>
+            
+            <div className='btn-toolbar mb-3'>
+              <button className="btn btn-primary me-1" type="submit">Save</button>
+              <button type="button" className="btn btn-danger" onClick={turnOnEdit}>Cancel</button>
+            </div>
+          </form>
         </div>)}
       </div>
     </Layout>
