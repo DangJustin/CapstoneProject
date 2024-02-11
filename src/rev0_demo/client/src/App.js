@@ -4,6 +4,7 @@ import HomePage from './Homepage';
 import Login from './account/Login';
 import Register from './account/Register';
 import Account from './account/Account';
+import Group from './account/Group';
 import TaskManagement from './taskManagement/TaskManagement';
 import AddTask from './taskManagement/AddTask';
 import Task from './taskManagement/Task';
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="account" element={<Account />} /> {/* Account work */}
           <Route path="account/login" element={<Login />} /> {/* Task Management work */}
           <Route path="account/register" element={<Register />} />
+          <Route path="account/group" element={<Group />} />
           <Route path="taskManagement" element={<TaskManagement />} /> {/* Task Management Work*/}
           <Route path="taskManagement/addTask" element={<AddTask />} /> {/*Add Task Page*/}
           <Route path="taskManagement/tasks/task/:id" element={<Task />} /> {/*View Individual Page*/}

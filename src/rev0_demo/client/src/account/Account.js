@@ -19,9 +19,9 @@ function Account() {
     navigate('/account/login');
   };
 
-  // const goToGroupPage = () => {
-  //   navigate('/account/group');
-  // };
+  const goToGroupPage = () => {
+    navigate('/account/group');
+  };
 
   return (
     <Layout>
@@ -47,7 +47,7 @@ function Account() {
         <button>Edit Info</button>
         </div>
         <div>
-        {/* <button onSubmit={goToGroupPage}>View Groups</button> */}
+        <button onClick={goToGroupPage}>View Groups</button>
         </div>
         <div>
         <button>Delete</button>

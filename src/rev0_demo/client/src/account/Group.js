@@ -1,129 +1,69 @@
-import React, { useState } from "react"
-// import axios from "axios"
+import React, { useEffect, useState } from "react"
+import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import AuthDetails from "../AuthDetails"
 import Layout from "../Layout"
+import { useUser } from '../UserContext';
 
 
-function Login() {
+function Group() {
   // React hook to manage navigation between pages
   const navigate = useNavigate();
+  const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { currentUser, isLoading, error } = useUser();
 
-  // State variables for managing input values and error messages
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userDoesntExistMessage, setUserDoesntExistMessage] = useState('');
-  const [userExistsMessage, setUserExistsMessage] = useState('');
 
-  // Function to handle form submission for logging in
-  async function handleLoginSubmit(e) {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        console.log(userCredentials);
-        goToHomePage()
-      }).catch((error) => {
-        console.log(error);
-      })
-
-  }
-
-  // Function to handle form submission for logging in
-  async function handleForgotPassword(e) {
-    e.preventDefault();
-  }
-
-  const handleRegister = () => {
-    navigate('/account/register');
-  };
-
-  // Function to handle form submission for creating a new user
-  // MOVE to REGISTER MODULE
-  async function handleNewUserSubmit(e) {
-    e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        console.log(userCredentials);
-      }).catch((error) => {
-        console.log(error);
-      })
-  }
-
-  // Function to handle form submission for signing out user
-  async function handleLogout(e) {
-    e.preventDefault();
-    auth.signOut().then(() => {
-      console.log("success");
-      goToHomePage()
-    }).catch((error) =>
-      console.log(error));
-  }
-
-    // Function to redirect to home page
-    const goToHomePage = () => {
-      navigate('/');
+  useEffect(() => {
+    // Function to fetch groups
+    const fetchGroups = async () => {
+      // Make sure the user is logged in
+      if (currentUser) {
+        try {
+          // Get the user's ID from the auth state
+          const userId = currentUser.userID;
+          // Replace 'http://yourserver.com' with your actual server's URL
+          const response = await axios.get(`http://localhost:5000/api/database/user-groups/${userId}`);
+          setGroups(response.data); // Set the groups in state
+        } catch (error) {
+          console.error('Error fetching groups:', error);
+          // Handle error, e.g., by setting an error state or notifying the user
+        } finally {
+          setLoading(false); // Set loading to false regardless of the outcome
+        }
+      } else {
+        navigate('/login'); // If not logged in, redirect to the login page
+      }
     };
 
+    fetchGroups();
+  }, [navigate]);
+
+  // State variables for managing input values and error messages
+  // const [email, setEmail] = useState('');
+
   return (
-    <div className="login">
-      <h1>Welcome to Housemates!</h1>
+    <Layout>
 
-      {/* Form for logging in with an existing username */}
-      {!auth.currentUser && (
-        <div>
-        <h2>Login with Existing User</h2>
-        <form action="POST" onSubmit={handleLoginSubmit}>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => { setEmail(e.target.value) }}
-              placeholder="Enter Your Email"
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => { setPassword(e.target.value) }}
-              placeholder="Enter Your Password"
-              required
-            />
-          </div>
-
-          <div>
-            <button type="button" onClick={handleForgotPassword}>
-              Forgot Password?
-            </button>
-          </div>
-          <input type="submit" value="Login" />
-        </form>
-
-        {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
-
-      {/* <button onClick={handleLogout}>Sign Out</button> */}
-      <div className="register-container">
-        <button onClick={handleRegister} className="register-button">
-          New User? Register
-        </button>
+      <div className="login">
+        <h1>My Groups</h1>
+        <hr></hr>
+        {loading ? (
+          <p>Loading groups...</p>
+        ) : (
+          groups.map(group => (
+            <div key={group._id}>
+              <p>{group.groupName}</p>
+              {/* Render other group details as needed */}
+            </div>
+          ))
+        )}
       </div>
-      </div>
-
-      )}
-
-      {auth.currentUser && (
-        <div>
-
-          <button onClick={goToHomePage}>Go to Home Page</button>
-          <button onClick={handleLogout}>Sign Out</button>
-        </div>
-      )}
-      <AuthDetails />
-
-    </div>
+    </Layout>
 
   );
 }
 
-export default Login;
+export default Group;

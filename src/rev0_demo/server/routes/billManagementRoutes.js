@@ -7,4 +7,3 @@ const billManagementController = require('../controllers/billManagementControlle
 router.get('/', billManagementController.index);
 router.post('/split-expense', billManagementController.splitExpense);
 module.exports = router;
-
