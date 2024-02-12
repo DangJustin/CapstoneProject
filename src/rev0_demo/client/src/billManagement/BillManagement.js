@@ -11,6 +11,9 @@ function BillManagement() {
   const [currentUser, setCurrentUser] = useState(null);
   const [debts, setDebts] = useState([]);
   const [userAmount, setUserAmount] = useState(0);
+  const [settlingDebt, setSettlingDebt] = useState(null);
+  const [settlementAmount, setSettlementAmount] = useState(0);
+  const [updatedUserAmount, setUpdatedUserAmount] = useState(userAmount);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -21,7 +24,6 @@ function BillManagement() {
   }, []);
 
   useEffect(() => {
-    // Fetch the interpersonal debt relations between users
     const fetchDebts = async () => {
       try {
         const response = await axios.get(
@@ -29,6 +31,7 @@ function BillManagement() {
         );
         setDebts(response.data.netDebts);
         setUserAmount(response.data.userAmount);
+        setUpdatedUserAmount(response.data.userAmount);
       } catch (error) {
         console.error("Error fetching debts:", error);
       }
@@ -46,6 +49,20 @@ function BillManagement() {
     navigate("viewExpenses");
   };
 
+  const handleSettleExpense = () => {
+    // Perform the settlement action here
+    if (settlingDebt && settlementAmount) {
+      // Update debts and userAmount accordingly
+      const updatedDebts = { ...debts };
+      updatedDebts[settlingDebt] += settlementAmount;
+      setDebts(updatedDebts);
+      setUpdatedUserAmount(updatedUserAmount + settlementAmount);
+      // Reset settlingDebt and settlementAmount
+      setSettlingDebt(null);
+      setSettlementAmount(0);
+    }
+  };
+
   return (
     <Layout>
       <div>
@@ -55,7 +72,7 @@ function BillManagement() {
         <button onClick={goToViewExpenses}>View Expense</button>
 
         <h1>
-          {userAmount < 0 ? `Overall, you owe $${userAmount}` : `Overall, you are owed $${userAmount}`}
+          {updatedUserAmount < 0 ? `Overall, you owe $${updatedUserAmount}` : `Overall, you are owed $${updatedUserAmount}`}
         </h1>
         <h2>Interpersonal Debt Relations:</h2>
         <ul>
@@ -64,9 +81,22 @@ function BillManagement() {
               {amount < 0
                 ? `You owe user ${user} $${Math.abs(amount)}`
                 : `User ${user} owes you $${Math.abs(amount)}`}
+              <button onClick={() => setSettlingDebt(user)}>Settle</button>
             </li>
           ))}
         </ul>
+
+        {/* Input for settlement amount */}
+        {settlingDebt && (
+          <div>
+            <input
+              type="number"
+              value={settlementAmount}
+              onChange={(e) => setSettlementAmount(parseFloat(e.target.value))}
+            />
+            <button onClick={handleSettleExpense}>Settle Expense</button>
+          </div>
+        )}
       </div>
     </Layout>
   );
