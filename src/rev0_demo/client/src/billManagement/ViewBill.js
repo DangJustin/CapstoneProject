@@ -70,15 +70,14 @@ function ViewBill() {
           <EditBill bill={editBill} onSave={handleSaveBill} />
         ) : (
           <>
-            <h1>View Expenses</h1>
-            <h2>Bills</h2>
-            <table className="bill-table" border="1">
+            <h1 className="text-center pb-3 pt-3">View Expenses</h1>
+            <table className="table table-bordered">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Total Amount</th>
+                  <th>Amount paid</th>
                   <th>Payer</th>
-                  <th>Participants</th>
+                  <th>Expensed with</th>
                   <th>Group</th>
                   <th>Action</th>
                 </tr>
@@ -100,10 +99,10 @@ function ViewBill() {
                     </td>
                     <td>{bill.group ? bill.group.groupName : "None"}</td>
                     <td>
-                      <button onClick={() => handleEditBill(bill._id)}>
+                      <button onClick={() => handleEditBill(bill._id)} className="btn btn-primary me-1">
                         Edit
                       </button>
-                      <button onClick={() => handleDeleteBill(bill._id)}>
+                      <button onClick={() => handleDeleteBill(bill._id)} className="btn btn-danger">
                         Delete
                       </button>
                     </td>
@@ -115,7 +114,7 @@ function ViewBill() {
         )}
       </div>
     </Layout>
-  );
+  );  
 }
 
 export default ViewBill;
