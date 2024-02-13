@@ -6,11 +6,12 @@ import { auth } from "../firebase"
 import AuthDetails from "../AuthDetails"
 import Layout from "../Layout"
 import axios from "axios"
-
+import { useUser } from '../UserContext';
 
 
 function EventAdd() {
 
+  const { currentUser, isLoading, error } = useUser();
   // State variables for managing input values and error messages
   const [eventName, setEventName] = useState('');
   const [dateTime, setDateTime] = useState('');
@@ -29,9 +30,24 @@ function EventAdd() {
     e.preventDefault();
 
     const durationMinutes = parseInt(minutes);
-    if (isNaN(durationMinutes) || durationMinutes % 30 !== 0) {
-      alert('The duration of the event must be a multiple of 30 minutes.');
+    if (isNaN(durationMinutes) || durationMinutes > 1439 ||  durationMinutes < 1) {
+      alert('The duration of the event must be less than or equal to 1439 and greater than 0');
       return;
+    }
+
+    try{
+      const groupInvolvedRes = await axios.get(`http://localhost:5000/api/database/user-groups/${currentUser.userID}`);
+      var listOfGroups = [];
+      const n = (groupInvolvedRes.data).length;
+      for (var i = 0; i < n; i++) {listOfGroups.push((groupInvolvedRes.data)[i].groupName);}
+
+      if (!listOfGroups.includes(groupName)){
+        alert("You can only add an event to a group you are in!");
+        return;
+      }
+
+    } catch (error) {
+        alert("Failed checking group authentication")
     }
     
     try{
@@ -118,7 +134,7 @@ function EventAdd() {
                   required
                 />
               </div>
-              <p>Enter in multiples of 30.</p>
+              <p>Must be at least one and less than 1440.</p>
               <div>
                 <input
                   type="text"

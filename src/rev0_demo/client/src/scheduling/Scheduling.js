@@ -70,7 +70,7 @@ function Scheduling() {
 function formatDateAndTime(startIsoString, durationMinutes) {
   const startDate = new Date(startIsoString);
   const endDate = new Date(new Date(startIsoString).getTime() + durationMinutes * 60000); // Add duration in milliseconds
-
+  
   // Options for formatting the date part
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   // Options for formatting the time part
