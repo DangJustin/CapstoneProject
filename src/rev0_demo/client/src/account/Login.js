@@ -70,7 +70,6 @@ function Login() {
     <div className="login">
       <h1>Welcome to Housemates!</h1>
 
-      {/* Form for logging in with an existing username */}
       {!auth.currentUser && (
         <div>
         <h2>Login with Existing User</h2>
@@ -102,7 +101,6 @@ function Login() {
 
         {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
 
-      {/* <button onClick={handleLogout}>Sign Out</button> */}
       <div className="register-container">
         <button onClick={handleRegister} className="register-button">
           New User? Register

@@ -17,48 +17,71 @@ function Group() {
 
 
   useEffect(() => {
-    // Function to fetch groups
     const fetchGroups = async () => {
-      // Make sure the user is logged in
       if (currentUser) {
         try {
-          // Get the user's ID from the auth state
           const userId = currentUser.userID;
-          // Replace 'http://yourserver.com' with your actual server's URL
           const response = await axios.get(`http://localhost:5000/api/database/user-groups/${userId}`);
           setGroups(response.data); // Set the groups in state
         } catch (error) {
           console.error('Error fetching groups:', error);
-          // Handle error, e.g., by setting an error state or notifying the user
         } finally {
-          setLoading(false); // Set loading to false regardless of the outcome
+          setLoading(false);
         }
       } else {
-        navigate('/login'); // If not logged in, redirect to the login page
+        navigate('/account/group');
       }
     };
 
     fetchGroups();
   }, [navigate]);
 
+  // Function to handle creating a new group
+  const handleCreateJoinGroup = async () => {
+    if (!auth.currentUser) { alert('You have to be logged in to be able to join or create a group'); }
+    try {
+      console.log(groupName)
+      console.log(currentUser.userID)
+      
+      const response = await axios.put(`http://localhost:5000/api/database/group/${groupName}/user/${currentUser.userID}`)
+      console.log("Group successfully created/joined: ", response.data);
+      alert(`Joined group: ${groupName}`);
+      // refresh group list
+      navigate('/account/group');
+    } catch (error) {
+
+      console.log("Error creating/joining group: ", error);
+      alert('There was an error trying to join.');
+    }
+  };
+
+
+
   // State variables for managing input values and error messages
-  // const [email, setEmail] = useState('');
+  const [groupName, setGroupName] = useState('');
 
   return (
     <Layout>
 
       <div className="login">
         <h1>My Groups</h1>
-        <hr></hr>
-        {loading ? (
-          <p>Loading groups...</p>
-        ) : (
+        <hr />
+        <input style={{ position: 'relative', bottom: '7.5px', left: '0px' }}
+          type="text"
+          onChange={(e) => { setGroupName(e.target.value) }}
+          placeholder="Create or join a group"
+          required
+        ></input><button onClick={handleCreateJoinGroup} style={{ position: 'relative', bottom: '7.5px', left: '5px' }}>
+          ➕ 
+        </button>
+        {groups.length > 0 ? (
           groups.map(group => (
-            <div key={group._id}>
+            <div key={group._id} style={{ border: '1px solid black', top: '100px', padding: '10px' }}>
               <p>{group.groupName}</p>
-              {/* Render other group details as needed */}
             </div>
           ))
+        ) : (
+          <p>No groups found. Try refreshing the page or click the plus sign to create or join one.</p>
         )}
       </div>
     </Layout>

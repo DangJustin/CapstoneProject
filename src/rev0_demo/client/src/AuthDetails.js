@@ -14,7 +14,7 @@ const AuthDetails = () => {
       }
     });
 
-    return listen; // This may need to be `return () => listen();` if listen is a function
+    return listen;
   }, []);
 
   return <div>

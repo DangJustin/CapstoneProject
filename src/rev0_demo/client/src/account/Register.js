@@ -48,11 +48,9 @@ function Register() {
 
         axios.post('http://localhost:5000/api/account', userData )
         .then(response => {
-          // Handle the response from your server here
           console.log('User added to the database', response.data);
         })
         .catch(error => {
-          // Handle any errors from your server here
           console.error('Error adding user to the database', error);
         });
       }).catch((error) => {

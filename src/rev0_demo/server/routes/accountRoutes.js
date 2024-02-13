@@ -5,6 +5,7 @@ const router = express.Router();
 const accountController = require('../controllers/accountController');
 const User = require('../models/userModel');
 const Group = require('../models/groupModel');
+const Event = require('../models/eventModel');
 
 
 router.get('/', accountController.index);
