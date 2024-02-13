@@ -1,4 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 
 // Create a router instance
 const router = express.Router();
@@ -19,6 +22,20 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: "Error creating event", error: error });
     }
 })
+
+// GET events in a group using group
+router.get('/group/:groupId/events', async (req, res) => {
+    try {
+
+        const events = await Event.find({ groupID: new ObjectId(req.params.groupId) });
+
+        // Send back the found events
+        res.json(events);
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
 
 
 

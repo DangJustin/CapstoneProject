@@ -39,7 +39,7 @@ function EventAdd() {
       
       if (groupRes.data && groupRes.data.groupId){
         console.log('Group ID: ', groupRes.data.groupId);
-        setGroupid(groupRes.data.groupId);
+        var groupid = groupRes.data.groupId;
       } else {
         alert('The group you mentioned does not exist, please try again.');
         return;
@@ -55,10 +55,10 @@ function EventAdd() {
 
     // Create event object
     const event = {
-      eventName,
-      dateTime: eventDateTime.toISOString(),
-      duration: durationMinutes,
-      groupid
+      "eventname": eventName,
+      "datetime": eventDateTime.toISOString(),
+      "minutes": durationMinutes,
+      "groupID": groupid
     };
 
     // Check if correct
