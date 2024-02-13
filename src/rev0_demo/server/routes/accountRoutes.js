@@ -5,7 +5,6 @@ const router = express.Router();
 const accountController = require('../controllers/accountController');
 const User = require('../models/userModel');
 const Group = require('../models/groupModel');
-const Event = require('../models/eventModel');
 
 
 router.get('/', accountController.index);
@@ -24,6 +23,26 @@ router.post('/', async (req, res) => {
 
     }
 })
+
+
+// Endpoint for retrieving a group ID by group name
+router.get('/groups/:groupname/id', async (req, res) => {
+    const groupname = req.params.groupname;
+  
+    try {
+      const group = await Group.findOne({ groupName: groupname });
+  
+      if (!group) {
+        return res.status(404).json({ message: 'Group not found' });
+      }
+      
+      res.json({ groupId: group._id });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+
 
 // GET a user by email
 router.get('/user', async (req, res) => {

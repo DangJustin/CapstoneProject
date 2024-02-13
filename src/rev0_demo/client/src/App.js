@@ -12,6 +12,7 @@ import Scheduling from './scheduling/Scheduling';
 import BillManagement from './billManagement/BillManagement';
 import AddBill from './billManagement/AddBill';
 import ViewBill from './billManagement/ViewBill'
+import EventAdd from './scheduling/EventAdd'
 
 import { UserProvider } from './UserContext';
 
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="taskManagement/addTask" element={<AddTask />} /> {/*Add Task Page*/}
           <Route path="taskManagement/tasks/task/:id" element={<Task />} /> {/*View Individual Page*/}
           <Route path="scheduling" element={<Scheduling />} /> {/* Scheduling work */}
+          <Route path="scheduling/eventadd" element={<EventAdd />} /> {/* Scheduling work */}
           <Route path="billManagement" element={<BillManagement />} /> {/* Bill Management work */}
           <Route path="billManagement/addExpense" element={<AddBill />} /> {/* Bill Management work */}
           <Route path="billManagement/viewExpenses" element={<ViewBill />} /> {/* Bill Management work */}

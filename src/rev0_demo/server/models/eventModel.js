@@ -16,7 +16,7 @@ const eventSchema = new mongoose.Schema({
         required: true,
     },
     groupID: {
-        type: mongoose.Schema.Types.ObjectId,,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     }
 });
