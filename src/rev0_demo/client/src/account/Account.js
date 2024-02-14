@@ -4,6 +4,7 @@ import Layout from '../Layout';
 import { auth } from "../firebase"
 import { useNavigate } from "react-router-dom"
 import { useUser } from '../UserContext';
+import axios from 'axios';
 
 
 function Account() {
@@ -12,8 +13,8 @@ function Account() {
   const { currentUser, isLoading, error } = useUser();
 
   // If data is loading or there's an error, handle those cases
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading || error) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error.message}</div>;
 
   const goToLogin = () => {
     navigate('/account/login');
@@ -25,6 +26,28 @@ function Account() {
 
   const goToEditInfoPage = () => {
     navigate('/account/editinfo');
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      console.log(currentUser.userID)
+      const response = await axios.delete(`http://localhost:5000/api/account/users/${currentUser.userID}`)
+
+      console.log(response.data.message);
+
+      // Log out
+      auth.signOut();
+      navigate('/account/login'); // Navigate to login page after deletion
+
+    } catch (error) {
+      console.error('There was an error deleting the user:', error.response ? error.response.data : error);
+      alert("Error could not delete")
+    }
   };
 
   return (
@@ -54,7 +77,7 @@ function Account() {
         <button onClick={goToGroupPage}>View Groups</button>
         </div>
         <div>
-        <button>Delete</button>
+        <button onClick={handleDelete}>Delete</button>
         </div>
         </div>
 
