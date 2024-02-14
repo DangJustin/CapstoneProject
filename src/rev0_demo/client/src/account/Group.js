@@ -22,7 +22,6 @@ function Group() {
         try {
           const userId = currentUser.userID;
           const response = await axios.get(`http://localhost:5000/api/database/user-groups/${userId}`);
-          console.log(response.data);
           setGroups(response.data); // Set the groups in state
 
         } catch (error) {
@@ -64,30 +63,38 @@ function Group() {
 
   return (
     <Layout>
-
-      <div className="login">
-        <h1>My Groups</h1>
+      <div className="login container">
+        <h1 className="text-center pb-3 pt-3">My Groups</h1>
         <hr />
-        <input style={{ position: 'relative', bottom: '7.5px', left: '0px' }}
-          type="text"
-          onChange={(e) => { setGroupName(e.target.value) }}
-          placeholder="Create or join a group"
-          required
-        ></input><button onClick={handleCreateJoinGroup} style={{ position: 'relative', bottom: '7.5px', left: '5px' }}>
-          ➕ 
-        </button>
-        {groups.length > 0 ? (
-          groups.map(group => (
-            <div key={group._id} style={{ border: '1px solid black', top: '100px', padding: '10px' }}>
-              <p>{group.groupName}</p>
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control"
+                onChange={(e) => { setGroupName(e.target.value) }}
+                placeholder="Create or join a group"
+                required
+              />
+              <button className="btn btn-primary" onClick={handleCreateJoinGroup}>
+                ➕
+              </button>
             </div>
-          ))
-        ) : (
-          <p>No groups found. Try refreshing the page or click the plus sign to create or join one.</p>
-        )}
+            {groups.length > 0 ? (
+              groups.map((group) => (
+                <div key={group._id} className="card mb-3">
+                  <div className="card-body">
+                    <p className="card-text">{group.groupName}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No groups found. Try refreshing the page or click the plus sign to create or join one.</p>
+            )}
+          </div>
+        </div>
       </div>
     </Layout>
-
   );
 }
 
