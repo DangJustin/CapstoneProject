@@ -65,14 +65,14 @@ function ViewBill() {
 
   return (
     <Layout>
-      <div>
+      <div className="container">
         {editBill ? (
           <EditBill bill={editBill} onSave={handleSaveBill} />
         ) : (
           <>
-            <h1>View Expenses</h1>
+            <h1 className="mt-3">View Expenses</h1>
             <h2>Bills</h2>
-            <table className="bill-table" border="1">
+            <table className="table bill-table">
               <thead>
                 <tr>
                   <th>Date</th>
@@ -100,10 +100,10 @@ function ViewBill() {
                     </td>
                     <td>{bill.group ? bill.group.groupName : "None"}</td>
                     <td>
-                      <button onClick={() => handleEditBill(bill._id)}>
+                      <button className="btn btn-primary me-2" onClick={() => handleEditBill(bill._id)}>
                         Edit
                       </button>
-                      <button onClick={() => handleDeleteBill(bill._id)}>
+                      <button className="btn btn-danger" onClick={() => handleDeleteBill(bill._id)}>
                         Delete
                       </button>
                     </td>

@@ -49,52 +49,63 @@ function BillManagement() {
     navigate("viewExpenses");
   };
 
-  const handleSettleExpense = () => {
-    // Perform the settlement action here
-    if (settlingDebt && settlementAmount) {
-      // Update debts and userAmount accordingly
-      const updatedDebts = { ...debts };
-      updatedDebts[settlingDebt] += settlementAmount;
-      setDebts(updatedDebts);
-      setUpdatedUserAmount(updatedUserAmount + settlementAmount);
-      // Reset settlingDebt and settlementAmount
-      setSettlingDebt(null);
-      setSettlementAmount(0);
-    }
+  const handleSettleExpense = async () => {
+    try {
+    
+      if (settlingDebt && settlementAmount) {
+        const updatedDebts = { ...debts };
+        updatedDebts[settlingDebt] -= settlementAmount;
+        setDebts(updatedDebts);
+        setUpdatedUserAmount(updatedUserAmount - settlementAmount);
+        setSettlingDebt(null);
+        setSettlementAmount(0);
+      }
+      const updatedDebt = {
+        userId: currentUser.userId,
+        amount: updatedUserAmount, 
+      };
+
+      await axios.put(`http://localhost:5000/api/database/updateUserAmount/${currentUser.uid}`,
+      updatedDebt);
+
+      } catch (error) {
+        console.error("Error settling expense:", error);
+      }
+
   };
 
   return (
     <Layout>
-      <div>
-        <h1>Bill Management Page</h1>
-        <button onClick={goToAddExpense}>Add Expense</button>
-        <br />
-        <button onClick={goToViewExpenses}>View Expense</button>
+      <div className="container">
+        <h1 className="mt-3">Bill Management Page</h1>
+        <button className="btn btn-primary mt-3" onClick={goToAddExpense}>Add Expense</button>
+        <button className="btn btn-secondary mt-3 mx-3" onClick={goToViewExpenses}>View Expense</button>
 
-        <h1>
+        <h1 className="mt-3">
           {updatedUserAmount < 0 ? `Overall, you owe $${updatedUserAmount}` : `Overall, you are owed $${updatedUserAmount}`}
         </h1>
         <h2>Interpersonal Debt Relations:</h2>
-        <ul>
+        <ul className="list-group">
           {Object.entries(debts).map(([user, amount]) => (
-            <li key={user}>
+            <li key={user} className="list-group-item d-flex justify-content-between align-items-center">
               {amount < 0
                 ? `You owe user ${user} $${Math.abs(amount)}`
                 : `User ${user} owes you $${Math.abs(amount)}`}
-              <button onClick={() => setSettlingDebt(user)}>Settle</button>
+              <button className="btn btn-outline-danger" onClick={() => setSettlingDebt(user)}>Settle</button>
             </li>
           ))}
         </ul>
 
         {/* Input for settlement amount */}
         {settlingDebt && (
-          <div>
+          <div className="mt-3">
             <input
               type="number"
               value={settlementAmount}
               onChange={(e) => setSettlementAmount(parseFloat(e.target.value))}
+              className="form-control"
             />
-            <button onClick={handleSettleExpense}>Settle Expense</button>
+            <button className="btn btn-success mt-2" onClick={handleSettleExpense}>Settle Expense</button>
           </div>
         )}
       </div>
