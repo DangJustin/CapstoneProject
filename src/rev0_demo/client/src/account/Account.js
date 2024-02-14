@@ -52,41 +52,37 @@ function Account() {
 
   return (
     <Layout>
-      <div>
-        <h1>Account Page</h1>
+      <div className="container">
+        <h1 className="text-center pb-3 pt-3">Account Page</h1>
         {!auth.currentUser && 
-        <div>
-          <h4>There is no user currently logged in</h4>
-          <button onClick={goToLogin}>Click here to log in</button>
-        </div>
+          <div>
+            <h4>There is no user currently logged in</h4>
+            <button className="btn btn-primary" onClick={goToLogin}>Click here to log in</button>
+          </div>
         }
 
         {auth.currentUser && 
-        <div>
-<h4>Hi, {currentUser.firstname}!</h4>
-          <hr></hr>
-          <h5>Username:     {currentUser.username}</h5>
-          <h5>Name:         {currentUser.firstname} {currentUser.lastname}</h5>
-          <h5>Email:        {currentUser.email}</h5>
-          <h5>Phone:        {currentUser.phone}</h5>
           <div>
+            <h4>Hi, {currentUser.firstname}!</h4>
+            <hr></hr>
+            <h5>Username:     {currentUser.username}</h5>
+            <h5>Name:         {currentUser.firstname} {currentUser.lastname}</h5>
+            <h5>Email:        {currentUser.email}</h5>
+            <h5>Phone:        {currentUser.phone}</h5>
 
-        <button onClick={goToEditInfoPage}>Edit Info</button>
-        </div>
-        <div>
-        <button onClick={goToGroupPage}>View Groups</button>
-        </div>
-        <div>
-        <button onClick={handleDelete}>Delete</button>
-        </div>
-        </div>
-
+            <div>
+              <button className="btn btn-primary mt-2 mb-2" onClick={goToEditInfoPage}>Edit Info</button>
+            </div>
+            <div>
+              <button className="btn btn-primary mb-2" onClick={goToGroupPage}>View Groups</button>
+            </div>
+            <div>
+              <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+            </div>
+          </div>
         }
-
-
-
       </div>
-      </Layout>
+    </Layout>
   );
 }
 

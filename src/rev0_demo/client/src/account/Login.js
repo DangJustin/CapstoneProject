@@ -67,60 +67,66 @@ function Login() {
     };
 
   return (
-    <div className="login">
-      <h1>Welcome to Housemates!</h1>
+    <Layout>
+      <div className="login container">
+        <h1 className="text-center pb-5 pt-3">Welcome to Housemates!</h1>
 
-      {!auth.currentUser && (
-        <div>
-        <h2>Login with Existing User</h2>
-        <form action="POST" onSubmit={handleLoginSubmit}>
+        {!auth.currentUser && (
           <div>
-            <input
-              type="text"
-              onChange={(e) => { setEmail(e.target.value) }}
-              placeholder="Enter Your Email"
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => { setPassword(e.target.value) }}
-              placeholder="Enter Your Password"
-              required
-            />
-          </div>
+            <form onSubmit={handleLoginSubmit}>
+              <div className="row">
+                <div className="col-md-6 offset-md-3">
+                  <div className="mb-3">
+                    <label className="form-label">Email:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      onChange={(e) => { setEmail(e.target.value) }}
+                      placeholder="Enter Your Email"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Password:</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      onChange={(e) => { setPassword(e.target.value) }}
+                      placeholder="Enter Your Password"
+                      required
+                    />
+                  </div>
 
-          <div>
-            <button type="button" onClick={handleForgotPassword}>
-              Forgot Password?
-            </button>
+                  <div className="mb-3">
+                    <button type="button" className="btn btn-link" onClick={handleForgotPassword}>
+                      Forgot Password?
+                    </button>
+                  </div>
+
+                  <div className="text-center mb-2">
+                    <button type="submit" className="btn btn-primary">Login</button>
+                  </div>
+
+                  {userDoesntExistMessage && <p className="text-danger">{userDoesntExistMessage}</p>}
+
+                  <div className="text-center">
+                    <button onClick={handleRegister} className="btn btn-link">New User? Register</button>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-          <input type="submit" value="Login" />
-        </form>
+        )}
 
-        {userDoesntExistMessage && <p id="error">{userDoesntExistMessage}</p>}
-
-      <div className="register-container">
-        <button onClick={handleRegister} className="register-button">
-          New User? Register
-        </button>
+        {auth.currentUser && (
+          <div className="text-center">
+            <button onClick={goToHomePage} className="btn btn-primary me-2">Go to Home Page</button>
+            <button onClick={handleLogout} className="btn btn-danger">Sign Out</button>
+          </div>
+        )}
+        <AuthDetails />
       </div>
-      </div>
-
-      )}
-
-      {auth.currentUser && (
-        <div>
-
-          <button onClick={goToHomePage}>Go to Home Page</button>
-          <button onClick={handleLogout}>Sign Out</button>
-        </div>
-      )}
-      <AuthDetails />
-
-    </div>
-
+    </Layout>
   );
 }
 

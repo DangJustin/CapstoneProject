@@ -17,9 +17,6 @@ const AuthDetails = () => {
     return listen;
   }, []);
 
-  return <div>
-    {authUser ? <p>Logged In as {authUser.email} </p> : <span>Signed Out</span>}
-  </div>;
 };
 
 export default AuthDetails;
