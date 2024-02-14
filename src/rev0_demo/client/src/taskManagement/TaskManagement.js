@@ -11,13 +11,15 @@ function TaskManagement() {
   const [currentUser, setCurrentUser] = useState('');
   const [tasks,setTasks] = useState([]);
   const [displayTasks,setDisplayTasks] = useState([]);
+  const [completeTasks, setCompleteTasks] = useState([]);
+  const [incompleteTasks, setIncompleteTasks] = useState([]);
   const navigate = useNavigate();
   const goToAddTask = () => {
     navigate('addTask');
   };
-  const handleSelectChange = (event) =>{
-    navigate('tasks/task/'+String(event.target.value));
-  };
+  const handleSelect = (task) => {
+    navigate('tasks/task/'+String(task))
+  }
 
   //Checking if user is logged in
   useEffect(() => {
@@ -71,14 +73,25 @@ function TaskManagement() {
     changeTaskData();
   },[tasks])
 
+  // Filter Between Incomplete and Completed Tasks
+  useEffect(()=>{
+    const incompleteList = displayTasks.filter(task => !task.completed);
+    const completeList = displayTasks.filter(task => task.completed);
+    setCompleteTasks(completeList);
+    setIncompleteTasks(incompleteList);
+  },[displayTasks])
+
   return (
     <Layout>
       <div>
         {currentUser ? (
           <div>
             <h1>Task Management Page for user: {currentUser.email}</h1>
-            
-            {/*Table to show all tasks*/}
+            <hr></hr>
+          
+
+            {/*Table to show all incomplete tasks*/}
+            <h3>Incomplete Tasks</h3>
             <div>
             <table class="table table-bordered">
               <thead>
@@ -87,7 +100,6 @@ function TaskManagement() {
                       <th>Task Name</th>
                       <th>Task Description</th>
                       <th>Group Name</th>
-                      <th>Completed</th>
                       <th>Date Created</th>
                       <th>Deadline Date</th>
                       <th>Overdue</th>
@@ -95,14 +107,13 @@ function TaskManagement() {
                   </tr>
               </thead>
               <tbody>
-                  {displayTasks.map((task) => {
+                  {incompleteTasks.map((task) => {
                       return(
                           <tr key={task._id}>
                               <td>{task._id}</td>
                               <td>{task.taskName}</td>
                               <td>{task.description}</td>
                               <td>{task.groupID}</td>
-                              <td>{task.completed?"Yes":"No"}</td>
                               <td>{new Date(task.createdDate).toLocaleDateString()}</td>
                               <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
                               <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
@@ -114,16 +125,67 @@ function TaskManagement() {
               </table>
             </div>
 
+            {/*Table to show all completed tasks*/}
+            <h3>Completed Tasks</h3>
             <div>
-              <select value={""} onChange={handleSelectChange}>
-                <option value="">Select a task</option>
-                {tasks.map(task => (
-                  <option key={task._id} value={task._id}>{task.taskName}</option>
-                ))}
-              </select>
+            <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Task ID</th>
+                      <th>Task Name</th>
+                      <th>Task Description</th>
+                      <th>Group Name</th>
+                      <th>Date Created</th>
+                      <th>Deadline Date</th>
+                      <th>Users Responsible</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {completeTasks.map((task) => {
+                      return(
+                          <tr key={task._id}>
+                              <td>{task._id}</td>
+                              <td>{task.taskName}</td>
+                              <td>{task.description}</td>
+                              <td>{task.groupID}</td>
+                              <td>{new Date(task.createdDate).toLocaleDateString()}</td>
+                              <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
+                              <td>{task.usersResponsible.join(", ")}</td>
+                          </tr>
+                      )
+                  })}
+              </tbody>
+              </table>
+            </div>
+            
+            <div className="btn-toolbar mb-3">
+            {/* Dropdown Menu to Select Task */}
+              <button type="button" className="btn btn-primary me-1" onClick={goToAddTask}>Add Task</button>
+              <div className ='dropdown' >
+                <button className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                {'Select a task'}
+                </button>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {tasks.map((task) => (
+                    <button
+                      key={task._id}
+                      className="dropdown-item"
+                      onClick={() => handleSelect(task._id)}
+                    >
+                      {task.taskName}
+                    </button>
+                  ))}
+                  </div>
+              </div>
             </div>
 
-            <button onClick={goToAddTask}>Add Task</button>
+
           </div>
         ) : (
           <div>

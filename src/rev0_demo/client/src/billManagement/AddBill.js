@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import axios from 'axios';
-import Layout from '../Layout';
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
+import Layout from "../Layout";
+import Multiselect from "multiselect-react-dropdown";
 
 const auth = getAuth();
 
 function AddBill() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [allParticipants, setAllParticipants] = useState([]);
   const [selectedParticipants, setSelectedParticipants] = useState([]);
   const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState("");
   const [splitUnevenly, setSplitUnevenly] = useState(false); // State variable for uneven split
 
   useEffect(() => {
@@ -27,14 +28,16 @@ function AddBill() {
     const fetchUserData = async () => {
       try {
         if (!currentUser) {
-          console.error('No user currently logged in.');
+          console.error("No user currently logged in.");
           return;
         }
 
-        const groupsResponse = await axios.get(`http://localhost:5000/api/database/user-groups/${currentUser.uid}`);
+        const groupsResponse = await axios.get(
+          `http://localhost:5000/api/database/user-groups/${currentUser.uid}`
+        );
 
         if (!groupsResponse) {
-          console.error('Failed to fetch user or group data');
+          console.error("Failed to fetch user or group data");
           return;
         }
 
@@ -42,7 +45,7 @@ function AddBill() {
 
         setGroups(groupsData);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -51,9 +54,11 @@ function AddBill() {
 
   const fetchGroupParticipants = async (groupId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/database/group-participants/${groupId}/user/${currentUser.uid}`);
+      const response = await axios.get(
+        `http://localhost:5000/api/database/group-participants/${groupId}/user/${currentUser.uid}`
+      );
       if (!response || !response.data) {
-        console.error('Failed to fetch group participants:', response);
+        console.error("Failed to fetch group participants:", response);
         return [];
       }
 
@@ -63,7 +68,7 @@ function AddBill() {
 
       return groupParticipants;
     } catch (error) {
-      console.error('Error fetching group participants:', error);
+      console.error("Error fetching group participants:", error);
       return [];
     }
   };
@@ -84,113 +89,170 @@ function AddBill() {
 
       // If split unevenly, include individual expense amounts
       if (splitUnevenly) {
-        const individualAmounts = selectedParticipants.map(participant => participant.individualAmount);
-        const totalIndividualAmounts = individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0);
+        const individualAmounts = selectedParticipants.map(
+          (participant) => participant.individualAmount
+        );
+        const totalIndividualAmounts = individualAmounts.reduce(
+          (acc, val) => acc + parseFloat(val),
+          0
+        );
         if (totalIndividualAmounts > parseFloat(amount)) {
-          console.error('Individual expense amounts exceed the total amount.');
+          console.error("Individual expense amounts exceed the total amount.");
           return;
         }
         expenseData.individualAmounts = individualAmounts;
       }
-      
-      const response = await axios.post('http://localhost:5000/api/billManagement/split-expense', expenseData);
-  
+
+      const response = await axios.post(
+        "http://localhost:5000/api/billManagement/split-expense",
+        expenseData
+      );
+
       if (response.status !== 200) {
-        console.error('Unexpected response status:', response.status);
+        console.error("Unexpected response status:", response.status);
         return;
       }
-  
+
       const data = response.data;
-  
+
       if (!data || data.success !== true) {
-        console.error('Failed to add expense. Data:', data);
+        console.error("Failed to add expense. Data:", data);
         return;
       }
-  
+
       console.log(data.message);
-  
+
       fetchGroupParticipants(selectedGroup);
-  
-      setAmount('');
-      setDescription('');
+
+      setAmount("");
+      setDescription("");
       setSelectedParticipants([]);
-      setSelectedGroup('');
+      setSelectedGroup("");
       setSplitUnevenly(false); // Reset splitUnevenly state
     } catch (error) {
-      console.error('Error adding expense. Details:', error);
+      console.error("Error adding expense. Details:", error);
     }
   };
-  
 
   return (
     <Layout>
-    <div>
       {currentUser ? (
-        <div>
-          <h1>Bill Management Page</h1>
-          <p>Welcome, {currentUser.email}!</p>
-          <div>
-            <label>
-              Amount:
-              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
-            </label>
+        <div className="w-75 mx-auto">
+          <h1 className="text-center pb-3 pt-3">Add a new expense</h1>
+          <div className="mb-3">
+            <label className="text-danger">*</label>
+            <label className="form-label">Amount:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
           </div>
-          <div>
-            <label>
-              Description:
-              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-            </label>
+          <div className="mb-3">
+            <label className="text-danger">*</label>
+            <label className="form-label">Description:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
-          <div>
-            <label>
-              Participants:
-              <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
-                {selectedGroup
-                  ? allParticipants.map((user) => (
-                      <option key={user._id} value={user._id}>{user.email}</option>
-                    ))
-                  : null}
-              </select>
-            </label>
+          <div className="mb-3">
+            <label className="text-danger">*</label>
+            <label className="form-label">Participants:</label>
+            <Multiselect
+              options={allParticipants.map((user) => ({
+                value: user._id,
+                label: user.email,
+              }))}
+              selectedValues={selectedParticipants.map((participant) => ({
+                value: participant._id,
+                label: participant.email,
+              }))}
+              onSelect={(selectedList) =>
+                setSelectedParticipants(
+                  selectedList.map((user) => ({
+                    _id: user.value,
+                    email: user.label,
+                  }))
+                )
+              }
+              onRemove={(selectedList) =>
+                setSelectedParticipants(
+                  selectedList.map((user) => ({
+                    _id: user.value,
+                    email: user.label,
+                  }))
+                )
+              }
+              displayValue="label"
+              showCheckbox={true}
+              closeIcon="cancel"
+              placeholder={
+                selectedGroup ? "Select participants" : "Select group first"
+              }
+              required
+            />
           </div>
-          <div>
-            <label>
-              Group:
-              <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
-                <option value="">Select a Group</option>
-                {groups.map((group) => (
-                  <option key={group._id} value={group._id}>{group.groupName}</option>
-                ))}
-              </select>
-            </label>
+          <div className="mb-3">
+            <label className="text-danger">*</label>
+            <label className="form-label">Group:</label>
+            <select
+              className="form-select"
+              value={selectedGroup}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+            >
+              <option value="">Select a Group</option>
+              {groups.map((group) => (
+                <option key={group._id} value={group._id}>
+                  {group.groupName}
+                </option>
+              ))}
+            </select>
           </div>
-          <div>
-            <label>
-              Split Unevenly:
-              <input type="checkbox" checked={splitUnevenly} onChange={() => setSplitUnevenly(!splitUnevenly)} />
-            </label>
+          <div className="mb-3">
+            <label className="form-check-label">Split Unevenly:</label>
+            <input
+              type="checkbox"
+              className="form-check-input"
+              checked={splitUnevenly}
+              onChange={() => setSplitUnevenly(!splitUnevenly)}
+            />
           </div>
           {splitUnevenly && (
             <div>
-              {selectedParticipants.map(participant => (
-                <div key={participant._id}>
-                  <label>
+              {selectedParticipants.map((participant) => (
+                <div key={participant._id} className="mb-3">
+                  <label className="form-label">
                     {participant.email}:
-                    <input type="text" value={participant.individualAmount || ''} onChange={(e) => {
-                      const updatedParticipants = selectedParticipants.map(p => {
-                        if (p._id === participant._id) {
-                          return { ...p, individualAmount: e.target.value };
-                        }
-                        return p;
-                      });
-                      setSelectedParticipants(updatedParticipants);
-                    }} />
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={participant.individualAmount || ""}
+                      onChange={(e) => {
+                        const updatedParticipants = selectedParticipants.map(
+                          (p) => {
+                            if (p._id === participant._id) {
+                              return { ...p, individualAmount: e.target.value };
+                            }
+                            return p;
+                          }
+                        );
+                        setSelectedParticipants(updatedParticipants);
+                      }}
+                    />
                   </label>
                 </div>
               ))}
             </div>
           )}
-          <button onClick={handleAddExpense}>Add Expense</button>
+          <div className="d-flex justify-content-center pt-3">
+            <button onClick={handleAddExpense} className="btn btn-primary me-2">
+              Add Expense
+            </button>
+          </div>
         </div>
       ) : (
         <div>
@@ -198,7 +260,6 @@ function AddBill() {
           <p>No user currently logged in.</p>
         </div>
       )}
-    </div>
     </Layout>
   );
 }
