@@ -23,6 +23,10 @@ function Account() {
     navigate('/account/group');
   };
 
+  const goToEditInfoPage = () => {
+    navigate('/account/editinfo');
+  };
+
   return (
     <Layout>
       <div>
@@ -44,7 +48,7 @@ function Account() {
           <h5>Phone:        {currentUser.phone}</h5>
           <div>
 
-        <button>Edit Info</button>
+        <button onClick={goToEditInfoPage}>Edit Info</button>
         </div>
         <div>
         <button onClick={goToGroupPage}>View Groups</button>

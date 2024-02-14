@@ -86,6 +86,30 @@ router.post('/addGroup', async (req, res) => {
     }
 })
 
+// edit user info
+router.put('/users/:userID', async (req, res) => {
+    const { userID } = req.params;
+    const { username, firstname, lastname, phone } = req.body;
+  
+    try {
+      // Find the user by ID and update the given fields
+      const user = await User.findByIdAndUpdate(
+        { userID: userID },
+        { email, username, firstname, lastname, phone },
+        { new: true, runValidators: true }
+      );
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({ message: "Error updating user", error: error.message });
+    }
+  });
+
 // GET group based off group._id
 router.get('/groups/group/:id',accountController.getGroup);
 

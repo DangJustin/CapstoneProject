@@ -31,8 +31,13 @@ function Scheduling() {
         const allEvents = eventsResponses.flatMap(response => response.data);
         console.log(allEvents)
 
-        // Assuming the event data has the properties you need to display
-        setEvents(allEvents);
+        // Filter out past events
+        const currentDateTime = new Date();
+        const upcomingEvents = allEvents.filter(event => new Date(event.datetime) > currentDateTime);
+
+        // Sort events by date and time
+        upcomingEvents.sort((a, b) => new Date(a.datetime) - new Date(b.datetime))
+        setEvents(upcomingEvents);
       } catch (error) {
         console.error('Error fetching events:', error);
       }
