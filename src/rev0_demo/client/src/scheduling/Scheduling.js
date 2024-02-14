@@ -44,7 +44,7 @@ function Scheduling() {
     }
 
     fetchEvents();
-  }, []);
+  }, [currentUser]);
 
 
 
