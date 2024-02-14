@@ -89,11 +89,11 @@ router.post('/addGroup', async (req, res) => {
 // edit user info
 router.put('/users/:userID', async (req, res) => {
     const { userID } = req.params;
-    const { username, firstname, lastname, phone } = req.body;
+    const { email, username, firstname, lastname, phone } = req.body;
   
     try {
       // Find the user by ID and update the given fields
-      const user = await User.findByIdAndUpdate(
+      const user = await User.findOneAndUpdate(
         { userID: userID },
         { email, username, firstname, lastname, phone },
         { new: true, runValidators: true }

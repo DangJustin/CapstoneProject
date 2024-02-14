@@ -26,8 +26,7 @@ function Editinfo() {
   async function handleEditSubmit(e) {
     e.preventDefault();
     console.log()
-    const usrid = await axios.get()
-    axios.put(`http://localhost:5000/api/account/users/${currentUser.userID}`, {"username": username, "fisrtname": firstname, "lastname": lastname, "phone":phone})
+    axios.put(`http://localhost:5000/api/account/users/${currentUser.userID}`, {"email": currentUser.email, "username": username, "firstname": firstname, "lastname": lastname, "phone": phone})
       .then(response => {
         console.log('User added to the database', response.data);
       })
