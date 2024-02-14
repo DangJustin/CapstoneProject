@@ -22,6 +22,7 @@ function Group() {
         try {
           const userId = currentUser.userID;
           const response = await axios.get(`http://localhost:5000/api/database/user-groups/${userId}`);
+          console.log(response.data);
           setGroups(response.data); // Set the groups in state
         } catch (error) {
           console.error('Error fetching groups:', error);
@@ -32,9 +33,8 @@ function Group() {
         navigate('/account/group');
       }
     };
-
     fetchGroups();
-  }, [navigate]);
+  },[currentUser]);
 
   // Function to handle creating a new group
   const handleCreateJoinGroup = async () => {
