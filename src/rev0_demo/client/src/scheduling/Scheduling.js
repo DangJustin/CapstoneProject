@@ -50,23 +50,26 @@ function Scheduling() {
 
   return (
     <Layout>
-      <div>
-        <h1>Scheduling Page</h1>
+      <div className="container">
+        <h1 className="text-center pt-3">Scheduling Page</h1>
         <hr />
-        <button onClick={goToEventAddPage} style={{ position: 'relative', bottom: '7.5px', left: '5px' }}>
-          ➕
-        </button>
-        {events.map(event => {
+        <div className="mb-3">
+          <button className="btn btn-primary" onClick={goToEventAddPage}>
+            ➕ Add Event
+          </button>
+        </div>
+        {events.map((event) => {
           const { date, startTime, endTime } = formatDateAndTime(event.datetime, event.minutes);
           return (
-            <div key={event._id} >
-              <h2>{event.eventname}</h2>
-              <p>{date}</p>
-              <p>{startTime} - {endTime} {nextDayOverflow(startTime, endTime) && "next day"}</p>
+            <div key={event._id} className="card mb-3">
+              <div className="card-body">
+                <h2 className="card-title">{event.eventname}</h2>
+                <p className="card-text">{date}</p>
+                <p className="card-text">{startTime} - {endTime} {nextDayOverflow(startTime, endTime) && "next day"}</p>
+              </div>
             </div>
           );
         })}
-
       </div>
     </Layout>
   );

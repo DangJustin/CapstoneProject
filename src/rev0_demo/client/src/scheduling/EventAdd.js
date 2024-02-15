@@ -96,58 +96,84 @@ function EventAdd() {
 
   return (
     <Layout>
-      <div>
-        <h1>Add an Event!</h1>
+      <div className="container">
+        <h1 className="text-center pb-3 pt-3">Add an Event!</h1>
         {!auth.currentUser && (
-          <div>
-            <h2>Login first, you are not logged in!</h2>
-            <button onClick={goToLogin}>Login</button>
+          <div className="row">
+            <div className="col-md-6 offset-md-3">
+              <div className="mb-3">
+                <h2 className="text-center mb-3">Login first, you are not logged in!</h2>
+
+                <div className="text-center mb-3">
+                  <button className="btn btn-primary" onClick={goToLogin}>Login</button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
         {auth.currentUser && (
           <div>
-            <form action="POST" onSubmit={handleEventSubmit}>
-              <div>
-                <input
-                  type="text"
-                  onChange={(e) => { setEventName(e.target.value) }}
-                  placeholder="Enter Your Event Title"
-                  required
-                />
-              </div>
-              <p>What is taking place?</p>
-              <div>
-                <input
-                  type="datetime-local"
-                  onChange={(e) => { setDateTime(e.target.value) }}
-                  placeholder="Start date and time?"
-                  required
-                />
-              </div>
-              <p>Enter start date and time of the event.</p>
-              <div>
-                <input
-                  type="text"
-                  onChange={(e) => { setMinutes(e.target.value) }}
-                  placeholder="Duration? (minutes)"
-                  required
-                />
-              </div>
-              <p>Must be at least one and less than 1440.</p>
-              <div>
-                <input
-                  type="text"
-                  onChange={(e) => { setGroupName(e.target.value) }}
-                  placeholder="Group name?"
-                  required
-                />
-              </div>
-              <p>Which Group is this for?</p>
+            <form onSubmit={handleEventSubmit}>
+              <div className="row">
+                <div className="col-md-6 offset-md-3">
+                  <div className="mb-3">
+                    <label className="text-danger">*</label>
+                    <label htmlFor="eventName" className="form-label">Event Title</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="eventName"
+                      onChange={(e) => { setEventName(e.target.value) }}
+                      placeholder="Enter your event title"
+                      required
+                    />
+                  </div>
 
-              <input type="submit" value="Add Event" />
+                  <div className="mb-3">
+                    <label className="text-danger">*</label>
+                    <label htmlFor="dateTime" className="form-label">Start Date and Time</label>
+                    <input
+                      type="datetime-local"
+                      className="form-control"
+                      id="dateTime"
+                      onChange={(e) => { setDateTime(e.target.value) }}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="text-danger">*</label>
+                    <label htmlFor="duration" className="form-label">Duration (minutes)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="duration"
+                      onChange={(e) => { setMinutes(e.target.value) }}
+                      placeholder="Enter duration (Must be at least one and less than 1440)"
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="text-danger">*</label>
+                    <label htmlFor="groupName" className="form-label">Group Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="groupName"
+                      onChange={(e) => { setGroupName(e.target.value) }}
+                      placeholder="Enter group name"
+                      required
+                    />
+                  </div>
+
+                  <div className="text-center mb-2">
+                    <button type="submit" className="btn btn-primary">Add Event</button>
+                  </div>
+                </div>
+              </div>
             </form>
-
           </div>
         )}
       </div>
