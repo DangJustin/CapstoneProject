@@ -35,7 +35,6 @@ function Navbar() {
     const fetchUserInfo = async () => {
         try {
         if (!currentUser) {
-            console.error('No user currently logged in.');
             return;
         }
 
