@@ -34,7 +34,6 @@ function TaskManagement() {
     const fetchTasksData = async () => {
       try {
         if (!currentUser) {
-          console.error('No user currently logged in.');
           return;
         }
 
@@ -86,14 +85,14 @@ function TaskManagement() {
       <div>
         {currentUser ? (
           <div>
-            <h1>Task Management Page for user: {currentUser.email}</h1>
+            <h1 className="text-center pt-3">Task Management Page</h1>
             <hr></hr>
           
 
             {/*Table to show all incomplete tasks*/}
             <h3>Incomplete Tasks</h3>
             <div>
-            <table class="table table-bordered">
+            <table className="table table-bordered">
               <thead>
                   <tr>
                       <th>Task ID</th>
@@ -128,7 +127,7 @@ function TaskManagement() {
             {/*Table to show all completed tasks*/}
             <h3>Completed Tasks</h3>
             <div>
-            <table class="table table-bordered">
+            <table className="table table-bordered">
               <thead>
                   <tr>
                       <th>Task ID</th>
@@ -189,7 +188,7 @@ function TaskManagement() {
           </div>
         ) : (
           <div>
-            <h1>Task Management Page</h1>
+            <h1 className="text-center pt-3">Task Management Page</h1>
             <p>No user currently logged in.</p>
           </div>
         )}
