@@ -53,7 +53,7 @@ describe('Tests for creating new task', () => {
         expect(task.usersResponsible[0]).toEqual(user2._id);
         expect(task.usersResponsible[0]).not.toEqual(user1._id);
         expect(task.description).toEqual("This is a new test task");
-        expect(task.deadlineDate.toLocaleDateString()).toEqual("2/20/2025");
+        expect(task.deadlineDate.toLocaleDateString()).toEqual(new Date("2/20/2025").toLocaleDateString());
     });
 
     // it('Should fail adding new task', async () => {
@@ -96,6 +96,6 @@ describe('Tests for already existing tasks', () => {
 
         expect(tasks[0].taskName).toEqual("Updated task name");
         expect(tasks[0].description).toEqual("Updated description");
-        expect(tasks[0].deadlineDate.toLocaleDateString()).toEqual("3/30/2024");
+        expect(tasks[0].deadlineDate.toLocaleDateString()).toEqual(new Date("3/30/2024").toLocaleDateString());
     });
 })
