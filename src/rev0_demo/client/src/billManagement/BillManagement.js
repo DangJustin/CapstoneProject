@@ -77,7 +77,8 @@ function BillManagement() {
   return (
     <Layout>
       <div className="container">
-        <h1 className="mt-3">Bill Management Page</h1>
+        <h1 className="text-center pt-3">Bill Management Page</h1>
+        <hr></hr>
         <button className="btn btn-primary mt-3" onClick={goToAddExpense}>Add Expense</button>
         <button className="btn btn-secondary mt-3 mx-3" onClick={goToViewExpenses}>View Expense</button>
 
