@@ -43,11 +43,10 @@ function Editinfo() {
   return (
     <Layout>
       <div className="login container">
-        <h1 className="text-center pb-3 pt-3">Welcome to Housemates!</h1>
+        <h1 className="text-center pb-3 pt-3">Edit User Info</h1>
 
         {/* Form for editing user info */}
         <div>
-          <h2 className="text-center">Edit User Info</h2>
           <form onSubmit={handleEditSubmit}>
             <div className="row">
               <div className="col-md-6 offset-md-3">
