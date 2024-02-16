@@ -386,4 +386,21 @@ router.get("/userDebts/:userID", async (req, res) => {
   }
 });
 
+
+router.put('/updateUserAmount/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const { user, amount } = req.body;
+
+  User.findOneAndUpdate({ userId: userId }, { $inc: { amount: -amount } })
+    .then(() => {
+      res.status(200).json({ message: 'Debt settled successfully' });
+    })
+    .catch((err) => {
+      console.error("Error settling debt:", err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
+
+
+
 module.exports = router;

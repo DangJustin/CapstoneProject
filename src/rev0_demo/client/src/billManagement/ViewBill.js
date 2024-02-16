@@ -65,7 +65,7 @@ function ViewBill() {
 
   return (
     <Layout>
-      <div>
+      <div className="container">
         {editBill ? (
           <EditBill bill={editBill} onSave={handleSaveBill} />
         ) : (
