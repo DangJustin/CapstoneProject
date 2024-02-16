@@ -124,58 +124,47 @@ function AddBill() {
 
   return (
     <Layout>
-    <div>
-      {currentUser ? (
-        <div>
-          <h1>Bill Management Page</h1>
-          <p>Welcome, {currentUser.email}!</p>
+      <div className="container">
+        {currentUser ? (
           <div>
-            <label>
-              Amount:
-              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Description:
-              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Participants:
-              <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))}>
+            <h1 className="mt-3">Bill Management Page</h1>
+            <p className="mt-3">Welcome, {currentUser.email}!</p>
+            <div className="mt-3">
+              <label>Amount:</label>
+              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} className="form-control" />
+            </div>
+            <div className="mt-3">
+              <label>Description:</label>
+              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} className="form-control" />
+            </div>
+            <div className="mt-3">
+              <label>Participants:</label>
+              <select multiple value={selectedParticipants.map((participant) => participant._id)} onChange={(e) => setSelectedParticipants(Array.from(e.target.selectedOptions, option => allParticipants.find(participant => participant._id === option.value)))} className="form-control">
                 {selectedGroup
                   ? allParticipants.map((user) => (
                       <option key={user._id} value={user._id}>{user.email}</option>
                     ))
                   : null}
               </select>
-            </label>
-          </div>
-          <div>
-            <label>
-              Group:
-              <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
+            </div>
+            <div className="mt-3">
+              <label>Group:</label>
+              <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)} className="form-control">
                 <option value="">Select a Group</option>
                 {groups.map((group) => (
                   <option key={group._id} value={group._id}>{group.groupName}</option>
                 ))}
               </select>
-            </label>
-          </div>
-          <div>
-            <label>
-              Split Unevenly:
-              <input type="checkbox" checked={splitUnevenly} onChange={() => setSplitUnevenly(!splitUnevenly)} />
-            </label>
-          </div>
-          {splitUnevenly && (
-            <div>
-              {selectedParticipants.map(participant => (
-                <div key={participant._id}>
-                  <label>
-                    {participant.email}:
+            </div>
+            <div className="mt-3">
+              <label>Split Unevenly:</label>
+              <input type="checkbox" checked={splitUnevenly} onChange={() => setSplitUnevenly(!splitUnevenly)} className="form-check-input" />
+            </div>
+            {splitUnevenly && (
+              <div className="mt-3">
+                {selectedParticipants.map(participant => (
+                  <div key={participant._id} className="mt-2">
+                    <label>{participant.email}:</label>
                     <input type="text" value={participant.individualAmount || ''} onChange={(e) => {
                       const updatedParticipants = selectedParticipants.map(p => {
                         if (p._id === participant._id) {
@@ -184,21 +173,20 @@ function AddBill() {
                         return p;
                       });
                       setSelectedParticipants(updatedParticipants);
-                    }} />
-                  </label>
-                </div>
-              ))}
-            </div>
-          )}
-          <button onClick={handleAddExpense}>Add Expense</button>
-        </div>
-      ) : (
-        <div>
-          <h1>Bill Management Page</h1>
-          <p>No user currently logged in.</p>
-        </div>
-      )}
-    </div>
+                    }} className="form-control" />
+                  </div>
+                ))}
+              </div>
+            )}
+            <button onClick={handleAddExpense} className="btn btn-primary mt-3">Add Expense</button>
+          </div>
+        ) : (
+          <div>
+            <h1 className="mt-3">Bill Management Page</h1>
+            <p className="mt-3">No user currently logged in.</p>
+          </div>
+        )}
+      </div>
     </Layout>
   );
 }
