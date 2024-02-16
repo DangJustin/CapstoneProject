@@ -35,7 +35,6 @@ function Navbar() {
     const fetchUserInfo = async () => {
         try {
         if (!currentUser) {
-            console.error('No user currently logged in.');
             return;
         }
 
@@ -71,6 +70,9 @@ function Navbar() {
                         <ul className="navbar-nav">
                         <li className="nav-item">
                             <a className="nav-link" aria-current="page" href="/">Home</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/account/group">Groups</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="/taskManagement">Tasks</a>

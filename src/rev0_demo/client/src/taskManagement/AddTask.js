@@ -33,7 +33,6 @@ function AddTask() {
     const fetchUserData = async () => {
       try {
         if (!currentUser) {
-          console.error('No user currently logged in.');
           return;
         }
 
@@ -70,7 +69,6 @@ function AddTask() {
 
       return groupParticipants;
     } catch (error) {
-      console.error('Error fetching group participants:', error);
       return [];
     }
   };
@@ -128,7 +126,7 @@ function AddTask() {
         <div className="row">
           {/* First Column */}
           <div className="col-md-6">
-            <div class="w-75 mx-auto d-flex flex-column justify-content-center">
+            <div className="w-75 mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
                 <label className="form-label">Task Name:</label>
@@ -147,7 +145,7 @@ function AddTask() {
 
           {/* Second Column */}
           <div className="col-md-6">
-            <div class="w-75 mx-auto d-flex flex-column justify-content-center">
+            <div className="w-75 mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
                 <label className="form-label">Select Group:</label>
@@ -183,7 +181,7 @@ function AddTask() {
           {/* Description Box Spanning Both Columns */}
           <div className="row">
             <div className="col-md-12">
-              <div class="w-75 mx-auto d-flex flex-column justify-content-center">
+              <div className="w-75 mx-auto d-flex flex-column justify-content-center">
                 <div className="mb-3">
                   <label className="form-label">Description:</label>
                   <textarea className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -195,7 +193,7 @@ function AddTask() {
           {/* Move the buttons to the center */}
           <div className="d-flex justify-content-center pt-">
               <button type="submit" className="btn btn-primary me-2">Add Task</button>
-              <button type="button" className="btn btn-secondary" onClick={goToTaskManagement}>Cancel</button>
+              <button type="button" className="btn btn-danger" onClick={goToTaskManagement}>Cancel</button>
             </div>
         </div>
       </form>

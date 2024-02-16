@@ -11,6 +11,8 @@ function TaskManagement() {
   const [currentUser, setCurrentUser] = useState('');
   const [tasks,setTasks] = useState([]);
   const [displayTasks,setDisplayTasks] = useState([]);
+  const [completeTasks, setCompleteTasks] = useState([]);
+  const [incompleteTasks, setIncompleteTasks] = useState([]);
   const navigate = useNavigate();
   const goToAddTask = () => {
     navigate('addTask');
@@ -32,7 +34,6 @@ function TaskManagement() {
     const fetchTasksData = async () => {
       try {
         if (!currentUser) {
-          console.error('No user currently logged in.');
           return;
         }
 
@@ -71,23 +72,33 @@ function TaskManagement() {
     changeTaskData();
   },[tasks])
 
+  // Filter Between Incomplete and Completed Tasks
+  useEffect(()=>{
+    const incompleteList = displayTasks.filter(task => !task.completed);
+    const completeList = displayTasks.filter(task => task.completed);
+    setCompleteTasks(completeList);
+    setIncompleteTasks(incompleteList);
+  },[displayTasks])
+
   return (
     <Layout>
       <div>
         {currentUser ? (
           <div>
-            <h1>Task Management Page for user: {currentUser.email}</h1>
-            
-            {/*Table to show all tasks*/}
+            <h1 className="text-center pt-3">Task Management Page</h1>
+            <hr></hr>
+          
+
+            {/*Table to show all incomplete tasks*/}
+            <h3>Incomplete Tasks</h3>
             <div>
-            <table class="table table-bordered">
+            <table className="table table-bordered">
               <thead>
                   <tr>
                       <th>Task ID</th>
                       <th>Task Name</th>
                       <th>Task Description</th>
                       <th>Group Name</th>
-                      <th>Completed</th>
                       <th>Date Created</th>
                       <th>Deadline Date</th>
                       <th>Overdue</th>
@@ -95,14 +106,13 @@ function TaskManagement() {
                   </tr>
               </thead>
               <tbody>
-                  {displayTasks.map((task) => {
+                  {incompleteTasks.map((task) => {
                       return(
                           <tr key={task._id}>
                               <td>{task._id}</td>
                               <td>{task.taskName}</td>
                               <td>{task.description}</td>
                               <td>{task.groupID}</td>
-                              <td>{task.completed?"Yes":"No"}</td>
                               <td>{new Date(task.createdDate).toLocaleDateString()}</td>
                               <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
                               <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
@@ -113,8 +123,41 @@ function TaskManagement() {
               </tbody>
               </table>
             </div>
+
+            {/*Table to show all completed tasks*/}
+            <h3>Completed Tasks</h3>
+            <div>
+            <table className="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Task ID</th>
+                      <th>Task Name</th>
+                      <th>Task Description</th>
+                      <th>Group Name</th>
+                      <th>Date Created</th>
+                      <th>Deadline Date</th>
+                      <th>Users Responsible</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {completeTasks.map((task) => {
+                      return(
+                          <tr key={task._id}>
+                              <td>{task._id}</td>
+                              <td>{task.taskName}</td>
+                              <td>{task.description}</td>
+                              <td>{task.groupID}</td>
+                              <td>{new Date(task.createdDate).toLocaleDateString()}</td>
+                              <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
+                              <td>{task.usersResponsible.join(", ")}</td>
+                          </tr>
+                      )
+                  })}
+              </tbody>
+              </table>
+            </div>
             
-            <div className="btn-toolbar">
+            <div className="btn-toolbar mb-3">
             {/* Dropdown Menu to Select Task */}
               <button type="button" className="btn btn-primary me-1" onClick={goToAddTask}>Add Task</button>
               <div className ='dropdown' >
@@ -145,7 +188,7 @@ function TaskManagement() {
           </div>
         ) : (
           <div>
-            <h1>Task Management Page</h1>
+            <h1 className="text-center pt-3">Task Management Page</h1>
             <p>No user currently logged in.</p>
           </div>
         )}

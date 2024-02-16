@@ -5,6 +5,41 @@ const Group = require("../models/groupModel");
 const Bill = require("../models/billModel");
 const UserDebt = require("../models/userDebtModel");
 
+
+// PUT a user in a group
+router.put('/group/:groupName/user/:userId', async (req, res) => {
+  const groupName = req.params.groupName;
+  const userId = req.params.userId;
+
+  try {
+    let group = await Group.findOne({ groupName: groupName });
+
+    if (!group) {
+      group = new Group({ groupName: groupName, users: [] });
+    }
+
+    const user = await User.findOne({ userID: userId });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (group.users.includes(user._id)) {
+      return res.status(400).json({ error: 'User already in group' });
+    }
+
+    group.users.push(user._id);
+
+    await group.save();
+
+    res.status(200).json({ message: 'User added to group', group: group });
+  } catch (error) {
+    console.error('Error adding user to group:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 // Endpoint to get current logged in user's info
 router.get('/user/:userId', async (req, res) => {
     try {
