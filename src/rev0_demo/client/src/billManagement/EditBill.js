@@ -60,7 +60,7 @@ function EditBill({ bill, onSave }) {
         },
         ...updatedBill.users.map((user) => ({
           user: user._id, // Assuming user._id is the correct user ID field
-          amountOwed: splitUnevenly ?  user.individualAmount : (updatedBill.totalAmount / (updatedBill.users.length + 1)) || 0, // Defaulting to 0 if amountOwed is missing
+          amountOwed: splitUnevenly ? user.individualAmount : (updatedBill.totalAmount / (updatedBill.users.length + 1)) || 0, // Defaulting to 0 if amountOwed is missing
         })),
       ];
 
@@ -85,32 +85,34 @@ function EditBill({ bill, onSave }) {
   };
 
   return (
-    <div>
+    <div className="container mt-3">
       <h1>Edit Bill</h1>
-      <div>
-        <label>
+      <div className="mb-3">
+        <label className="form-label">
           Amount:
           <input
             type="text"
             name="totalAmount"
             value={updatedBill.totalAmount}
             onChange={handleChange}
+            className="form-control"
           />
         </label>
       </div>
-      <div>
-        <label>
+      <div className="mb-3">
+        <label className="form-label">
           Description:
           <input
             type="text"
             name="description"
             value={updatedBill.description}
             onChange={handleChange}
+            className="form-control"
           />
         </label>
       </div>
-      <div>
-        <label>
+      <div className="mb-3">
+        <label className="form-label">
           Participants:
           <select
             multiple
@@ -125,6 +127,7 @@ function EditBill({ bill, onSave }) {
                 ),
               })
             }
+            className="form-select"
           >
             {allParticipants.map((user) => (
               <option key={user._id} value={user._id}>
@@ -134,32 +137,34 @@ function EditBill({ bill, onSave }) {
           </select>
         </label>
       </div>
-      <div>
-        <label>
+      <div className="mb-3">
+        <label className="form-label">
           Group:
           <input
             type="text"
             value={updatedBill.group.groupName || ""}
             disabled
+            className="form-control"
           />
         </label>
       </div>
-      <div>
-        <label>
-          Uneven Split:
+      <div className="mb-3">
+        <div className="form-check">
           <input
             type="checkbox"
             checked={splitUnevenly}
             onChange={() => setSplitUnevenly(!splitUnevenly)}
+            className="form-check-input"
           />
-        </label>
+          <label className="form-check-label">Uneven Split</label>
+        </div>
       </div>
       {/* Only show individual amount inputs if split unevenly is selected */}
       {splitUnevenly && (
         <div>
           {updatedBill.users.map((user, index) => (
-            <div key={user._id}>
-              <label>
+            <div key={user._id} className="mb-3">
+              <label className="form-label">
                 {user.email}:
                 <input
                   type="text"
@@ -173,13 +178,16 @@ function EditBill({ bill, onSave }) {
                     newUsers[index] = newUser;
                     setUpdatedBill({ ...updatedBill, users: newUsers });
                   }}
+                  className="form-control"
                 />
               </label>
             </div>
           ))}
         </div>
       )}
-      <button onClick={handleSave}>Save</button>
+      <button onClick={handleSave} className="btn btn-primary">
+        Save
+      </button>
     </div>
   );
 }
