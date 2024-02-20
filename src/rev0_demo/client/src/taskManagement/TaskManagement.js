@@ -11,12 +11,21 @@ function TaskManagement() {
   const [currentUser, setCurrentUser] = useState('');
   const [tasks,setTasks] = useState([]);
   const [displayTasks,setDisplayTasks] = useState([]);
-  const [completeTasks, setCompleteTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
   const navigate = useNavigate();
+
+  // Go to add task page
   const goToAddTask = () => {
     navigate('addTask');
   };
+
+  // Toggle showing History of all tasks
+  const toggleShowHistory = () => {
+    setShowHistory(!showHistory);
+  }
+
+  // Go to individual Task Page
   const handleSelect = (task) => {
     navigate('tasks/task/'+String(task))
   }
@@ -75,114 +84,73 @@ function TaskManagement() {
   // Filter Between Incomplete and Completed Tasks
   useEffect(()=>{
     const incompleteList = displayTasks.filter(task => !task.completed);
-    const completeList = displayTasks.filter(task => task.completed);
-    setCompleteTasks(completeList);
     setIncompleteTasks(incompleteList);
   },[displayTasks])
+  
+  // Function to Sort By Deadline Date of Tasks
+  const sortDate= (task1,task2) => {
+    return new Date(task1.deadlineDate)- new Date(task2.deadlineDate);
+  }
 
   return (
     <Layout>
       <div>
         {currentUser ? (
           <div>
-            <h1 className="text-center pt-3">Task Management Page</h1>
+            <h1 className="text-center pt-3">Tasks</h1>
             <hr></hr>
-          
 
-            {/*Table to show all incomplete tasks*/}
-            <h3>Incomplete Tasks</h3>
-            <div>
-            <table className="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>Task ID</th>
-                      <th>Task Name</th>
-                      <th>Task Description</th>
-                      <th>Group Name</th>
-                      <th>Date Created</th>
-                      <th>Deadline Date</th>
-                      <th>Overdue</th>
-                      <th>Users Responsible</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {incompleteTasks.map((task) => {
-                      return(
-                          <tr key={task._id}>
-                              <td>{task._id}</td>
-                              <td>{task.taskName}</td>
-                              <td>{task.description}</td>
-                              <td>{task.groupID}</td>
-                              <td>{new Date(task.createdDate).toLocaleDateString()}</td>
-                              <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
-                              <td>{(!task.completed&&(new Date(task.deadlineDate)<Date.now()))?"Yes":"No"}</td>
-                              <td>{task.usersResponsible.join(", ")}</td>
-                          </tr>
-                      )
-                  })}
-              </tbody>
-              </table>
-            </div>
-
-            {/*Table to show all completed tasks*/}
-            <h3>Completed Tasks</h3>
-            <div>
-            <table className="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>Task ID</th>
-                      <th>Task Name</th>
-                      <th>Task Description</th>
-                      <th>Group Name</th>
-                      <th>Date Created</th>
-                      <th>Deadline Date</th>
-                      <th>Users Responsible</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {completeTasks.map((task) => {
-                      return(
-                          <tr key={task._id}>
-                              <td>{task._id}</td>
-                              <td>{task.taskName}</td>
-                              <td>{task.description}</td>
-                              <td>{task.groupID}</td>
-                              <td>{new Date(task.createdDate).toLocaleDateString()}</td>
-                              <td>{new Date(task.deadlineDate).toLocaleDateString()}</td>
-                              <td>{task.usersResponsible.join(", ")}</td>
-                          </tr>
-                      )
-                  })}
-              </tbody>
-              </table>
-            </div>
-            
-            <div className="btn-toolbar mb-3">
-            {/* Dropdown Menu to Select Task */}
-              <button type="button" className="btn btn-primary me-1" onClick={goToAddTask}>Add Task</button>
-              <div className ='dropdown' >
-                <button className="btn btn-secondary dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                {'Select a task'}
-                </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  {tasks.map((task) => (
-                    <button
-                      key={task._id}
-                      className="dropdown-item"
-                      onClick={() => handleSelect(task._id)}
-                    >
-                      {task.taskName}
-                    </button>
-                  ))}
+            {/* Display Incomplete Tasks */}
+            <div className = "card-deck" style={{ display: "flex", flexWrap: "wrap" }}>
+            {incompleteTasks.sort(sortDate).map((task)=>{
+              var background = "card me-3 mb-3 bg-light";
+              if ((new Date(task.deadlineDate)<Date.now())){
+                background = "card me-3 mb-3 bg-danger";
+              } 
+              return(
+                <div key={task._id} onClick={() => handleSelect(task._id)}  className={background}>
+                  <div className="card-body">
+                    <h2 className="card-title">{task.taskName}</h2>
+                    <h4 class="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                    <p className="card-text">{task.description}</p>
                   </div>
-              </div>
+                </div>
+              )
+            })}
             </div>
+
+            
+            <div className="btn-toolbar d-flex justify-content-center pt- mb-3">
+              <button type="button" className="btn btn-primary btn-lg me-1" onClick={goToAddTask}>Add Task</button>
+              <button type="button" className="btn btn-secondary btn-lg me-1" onClick={toggleShowHistory}>Task History</button>
+            </div>
+
+            {/* Task History */}
+            {showHistory && <div>
+              <h2>Task History</h2>
+              <div className = "card-deck">
+                {displayTasks.sort(sortDate).map((task)=>{
+                  var background = "card me-3 mb-3 bg-light";
+                  if (task.completed){
+                    background = "card me-3 mb-3 bg-success";
+                  }
+                  else if ((new Date(task.deadlineDate)<Date.now())){
+                    background = "card me-3 mb-3 bg-danger";
+                  } 
+                  return(
+                    <div key={task._id} onClick={() => handleSelect(task._id)}  className={background}>
+                      <div className="card-body">
+                        <h2 className="card-title">{task.taskName}</h2>
+                        <h4 class="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                        <p className="card-text">{task.description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+                </div>
+              </div>}
 
 
           </div>
