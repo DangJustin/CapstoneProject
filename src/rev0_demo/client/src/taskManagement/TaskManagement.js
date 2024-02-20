@@ -13,7 +13,22 @@ function TaskManagement() {
   const [displayTasks,setDisplayTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
+
+  // Search handler
+  const handleSearch = (e) => {
+    const inputValue = e.target.value;
+    setQuery(inputValue);
+    const result = incompleteTasks.filter(task =>
+      task.taskName.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setResults(result);
+    setShowResults(true);
+  };
+
 
   // Go to add task page
   const goToAddTask = () => {
@@ -100,6 +115,24 @@ function TaskManagement() {
             <h1 className="text-center pt-3">Tasks</h1>
             <hr></hr>
 
+            {/* Search Bar to search for tasks */}
+            <div className ="mb-3">
+            <input type="search" className="form-control" placeholder="Search for Task" value={query} onChange={handleSearch}/>
+            {showResults && (
+              <div className="list-group">
+                {results.map(task => (
+                  <div key={task._id} onClick={() => handleSelect(task._id)} className="list-group-item list-group-item-action ">
+                    <h4 className='mb-2'>{task.taskName}</h4>
+                    <h5 className="mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
+                    <h6 className="mb-2 text-muted">{task.groupID}</h6>
+                    <p>{task.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            </div>
+            
+
             {/* Display Incomplete Tasks */}
             <div className = "card-deck" style={{ display: "flex", flexWrap: "wrap" }}>
             {incompleteTasks.sort(sortDate).map((task)=>{
@@ -111,8 +144,8 @@ function TaskManagement() {
                 <div key={task._id} onClick={() => handleSelect(task._id)}  className={background}>
                   <div className="card-body">
                     <h2 className="card-title">{task.taskName}</h2>
-                    <h4 class="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                    <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                    <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
                     <p className="card-text">{task.description}</p>
                   </div>
                 </div>
@@ -142,8 +175,8 @@ function TaskManagement() {
                     <div key={task._id} onClick={() => handleSelect(task._id)}  className={background}>
                       <div className="card-body">
                         <h2 className="card-title">{task.taskName}</h2>
-                        <h4 class="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
-                        <h6 class="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                        <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                        <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
                         <p className="card-text">{task.description}</p>
                       </div>
                     </div>

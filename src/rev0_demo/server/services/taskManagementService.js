@@ -17,7 +17,7 @@ async function getUserTasks(userID){
     tasks = [];
     for (let i = 0; i < userGroups.length; i++){
       group = userGroups[i];
-      task = await Task.find({groupID:group._id})
+      task = await Task.find({groupID:group._id});
       tasks = tasks.concat(task);
     }
     return tasks;
