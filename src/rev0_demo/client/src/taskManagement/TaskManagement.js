@@ -8,14 +8,24 @@ import Layout from '../Layout';
 const auth = getAuth();
 
 function TaskManagement() {
+  // User State
   const [currentUser, setCurrentUser] = useState('');
+
+  // Task State
   const [tasks,setTasks] = useState([]);
   const [displayTasks,setDisplayTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
+
+  // History State
   const [showHistory, setShowHistory] = useState(false);
+
+  // Search State
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+
+  // Modal State
+  const [selectedTask, setSelectedTask] = useState(null);
   const navigate = useNavigate();
 
   // Search handler
@@ -28,6 +38,13 @@ function TaskManagement() {
     setResults(result);
     setShowResults(true);
   };
+
+  // Modal State Handlers
+  const handleClose = () => setSelectedTask(null);
+  const handleOpen = (task) => {
+    console.log(task);
+    setSelectedTask(task);
+  }
 
 
   // Go to add task page
@@ -115,13 +132,39 @@ function TaskManagement() {
             <h1 className="text-center pt-3">Tasks</h1>
             <hr></hr>
 
+            {/* Modal to Display individual task data */}
+            {selectedTask && (
+              <div className="modal fade show" style={{ display: 'block' }} tabindex="-1" role="dialog">
+                <div className="modal-dialog" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h1 className="modal-title" >{selectedTask.taskName}</h1>
+                      <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                      <h4>Due: {new Date(selectedTask.deadlineDate).toLocaleDateString()}</h4>
+                      <h4 className='text-muted'>{selectedTask.groupID}</h4>
+                      <h4>Users Responsible: {selectedTask.usersResponsible.join(', ')}</h4>
+                      <hr></hr>
+                      <p>{selectedTask.description}</p>
+                    </div>
+                    <div className="modal-footer">
+                      {/* TODO change to complete task */}
+                      <button type="button" className="btn btn-success" onClick={handleClose}>Complete Task</button>
+                      <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button>
+                    </div>
+                  </div>
+                </div>
+              </div>            
+            )}
+
             {/* Search Bar to search for tasks */}
             <div className ="mb-3">
             <input type="search" className="form-control" placeholder="Search for Task" value={query} onChange={handleSearch}/>
             {showResults && (
               <div className="list-group">
                 {results.map(task => (
-                  <div key={task._id} onClick={() => handleSelect(task._id)} className="list-group-item list-group-item-action ">
+                  <div key={task._id} className="list-group-item list-group-item-action" onClick={()=>handleOpen(task)}>
                     <h4 className='mb-2'>{task.taskName}</h4>
                     <h5 className="mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
                     <h6 className="mb-2 text-muted">{task.groupID}</h6>
@@ -141,7 +184,7 @@ function TaskManagement() {
                 background = "card me-3 mb-3 bg-danger";
               } 
               return(
-                <div key={task._id} onClick={() => handleSelect(task._id)}  className={background}>
+                <div key={task._id} className={background} onClick ={() => handleOpen(task)}>
                   <div className="card-body">
                     <h2 className="card-title">{task.taskName}</h2>
                     <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
@@ -172,7 +215,7 @@ function TaskManagement() {
                     background = "card me-3 mb-3 bg-danger";
                   } 
                   return(
-                    <div key={task._id} onClick={() => handleSelect(task._id)}  className={background}>
+                    <div key={task._id} onClick={()=>handleOpen(task)}  className={background}>
                       <div className="card-body">
                         <h2 className="card-title">{task.taskName}</h2>
                         <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
