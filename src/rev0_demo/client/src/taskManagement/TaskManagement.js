@@ -57,7 +57,11 @@ function TaskManagement() {
   }
 
   // Modal State Handlers
-  const handleClose = () => setSelectedTask(null);
+  const handleClose = () => {
+    setQuery('');
+    setShowResults(false);
+    setSelectedTask(null);
+  }
   const handleOpen = (task) => {
     console.log(task);
     setSelectedTask(task);
@@ -193,19 +197,21 @@ function TaskManagement() {
             
 
             {/* Display Incomplete Tasks */}
-            <div className = "card-deck" style={{ display: "flex", flexWrap: "wrap" }}>
+            <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
             {incompleteTasks.sort(sortDate).map((task)=>{
-              var background = "card me-3 mb-3 bg-light";
+              var background = "card bg-light h-100";
               if ((new Date(task.deadlineDate)<Date.now())){
-                background = "card me-3 mb-3 bg-danger";
+                background = "card bg-danger h-100";
               } 
               return(
-                <div key={task._id} className={background} onClick ={() => handleOpen(task)}>
-                  <div className="card-body">
-                    <h2 className="card-title">{task.taskName}</h2>
-                    <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
-                    <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
-                    <p className="card-text">{task.description}</p>
+                <div class="col">
+                  <div key={task._id} className={background} onClick ={() => handleOpen(task)}>
+                    <div className="card-body">
+                      <h2 className="card-title">{task.taskName}</h2>
+                      <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                      <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                      <p className="card-text">{task.description}</p>
+                    </div>
                   </div>
                 </div>
               )
