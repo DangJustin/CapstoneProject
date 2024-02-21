@@ -39,6 +39,23 @@ function TaskManagement() {
     setShowResults(true);
   };
 
+  // Completion Handler
+  const complete = async () => {
+    try {
+      await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${selectedTask._id}/complete`);
+      const modifiedTasks = [...displayTasks];
+      for (let i = 0; i < displayTasks.length; i++){
+        if ((selectedTask._id)===(displayTasks[i]._id)){
+          modifiedTasks[i] = {...modifiedTasks[i],completed:true};
+          console.log("modified");
+        }
+      }
+      setDisplayTasks(modifiedTasks);
+    } catch (error){
+      console.log(error);
+    }
+  }
+
   // Modal State Handlers
   const handleClose = () => setSelectedTask(null);
   const handleOpen = (task) => {
@@ -149,8 +166,7 @@ function TaskManagement() {
                       <p>{selectedTask.description}</p>
                     </div>
                     <div className="modal-footer">
-                      {/* TODO change to complete task */}
-                      <button type="button" className="btn btn-success" onClick={handleClose}>Complete Task</button>
+                      <button type="button" className="btn btn-success" onClick={()=>{complete();handleClose();}}>Complete Task</button>
                       <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button>
                     </div>
                   </div>
