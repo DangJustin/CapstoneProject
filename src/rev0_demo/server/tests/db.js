@@ -12,11 +12,9 @@ module.exports.connect = async () =>{
 
 // Disconnect from database after tests are complete
 module.exports.disconnect = async () => {
-    if (mongoServer){
-        await mongoose.connection.dropDatabase();
-        await mongoose.connection.close();
-        await mongoServer.stop();
-    }
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongoServer.stop();
 };
  
  
