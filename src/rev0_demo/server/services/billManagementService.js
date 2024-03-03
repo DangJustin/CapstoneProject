@@ -89,7 +89,7 @@ const splitExpense = async ({
 
     return { success: true, message: "Expense added successfully" };
   } catch (error) {
-    console.error("Error adding expense:", error);
+    // console.error("Error adding expense:", error);
     throw new Error("Internal Server Error");
   }
 };
