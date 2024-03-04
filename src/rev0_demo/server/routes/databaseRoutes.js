@@ -264,9 +264,12 @@ router.put("/edit-bill/:billId", async (req, res) => {
 
     // Save the updated bill
     const updatedBill = await bill.save();
+    const populateBill = await Bill.findById(updatedBill._id)
+    .populate("users.user")
+    .populate("group");
 
     // Send the updated bill as the response
-    res.json(updatedBill);
+    res.json(populateBill);
   } catch (error) {
     console.error("Error updating bill:", error);
     res.status(500).json({ error: "Internal Server Error" });
