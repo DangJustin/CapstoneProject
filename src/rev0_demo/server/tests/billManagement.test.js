@@ -5,6 +5,10 @@ const Bill = require("../models/billModel");
 const UserDebt = require("../models/userDebtModel");
 const billManagementService = require("../services/billManagementService");
 const accountService = require("../services/accountService");
+const { splitExpense } = require('../services/billManagementService');
+// const router = require("../routes/databaseRoutes")
+// const request = require('supertest')
+
 
 
 // Have This block before the tests
@@ -220,5 +224,97 @@ describe('Get Expenses', () => {
     // Check if the response contains the error message
     expect(expenses.error).toEqual('User not found');
   });
+});
+describe("POST /split-expense", () => {
+  it("Should split an expense among users and create a bill with equal individual amounts", async () => {
+    // Test data
+    const user1 = await User.findOne({ userID: "111111111" });
+    const user2 = await User.findOne({ userID: "222222222" });
+    const group = await Group.findOne({ groupName: "Test Create Task" });
 
+    // Make sure users and group exist
+    expect(user1).toBeDefined();
+    expect(user2).toBeDefined();
+    expect(group).toBeDefined();
+
+    // Split the expense with equal individual amounts
+    const bill1 = await splitExpense({
+      userID: user1.userID,
+      amount: 100,
+      description: "random",
+      participants: [user2._id],
+      groupID: group._id,
+    });
+
+    // Verify that the bill was created
+    const bills = await Bill.find();
+    expect(bills.length).toBe(1);
+
+    // Check bill details
+    const bill = bills[0];
+    expect(bill.totalAmount).toBe(100);
+    expect(bill.users.length).toBe(2); // Assuming only 2 users are involved
+    expect(bill.users[0].amountOwed).toBe(50); // User 1 owes 50
+    expect(bill.users[1].amountOwed).toBe(50); // User 2 owes 50
+    
+
+  });
+
+  it("Should split an expense among users and create a bill with custom individual amounts", async () => {
+    // Test data
+    const user1 = await User.findOne({ userID: "111111111" });
+    const user2 = await User.findOne({ userID: "222222222" });
+    const group = await Group.findOne({ groupName: "Test Create Task" });
+
+    // Make sure users and group exist
+    expect(user1).toBeDefined();
+    expect(user2).toBeDefined();
+    expect(group).toBeDefined();
+
+    // Split the expense with custom individual amounts
+    const bill2 = await splitExpense({
+      userID: user1.userID,
+      amount: 200,
+      description: "random",
+      participants: [user2._id],
+      groupID: group._id,
+      individualAmounts: [150], // Custom individual amount for user2
+    });
+
+    // Verify that the bill was created
+    const bills = await Bill.find();
+    expect(bills.length).toBe(1); 
+
+    // Check bill details
+    const bill = bills[0]; // Get the newly created bill
+    expect(bill.totalAmount).toBe(200);
+    expect(bill.users.length).toBe(2); // Assuming only 2 users are involved
+    expect(bill.users[0].amountOwed).toBe(50); // User 1 owes 50
+    expect(bill.users[1].amountOwed).toBe(150); // User 2 owes 150
+    // Add more assertions based on your bill schema
+  });
+
+  it("Should throw an error if the initiating user is not found", async () => {
+    // Attempt to split expense with non-existent user
+    await expect(splitExpense({
+      userID: "invalidUserID",
+      amount: 100,
+      description: "random",
+      participants: ["validUserID"],
+      groupID: "validGroupID",
+    })).rejects.toThrow("Internal Server Error");
+  });
+
+  it("Should throw an error if the group is not found", async () => {
+    // Attempt to split expense with non-existent group
+    await expect(splitExpense({
+      userID: "validUserID",
+      amount: 100,
+      description: "random",
+      participants: ["validUserID"],
+      groupID: "invalidGroupID",
+    })).rejects.toThrow("Internal Server Error");
+  });
+
+  // Add more test cases for error scenarios, edge cases, etc.
 });
