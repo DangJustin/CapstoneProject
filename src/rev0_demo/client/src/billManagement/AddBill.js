@@ -161,6 +161,22 @@ function AddBill() {
           </div>
           <div className="mb-3">
             <label className="text-danger">*</label>
+            <label className="form-label">Group:</label>
+            <select
+              className="form-select"
+              value={selectedGroup}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+            >
+              <option value="">Select a Group</option>
+              {groups.map((group) => (
+                <option key={group._id} value={group._id}>
+                  {group.groupName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label className="text-danger">*</label>
             <label className="form-label">Participants:</label>
             <Multiselect
               options={allParticipants.map((user) => ({
@@ -195,22 +211,6 @@ function AddBill() {
               }
               required
             />
-          </div>
-          <div className="mb-3">
-            <label className="text-danger">*</label>
-            <label className="form-label">Group:</label>
-            <select
-              className="form-select"
-              value={selectedGroup}
-              onChange={(e) => setSelectedGroup(e.target.value)}
-            >
-              <option value="">Select a Group</option>
-              {groups.map((group) => (
-                <option key={group._id} value={group._id}>
-                  {group.groupName}
-                </option>
-              ))}
-            </select>
           </div>
           <div className="mb-3">
             <label className="form-check-label">Split Unevenly:</label>
