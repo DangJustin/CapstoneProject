@@ -23,7 +23,7 @@ function ViewBill() {
     const fetchUserBills = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/database/user-bills/${currentUser.uid}`
+          `http://localhost:5000/api/billManagement/user-bills/${currentUser.uid}`
         );
         setBills(response.data);
       } catch (error) {
@@ -44,7 +44,7 @@ function ViewBill() {
   const handleDeleteBill = async (billId) => {
     try {
       // Send a DELETE request to delete the bill
-      await axios.delete(`http://localhost:5000/api/database/bills/${billId}`);
+      await axios.delete(`http://localhost:5000/api/billManagement/bills/${billId}`);
 
       // Remove the deleted bill from the bills array
       const updatedBills = bills.filter((bill) => bill._id !== billId);

@@ -10,6 +10,7 @@ const { splitExpense } = require('../services/billManagementService');
 // const request = require('supertest')
 
 
+
 // Have This block before the tests
 beforeAll(async () => {
   await db.connect();
@@ -91,6 +92,139 @@ describe("POST /split-expense", () => {
   });
 });
 
+
+describe('Bill Management Tests', () => {
+  let user1, user2, group, bill;
+
+  beforeEach(async () => {
+    // Clear the database before each test
+    await Bill.deleteMany({});
+    await User.deleteMany({});
+    await Group.deleteMany({});
+
+    // Create mock users
+    user1 = await User.create({
+      userID: '111111111',
+      email: 'userBMtest1@example.com',
+      username: 'user1',
+      firstname: 'John',
+      lastname: 'Doe',
+      phone: '1234567890',
+      amount: 0,
+      bills: []
+    });
+
+    user2 = await User.create({
+      userID: '222222222',
+      email: 'userBMtest2@example.com',
+      username: 'user2',
+      firstname: 'Jane',
+      lastname: 'Doe',
+      phone: '9876543210',
+      amount: 0,
+      bills: []
+    });
+
+    // Create a mock group
+    group = await Group.create({ groupName: 'BM TEST Group 1', users: [user1._id, user2._id] });
+    bill = await Bill.create({ totalAmount: 100, users: [{ user: user1._id, amountOwed: 50 }, { user: user2._id, amountOwed: 50 }], group: group._id });
+    
+    // Update the users' bills array
+    user1.bills.push(bill._id);
+    user2.bills.push(bill._id);
+    await user1.save();
+    await user2.save();
+  });
+
+  describe('Delete Bill', () => {
+    it('Should delete an existing bill', async () => {
+      // Get the bill to be deleted
+      const billToDelete = await Bill.findById(bill._id);
+
+      // Delete the bill
+      await billManagementService.deleteExpense(billToDelete._id);
+
+      // Check if the bill is deleted from the database
+      const deletedBill = await Bill.findById(billToDelete._id);
+      expect(deletedBill).toBeNull();
+
+      // Check if the bill is removed from associated users
+      const updatedUser1 = await User.findById(user1._id);
+      const updatedUser2 = await User.findById(user2._id);
+      expect(updatedUser1.bills).not.toContain(billToDelete._id);
+      expect(updatedUser2.bills).not.toContain(billToDelete._id);
+    });
+
+    it('Should handle deleting a non-existent bill', async () => {
+      // Try to delete a non-existent bill
+      const nonExistentBillId = "606c2d0d64f5e53d9c1d6b99"; // A random non-existent bill ID
+      await expect(billManagementService.deleteExpense(nonExistentBillId)).rejects.toThrow();
+    });
+  });
+  it('Should handle deleting a bill with invalid ID format', async () => {
+    // Try to delete a bill with an invalid ID format
+    const invalidBillId = "invalidIdFormat";
+    await expect(billManagementService.deleteExpense(invalidBillId)).rejects.toThrow();
+  });
+
+  it('Should handle deleting a bill with null ID', async () => {
+    // Try to delete a bill with null ID
+    const nullBillId = null;
+    await expect(billManagementService.deleteExpense(nullBillId)).rejects.toThrow();
+  });
+
+  it('Should handle deleting a bill with undefined ID', async () => {
+    // Try to delete a bill with undefined ID
+    const undefinedBillId = undefined;
+    await expect(billManagementService.deleteExpense(undefinedBillId)).rejects.toThrow();
+  });
+
+  it('Should handle deleting a bill with empty string ID', async () => {
+    // Try to delete a bill with an empty string ID
+    const emptyStringBillId = "";
+    await expect(billManagementService.deleteExpense(emptyStringBillId)).rejects.toThrow();
+  });
+});
+
+
+describe('Get Expenses', () => {
+  beforeEach(async () => {
+    // Clear the database before each test
+    await Bill.deleteMany({});
+    await User.deleteMany({});
+  });
+
+  it('Should get expenses for an existing user', async () => {
+    // Create a mock user
+    const user = await User.create({
+      userID: '123456789',
+      email: 'test@example.com',
+      username: 'testuser',
+      firstname: 'John',
+      lastname: 'Doe',
+      phone: '1234567890',
+      amount: 0,
+      bills: []
+    });
+
+    // Create mock bills associated with the user
+    await Bill.create({ totalAmount: 100, users: [{ user: user._id, amountOwed: 50 }], group: null });
+    await Bill.create({ totalAmount: 200, users: [{ user: user._id, amountOwed: 100 }], group: null });
+
+    // Call the service function to get the expenses for the user
+    const expenses = await billManagementService.getExpenses(user.userID);
+
+    // Check if the expenses array is not empty
+    expect(expenses.bills).toHaveLength(2); // Assuming there are 2 bills associated with the user
+  });
+  it('Should handle getting expenses for a non-existent user', async () => {
+    // Call the service function to get the expenses for a non-existent user
+    const expenses = await billManagementService.getExpenses('999999999');
+
+    // Check if the response contains the error message
+    expect(expenses.error).toEqual('User not found');
+  });
+});
 describe("POST /split-expense", () => {
   it("Should split an expense among users and create a bill with equal individual amounts", async () => {
     // Test data

@@ -124,27 +124,6 @@ router.get("/group-participants/:groupId/all-users/:userId", async (req, res) =>
     }
   });
 
-// Get all bills associated with a user
-router.get("/user-bills/:userId", async (req, res) => {
-  try {
-    const userId = req.params.userId;
-
-    // Find the user by ID
-    const user = await User.findOne({ userID: userId });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const bills = await Bill.find({ "users.user": user })
-      .populate("users.user", "username")
-      .populate("group", "groupName");
-    res.json(bills);
-  } catch (error) {
-    console.error("Error fetching user bills:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
 router.put("/edit-bill/:billId", async (req, res) => {
   try {
     const billId = req.params.billId;
@@ -290,54 +269,6 @@ router.put("/edit-bill/:billId", async (req, res) => {
     res.json(updatedBill);
   } catch (error) {
     console.error("Error updating bill:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-router.delete("/bills/:billId", async (req, res) => {
-  const billId = req.params.billId;
-  const billDetails = await Bill.findById(billId);
-  const firstUserId = billDetails.users[0].user;
-
-  // Iterate through each user in the bill's user list
-  for (const [index, user] of billDetails.users.entries()) {
-    if (index === 0) {
-      // Update the amount for the first user
-      await User.findOneAndUpdate(
-        { _id: user.user },
-        { $inc: { amount: -user.amountOwed } }
-      );
-    } else {
-      // For other users, update their amount owed
-      await User.findOneAndUpdate(
-        { _id: user.user },
-        { $inc: { amount: user.amountOwed } }
-      );
-
-      await UserDebt.findOneAndUpdate(
-        { from: firstUserId, to: user.user },
-        { $inc: { amount: -user.amountOwed } }
-      );
-    }
-
-    // Delete the bill ID from the user's bills array
-    await User.findOneAndUpdate(
-      { _id: user.user },
-      { $pull: { bills: billId } }
-    );
-  }
-
-  try {
-    // Find the bill by ID and delete it
-    const deletedBill = await Bill.findByIdAndDelete(billId);
-
-    if (!deletedBill) {
-      return res.status(404).json({ error: "Bill not found" });
-    }
-
-    res.status(200).json({ message: "Bill deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting bill:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

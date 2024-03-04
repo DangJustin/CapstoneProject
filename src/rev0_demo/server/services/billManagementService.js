@@ -94,6 +94,77 @@ const splitExpense = async ({
   }
 };
 
+const deleteExpense = async (billId) => {
+  const billDetails = await Bill.findById(billId);
+  const firstUserId = billDetails.users[0].user;
+
+  // Iterate through each user in the bill's user list
+  for (const [index, user] of billDetails.users.entries()) {
+    if (index === 0) {
+      // Update the amount for the first user
+      await User.findOneAndUpdate(
+        { _id: user.user },
+        { $inc: { amount: -user.amountOwed } }
+      );
+    } else {
+      // For other users, update their amount owed
+      await User.findOneAndUpdate(
+        { _id: user.user },
+        { $inc: { amount: user.amountOwed } }
+      );
+
+      await UserDebt.findOneAndUpdate(
+        { from: firstUserId, to: user.user },
+        { $inc: { amount: -user.amountOwed } }
+      );
+    }
+
+    // Delete the bill ID from the user's bills array
+    await User.findOneAndUpdate(
+      { _id: user.user },
+      { $pull: { bills: billId } }
+    );
+  }
+
+  try {
+    // Find the bill by ID and delete it
+    const deletedBill = await Bill.findByIdAndDelete(billId);
+
+    if (!deletedBill) {
+      // Return a value to indicate that the bill was not found
+      return { error: "Bill not found" };
+    }
+
+    // Return a value to indicate that the deletion was successful
+    return { message: "Bill deleted successfully" };
+
+  } catch (error) {
+    // Log the error and rethrow it to be caught in the controller
+    console.error("Error deleting bill:", error);
+    throw error;
+  }
+}
+
+const getExpenses = async (userId) => {
+  try {
+    // Find the user by ID
+    const user = await User.findOne({ userID: userId });
+    if (!user) {
+      return { error: "User not found" }; // Return an object with an error property
+    }
+
+    const bills = await Bill.find({ "users.user": user })
+      .populate("users.user", "username")
+      .populate("group", "groupName");
+      
+    return { bills }; // Return an object with bills property
+  } catch (error) {
+    console.error("Error fetching user bills:", error);
+    throw error; // Rethrow the error to be handled by the controller
+  }
+}
+
+
 module.exports = {
-  splitExpense,
+  splitExpense, deleteExpense, getExpenses
 };
