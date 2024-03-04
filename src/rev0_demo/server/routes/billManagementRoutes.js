@@ -6,4 +6,7 @@ const billManagementController = require('../controllers/billManagementControlle
 
 router.get('/', billManagementController.index);
 router.post('/split-expense', billManagementController.splitExpense);
+router.delete('/bills/:billId',billManagementController.deleteExpense);
+router.get('/user-bills/:userId',billManagementController.getExpenses);
+
 module.exports = router;
