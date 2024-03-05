@@ -67,7 +67,7 @@ function EditBill({ bill, onSave }) {
       // Create the updated bill object with the necessary fields
       const updatedBillData = {
         totalAmount: updatedBill.totalAmount,
-        description: updatedBill.description,
+        billName: updatedBill.billName,
         users: formattedUsers,
         group: updatedBill.group, // Assuming group doesn't need modification
       };
@@ -101,11 +101,11 @@ function EditBill({ bill, onSave }) {
       </div>
       <div className="mb-3">
         <label className="form-label">
-          Description:
+          billName:
           <input
             type="text"
-            name="description"
-            value={updatedBill.description}
+            name="billName"
+            value={updatedBill.billName}
             onChange={handleChange}
             className="form-control"
           />

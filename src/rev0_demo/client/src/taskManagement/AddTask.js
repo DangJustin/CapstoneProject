@@ -12,7 +12,7 @@ function AddTask() {
   const [taskName, setTaskName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [deadlineDate, setDeadlineDate] = useState('');
-  const [description, setDescription] = useState('');
+  const [billName, setbillName] = useState('');
   const [groups, setGroups] = useState([]);
   const [allParticipants, setAllParticipants] = useState([]);
   const [usersResponsible, setUsersResponsible] = useState([]);
@@ -92,7 +92,7 @@ function AddTask() {
         taskName: taskName,
         groupID: selectedGroup,
         deadlineDate: deadlineDate,
-        description: description,
+        billName: billName,
         usersResponsible: usersResponsible,
       });
 
@@ -178,13 +178,13 @@ function AddTask() {
 
           </div>
 
-          {/* Description Box Spanning Both Columns */}
+          {/* billName Box Spanning Both Columns */}
           <div className="row">
             <div className="col-md-12">
               <div className="w-75 mx-auto d-flex flex-column justify-content-center">
                 <div className="mb-3">
-                  <label className="form-label">Description:</label>
-                  <textarea className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} />
+                  <label className="form-label">billName:</label>
+                  <textarea className="form-control" rows="3" value={billName} onChange={(e) => setbillName(e.target.value)} />
                 </div>
               </div>
             </div>

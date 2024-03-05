@@ -140,8 +140,8 @@ router.put("/edit-bill/:billId", async (req, res) => {
     if (updatedData.totalAmount) {
       bill.totalAmount = updatedData.totalAmount;
     }
-    if (updatedData.description) {
-      bill.description = updatedData.description;
+    if (updatedData.billName) {
+      bill.billName = updatedData.billName;
     }
     if (updatedData.users) {
       // Calculate the amount owed per user

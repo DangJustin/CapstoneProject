@@ -5,6 +5,10 @@ const billSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  billName: {
+    type: String,
+    required: true,
+  },
   totalAmount: {
     type: Number,
     required: true,
@@ -27,6 +31,11 @@ const billSchema = new mongoose.Schema({
     ref: "Group",
     required: false,
   },
+  category: {
+    type: String,
+    required: false,
+    default: "Uncategorized"
+  }
 });
 
 const Bill = mongoose.model("Bill", billSchema);

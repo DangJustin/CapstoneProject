@@ -6,10 +6,11 @@ const UserDebt = require("../models/userDebtModel");
 const splitExpense = async ({
   userID,
   amount,
-  description,
+  billName,
   participants,
   groupID,
-  individualAmounts // Added parameter for individual expense amounts
+  individualAmounts, // Added parameter for individual expense amounts
+  category
 }) => {
   try {
     // Find the user initiating the expense (User A)
@@ -33,6 +34,7 @@ const splitExpense = async ({
 
     // Create a new bill
     const newBill = new Bill({
+      billName: billName,
       totalAmount: amount,
       users: [
         {
@@ -41,6 +43,7 @@ const splitExpense = async ({
         },
       ],
       group: groupID || null,
+      category: category
     });
 
     // Add participants to the bill

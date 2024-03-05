@@ -9,12 +9,14 @@ const auth = getAuth();
 function AddBill() {
   const [currentUser, setCurrentUser] = useState(null);
   const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const [billName, setbillName] = useState("");
   const [allParticipants, setAllParticipants] = useState([]);
   const [selectedParticipants, setSelectedParticipants] = useState([]);
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("");
   const [splitUnevenly, setSplitUnevenly] = useState(false); // State variable for uneven split
+  const [categories] = useState(["Food", "Groceries", "Transportation", "Household", "Entertainment", "Healthcare", "Education", "Personal Care", "Debts", "Miscellaneous"]); // Predefined categories
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -82,9 +84,10 @@ function AddBill() {
       let expenseData = {
         userID: currentUser.uid,
         amount: amount,
-        description,
+        billName,
         participants: selectedParticipants,
         groupID: selectedGroup,
+        category: selectedCategory, // Include selected category
       };
 
       // If split unevenly, include individual expense amounts
@@ -125,10 +128,11 @@ function AddBill() {
       fetchGroupParticipants(selectedGroup);
 
       setAmount("");
-      setDescription("");
+      setbillName("");
       setSelectedParticipants([]);
       setSelectedGroup("");
       setSplitUnevenly(false); // Reset splitUnevenly state
+      setSelectedCategory(""); // Reset selectedCategory state
     } catch (error) {
       console.error("Error adding expense. Details:", error);
     }
@@ -151,12 +155,12 @@ function AddBill() {
           </div>
           <div className="mb-3">
             <label className="text-danger">*</label>
-            <label className="form-label">Description:</label>
+            <label className="form-label">Describe your expense:</label>
             <input
               type="text"
               className="form-control"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={billName}
+              onChange={(e) => setbillName(e.target.value)}
             />
           </div>
           <div className="mb-3">
@@ -211,6 +215,22 @@ function AddBill() {
               }
               required
             />
+          </div>
+          <div className="mb-3">
+            <label className="text-danger">*</label>
+            <label className="form-label">Category:</label>
+            <select
+              className="form-select"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option value="">Select a Category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-3">
             <label className="form-check-label">Split Unevenly:</label>
