@@ -302,6 +302,9 @@ const editBill = async (billId, updatedData) => {
 
     // Save the updated bill
     const updatedBill = await bill.save();
+    const populateBill = await Bill.findById(updatedBill._id)
+    .populate("users.user")
+    .populate("group");
 
     // res.json(updatedBill);
   } catch (error) {
