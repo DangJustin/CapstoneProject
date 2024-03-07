@@ -23,7 +23,7 @@ function BillManagement() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchDebts = async () => {
       try {
         const response = await axios.get(
@@ -83,15 +83,15 @@ function BillManagement() {
         <button className="btn btn-secondary mt-3 mx-3" onClick={goToViewExpenses}>View Expense</button>
 
         <h1 className="mt-3">
-          {updatedUserAmount < 0 ? `Overall, you owe $${updatedUserAmount}` : `Overall, you are owed $${updatedUserAmount}`}
+          {updatedUserAmount < 0 ? `Overall, you owe $${updatedUserAmount.toFixed(2)}` : `Overall, you are owed $${updatedUserAmount.toFixed(2)}`}
         </h1>
         <h2>Interpersonal Debt Relations:</h2>
         <ul className="list-group">
           {Object.entries(debts).map(([user, amount]) => (
             <li key={user} className="list-group-item d-flex justify-content-between align-items-center">
               {amount < 0
-                ? `You owe user ${user} $${Math.abs(amount)}`
-                : `User ${user} owes you $${Math.abs(amount)}`}
+                ? `You owe user ${user} $${Math.abs(amount).toFixed(2)}`
+                : `User ${user} owes you $${Math.abs(amount).toFixed(2)}`}
               <button className="btn btn-outline-danger" onClick={() => setSettlingDebt(user)}>Settle</button>
             </li>
           ))}
