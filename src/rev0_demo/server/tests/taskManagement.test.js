@@ -96,6 +96,28 @@ describe('Task Management Tests', () => {
             expect(tasks[1].completed).toBeTruthy(); //task complete
         });
     });
+
+    describe('Reopen task', () => {
+        it('Should be able to reopen a completed task', async () => {
+            let tasks = await taskManagementService.getUserTasks("111111111");
+    
+            //mark task 2 as completed
+            await taskManagementService.completeTask(tasks[1]._id);
+    
+            //grab tasks again
+            tasks = await taskManagementService.getUserTasks("111111111");
+    
+            expect(tasks[1].completed).toBeTruthy(); //task complete
+
+            // reopen task 2
+            await taskManagementService.reopenTask(tasks[1]._id);
+
+            // Grab tasks
+            tasks = await taskManagementService.getUserTasks("111111111");
+
+            expect(tasks[1].completed).toBeFalsy(); //task is now incomplete
+        });
+    });
     
     
     describe('Edit Task', () => {

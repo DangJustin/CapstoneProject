@@ -62,6 +62,18 @@ async function completeTask(taskID){
     }
 }
 
+async function reopenTask(taskID){
+  try {
+    const task = await getTask(taskID);
+    task.completed = false;
+    await task.save();
+  } catch (error) {
+    // Handle any errors during the task reopening
+    console.error('Error reopening task:', error);
+    throw error;
+  }
+}
+
 async function editTask(taskData){
   try {
     const task = await Task.findById(taskData._id);
@@ -76,4 +88,4 @@ async function editTask(taskData){
   }
 }
 
-module.exports = { getTask, getUserTasks, addTask, completeTask, editTask };
+module.exports = { getTask, getUserTasks, addTask, completeTask, editTask, reopenTask };

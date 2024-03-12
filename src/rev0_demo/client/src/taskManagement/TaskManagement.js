@@ -40,13 +40,17 @@ function TaskManagement() {
   };
 
   // Completion Handler
-  const complete = async () => {
+  const toggleCompletion = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${selectedTask._id}/complete`);
+      if (!selectedTask.completed){
+        await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${selectedTask._id}/complete`);
+      } else{
+        await axios.put(`http://localhost:5000/api/taskManagement/tasks/task/${selectedTask._id}/reopen`);
+      }
       const modifiedTasks = [...displayTasks];
       for (let i = 0; i < displayTasks.length; i++){
         if ((selectedTask._id)===(displayTasks[i]._id)){
-          modifiedTasks[i] = {...modifiedTasks[i],completed:true};
+          modifiedTasks[i] = {...modifiedTasks[i],completed:!modifiedTasks[i].completed};
           console.log("modified");
         }
       }
@@ -170,7 +174,8 @@ function TaskManagement() {
                       <p>{selectedTask.description}</p>
                     </div>
                     <div className="modal-footer">
-                      <button type="button" className="btn btn-success" onClick={()=>{complete();handleClose();}}>Complete Task</button>
+                      {!selectedTask.completed?(<button type="button" className="btn btn-success" onClick={()=>{toggleCompletion();handleClose();}}>Complete Task</button>)
+                      :(<button type="button" className="btn btn-danger" onClick={()=>{toggleCompletion();handleClose();}}>Reopen task</button>)}
                       <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button>
                     </div>
                   </div>
