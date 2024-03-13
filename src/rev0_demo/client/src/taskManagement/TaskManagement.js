@@ -15,6 +15,7 @@ function TaskManagement() {
   const [tasks,setTasks] = useState([]);
   const [displayTasks,setDisplayTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
+  const [completeTasks, setCompleteTasks] = useState([]);
 
   // History State
   const [showHistory, setShowHistory] = useState(false);
@@ -141,7 +142,9 @@ function TaskManagement() {
   // Filter Between Incomplete and Completed Tasks
   useEffect(()=>{
     const incompleteList = displayTasks.filter(task => !task.completed);
+    const completeList = displayTasks.filter(task => task.completed);
     setIncompleteTasks(incompleteList);
+    setCompleteTasks(completeList);
   },[displayTasks])
   
   // Function to Sort By Deadline Date of Tasks
@@ -230,19 +233,13 @@ function TaskManagement() {
             </div>
 
             {/* Task History */}
-            {showHistory && <div>
-              <h2>Task History</h2>
-              <div className = "card-deck">
-                {displayTasks.sort(sortDate).map((task)=>{
-                  var background = "card me-3 mb-3 bg-light";
-                  if (task.completed){
-                    background = "card me-3 mb-3 bg-success";
-                  }
-                  else if ((new Date(task.deadlineDate)<Date.now())){
-                    background = "card me-3 mb-3 bg-danger";
-                  } 
-                  return(
-                    <div key={task._id} onClick={()=>handleOpen(task)}  className={background}>
+            {showHistory && (
+              <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
+              {completeTasks.sort(sortDate).map((task)=>{
+                var background = "card bg-success h-100";
+                return(
+                  <div class="col">
+                    <div key={task._id} className={background} onClick ={() => handleOpen(task)}>
                       <div className="card-body">
                         <h2 className="card-title">{task.taskName}</h2>
                         <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
@@ -250,11 +247,11 @@ function TaskManagement() {
                         <p className="card-text">{task.description}</p>
                       </div>
                     </div>
-                  )
-                })}
-                </div>
-              </div>}
-
+                  </div>
+                )
+              })}
+              </div>
+            )}
 
           </div>
         ) : (
