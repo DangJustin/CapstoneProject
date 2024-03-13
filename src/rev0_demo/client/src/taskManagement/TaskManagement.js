@@ -202,6 +202,10 @@ function TaskManagement() {
               </div>
             )}
             </div>
+
+            <div className="d-grid mb-3">
+              <button type="button" className="btn btn-outline-primary btn-lg me-1" onClick={goToAddTask}> ➕ Add Task</button>
+            </div>
             
 
             {/* Display Incomplete Tasks */}
@@ -213,12 +217,17 @@ function TaskManagement() {
               } 
               return(
                 <div class="col">
-                  <div key={task._id} className={background} onClick ={() => handleOpen(task)}>
-                    <div className="card-body">
+                  <div key={task._id} className={background}>
+                    <div className="card-header">
                       <h2 className="card-title">{task.taskName}</h2>
                       <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
                       <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                    </div>
+                    <div className="card-body">
                       <p className="card-text">{task.description}</p>
+                    </div>
+                    <div class="card-footer">
+                      <button className="btn btn-primary stretched-link w-100" onClick ={() => handleOpen(task)}>Details</button>
                     </div>
                   </div>
                 </div>
@@ -226,11 +235,10 @@ function TaskManagement() {
             })}
             </div>
 
-            
-            <div className="btn-toolbar d-flex justify-content-center pt- mb-3">
-              <button type="button" className="btn btn-primary btn-lg me-1" onClick={goToAddTask}>Add Task</button>
-              <button type="button" className="btn btn-secondary btn-lg me-1" onClick={toggleShowHistory}>Task History</button>
+            <div className="d-grid mb-3">
+              <button type="button" className="btn btn-outline-info btn-lg me-1" onClick={toggleShowHistory}>Task History</button>
             </div>
+            
 
             {/* Task History */}
             {showHistory && (
@@ -239,12 +247,17 @@ function TaskManagement() {
                 var background = "card bg-success h-100";
                 return(
                   <div class="col">
-                    <div key={task._id} className={background} onClick ={() => handleOpen(task)}>
-                      <div className="card-body">
+                    <div key={task._id} className={background}>
+                      <div className="card-header">
                         <h2 className="card-title">{task.taskName}</h2>
                         <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
                         <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                      </div>
+                      <div className="card-body">
                         <p className="card-text">{task.description}</p>
+                      </div>
+                      <div class="card-footer">
+                        <button className="btn btn-primary stretched-link w-100" onClick ={() => handleOpen(task)}>Details</button>
                       </div>
                     </div>
                   </div>
