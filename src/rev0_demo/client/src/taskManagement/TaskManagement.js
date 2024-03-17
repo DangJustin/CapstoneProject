@@ -4,6 +4,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import { getGroupName, getUserNames } from '../utils/nameConversions';
 import Layout from '../Layout';
+import AddTask from './AddTask';
 
 const auth = getAuth();
 
@@ -27,6 +28,7 @@ function TaskManagement() {
 
   // Modal State
   const [selectedTask, setSelectedTask] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   // Search handler
@@ -72,6 +74,15 @@ function TaskManagement() {
     setSelectedTask(task);
   }
 
+  //Modal handlers for add task
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
 
   // Go to add task page
   const goToAddTask = () => {
@@ -186,6 +197,22 @@ function TaskManagement() {
               </div>            
             )}
 
+            {/* Modal for AddTask component */}
+            <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
+              <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Add New Task</h5>
+                    <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowModal(false)}></button>
+                  </div>
+                  <div className="modal-body">
+                    {/* Render the AddTask component */}
+                    <AddTask closeModal={closeModal}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Search Bar to search for tasks */}
             <div className ="mb-3">
             <input type="search" className="form-control" placeholder="Search for Task" value={query} onChange={handleSearch}/>
@@ -204,7 +231,7 @@ function TaskManagement() {
             </div>
 
             <div className="d-grid mb-3">
-              <button type="button" className="btn btn-outline-primary btn-lg me-1" onClick={goToAddTask}> ➕ Add Task</button>
+              <button type="button" className="btn btn-outline-primary btn-lg me-1" onClick={openModal}> ➕ Add Task</button>
             </div>
             
 

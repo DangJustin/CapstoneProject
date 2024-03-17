@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
-import Layout from '../Layout';
 import Multiselect from 'multiselect-react-dropdown';
 
 const auth = getAuth();
 
-function AddTask() {
+function AddTask({ closeModal }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [taskName, setTaskName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
@@ -108,20 +107,15 @@ function AddTask() {
         return;
       }
 
-      navigate('/taskManagement');
+      closeModal();
 
     } catch (error) {
       console.error('Error adding task. Details:', error);
     }
   };
 
-  const goToTaskManagement = () => {
-    navigate('/taskManagement');
-  };
-
   return (
-    <Layout>
-      <h1 className="text-center pb-3 pt-3">Add New Task</h1>
+    <div>
       <form onSubmit={(e) => { e.preventDefault(); handleAddTask();}}>
         <div className="row">
           {/* First Column */}
@@ -193,7 +187,6 @@ function AddTask() {
           {/* Move the buttons to the center */}
           <div className="d-flex justify-content-center pt-">
               <button type="submit" className="btn btn-primary me-2">Add Task</button>
-              <button type="button" className="btn btn-danger" onClick={goToTaskManagement}>Cancel</button>
             </div>
         </div>
       </form>
@@ -205,7 +198,7 @@ function AddTask() {
         </div>
       )}
 
-    </Layout>
+    </div>
   );
 }
 
