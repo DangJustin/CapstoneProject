@@ -17,6 +17,7 @@ function ViewBill() {
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false); // State variable for edit modal visibility
   const [categories] = useState([
     "Food",
     "Groceries",
@@ -59,6 +60,8 @@ function ViewBill() {
   const handleEditBill = (billId) => {
     const billToEdit = bills.find((bill) => bill._id === billId);
     setEditBill(billToEdit);
+    console.log(billToEdit);
+    setShowEditModal(true);
   };
 
   const handleDeleteBill = async (billId) => {
@@ -83,6 +86,7 @@ function ViewBill() {
     );
     setBills(updatedBills);
     setEditBill(null); // Clear the editBill state
+    setShowEditModal(false);
   };
 
   const handleCategoryChange = (event) => {
@@ -161,233 +165,263 @@ function ViewBill() {
   return (
     <Layout>
       <div className="container">
-        {editBill ? (
-          <EditBill bill={editBill} onSave={handleSaveBill} />
-        ) : (
-          <>
-            <h1 className="text-center pb-3 pt-3">View Expenses</h1>
-            <div className="d-flex mb-3">
-              <div className="me-2">
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="categoryDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Categories
-                  </button>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="categoryDropdown"
-                  >
-                    <li>
+        <>
+          <h1 className="text-center pb-3 pt-3">View Expenses</h1>
+          <div className="d-flex mb-3">
+            <div className="me-2">
+              <div className="dropdown">
+                <button
+                  className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="categoryDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Categories
+                </button>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="categoryDropdown"
+                >
+                  <li>
+                    <label className="dropdown-item">
+                      <input
+                        type="checkbox"
+                        value=""
+                        onChange={handleCategoryChange}
+                        checked={selectedCategories.length === 0}
+                      />{" "}
+                      All
+                    </label>
+                  </li>
+                  {categories.map((category) => (
+                    <li key={category}>
                       <label className="dropdown-item">
                         <input
                           type="checkbox"
-                          value=""
+                          value={category}
                           onChange={handleCategoryChange}
-                          checked={selectedCategories.length === 0}
+                          checked={selectedCategories.includes(category)}
                         />{" "}
-                        All
+                        {category}
                       </label>
                     </li>
-                    {categories.map((category) => (
-                      <li key={category}>
-                        <label className="dropdown-item">
-                          <input
-                            type="checkbox"
-                            value={category}
-                            onChange={handleCategoryChange}
-                            checked={selectedCategories.includes(category)}
-                          />{" "}
-                          {category}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  ))}
+                </ul>
               </div>
-              <div className="me-2">
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="groupDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Groups
-                  </button>
-                  <ul className="dropdown-menu" aria-labelledby="groupDropdown">
-                    <li>
-                      <label className="dropdown-item">
-                        <input
-                          type="radio"
-                          value=""
-                          onChange={handleGroupChange}
-                          checked={!selectedGroup}
-                        />{" "}
-                        All
-                      </label>
-                    </li>
-                    {uniqueGroups.map((group) => (
-                      <li key={group._id}>
-                        <label className="dropdown-item">
-                          <input
-                            type="radio"
-                            value={group._id}
-                            onChange={handleGroupChange}
-                            checked={selectedGroup === group._id}
-                          />{" "}
-                          {group.groupName}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="me-2">
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="userDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Users
-                  </button>
-                  <ul className="dropdown-menu" aria-labelledby="userDropdown">
-                    <li>
-                      <label className="dropdown-item">
-                        <input
-                          type="radio"
-                          value=""
-                          onChange={handleUserChange}
-                          checked={!selectedUser}
-                        />{" "}
-                        All
-                      </label>
-                    </li>
-                    {uniqueUsers.map((user) => (
-                      <li key={user._id}>
-                        <label className="dropdown-item">
-                          <input
-                            type="radio"
-                            value={user._id}
-                            onChange={handleUserChange}
-                            checked={selectedUser === user._id}
-                          />{" "}
-                          {user.username}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="ms-auto">
-                <button className="btn btn-secondary" onClick={clearAllFilters}>
-                  Clear Filters
+            </div>
+            <div className="me-2">
+              <div className="dropdown">
+                <button
+                  className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="groupDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Groups
                 </button>
+                <ul className="dropdown-menu" aria-labelledby="groupDropdown">
+                  <li>
+                    <label className="dropdown-item">
+                      <input
+                        type="radio"
+                        value=""
+                        onChange={handleGroupChange}
+                        checked={!selectedGroup}
+                      />{" "}
+                      All
+                    </label>
+                  </li>
+                  {uniqueGroups.map((group) => (
+                    <li key={group._id}>
+                      <label className="dropdown-item">
+                        <input
+                          type="radio"
+                          value={group._id}
+                          onChange={handleGroupChange}
+                          checked={selectedGroup === group._id}
+                        />{" "}
+                        {group.groupName}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div className="my-3">
-              <div className="date-range">
-                <DatePicker
-                  selected={selectedStartDate}
-                  onChange={handleStartDateChange}
-                  selectsStart
-                  startDate={selectedStartDate}
-                  endDate={selectedEndDate}
-                  placeholderText="Start Date"
-                />
-                <DatePicker
-                  selected={selectedEndDate}
-                  onChange={handleEndDateChange}
-                  selectsEnd
-                  startDate={selectedStartDate}
-                  endDate={selectedEndDate}
-                  minDate={selectedStartDate}
-                  placeholderText="End Date"
-                />
+            <div className="me-2">
+              <div className="dropdown">
+                <button
+                  className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="userDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Users
+                </button>
+                <ul className="dropdown-menu" aria-labelledby="userDropdown">
+                  <li>
+                    <label className="dropdown-item">
+                      <input
+                        type="radio"
+                        value=""
+                        onChange={handleUserChange}
+                        checked={!selectedUser}
+                      />{" "}
+                      All
+                    </label>
+                  </li>
+                  {uniqueUsers.map((user) => (
+                    <li key={user._id}>
+                      <label className="dropdown-item">
+                        <input
+                          type="radio"
+                          value={user._id}
+                          onChange={handleUserChange}
+                          checked={selectedUser === user._id}
+                        />{" "}
+                        {user.username}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div className="row row-cols-1 row-cols-md-1 g-2">
-              {filteredBills.map((bill) => (
-                <div key={bill._id} className="col">
-                  <div className="card">
-                    <div className="card-body d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 className="card-title">{bill.billName}</h4>
-                        <p>{new Date(bill.date).toLocaleDateString()}</p>
-                      </div>
-                      <div className="d-flex justify-content-between align-items-center">
-                        <p className="card-text m-2">
-                          ${bill.totalAmount.toFixed(2)}
-                        </p>
-                        <button
-                          className="btn btn-primary"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target={`#collapse${bill._id}`}
-                          aria-expanded="false"
-                          aria-controls={`collapse${bill._id}`}
-                        >
-                          View Details
-                        </button>
-                      </div>
+            <div className="ms-auto">
+              <button className="btn btn-secondary" onClick={clearAllFilters}>
+                Clear Filters
+              </button>
+            </div>
+          </div>
+          <div className="my-3">
+            <div className="date-range">
+              <DatePicker
+                selected={selectedStartDate}
+                onChange={handleStartDateChange}
+                selectsStart
+                startDate={selectedStartDate}
+                endDate={selectedEndDate}
+                placeholderText="Start Date"
+              />
+              <DatePicker
+                selected={selectedEndDate}
+                onChange={handleEndDateChange}
+                selectsEnd
+                startDate={selectedStartDate}
+                endDate={selectedEndDate}
+                minDate={selectedStartDate}
+                placeholderText="End Date"
+              />
+            </div>
+          </div>
+          <div className="row row-cols-1 row-cols-md-1 g-2">
+            {filteredBills.map((bill) => (
+              <div key={bill._id} className="col">
+                <div className="card">
+                  <div className="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 className="card-title">{bill.billName}</h4>
+                      <p>{new Date(bill.date).toLocaleDateString()}</p>
                     </div>
-                    <div className="collapse" id={`collapse${bill._id}`}>
-                      <div className="card-body">
-                        <h5 className="card-title">Details</h5>
-                        <div className="mb-3">
-                          <p>
-                            <span className="fw-bold">
-                              {bill.users[0].user.username}{" "}
-                            </span>{" "}
-                            paid ${bill.totalAmount.toFixed(2)}
-                          </p>
-                        </div>
-                        <div className="mb-3">
-                          <ul className="list-unstyled">
-                            {bill.users.slice(1).map((participant) => (
-                              <li key={participant.user._id}>
-                                <span className="fw-bold">
-                                  {" "}
-                                  {participant.user.username}{" "}
-                                </span>{" "}
-                                owes ${participant.amountOwed.toFixed(2)}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <p className="card-text m-2">
+                        ${bill.totalAmount.toFixed(2)}
+                      </p>
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#collapse${bill._id}`}
+                        aria-expanded="false"
+                        aria-controls={`collapse${bill._id}`}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                  <div className="collapse" id={`collapse${bill._id}`}>
+                    <div className="card-body">
+                      <h5 className="card-title">Details</h5>
+                      <div className="mb-3">
+                        <p>
+                          <span className="fw-bold">
+                            {bill.users[0].user.username}{" "}
+                          </span>{" "}
+                          paid ${bill.totalAmount.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="mb-3">
+                        <ul className="list-unstyled">
+                          {bill.users.slice(1).map((participant) => (
+                            <li key={participant.user._id}>
+                              <span className="fw-bold">
+                                {" "}
+                                {participant.user.username}{" "}
+                              </span>{" "}
+                              owes ${participant.amountOwed.toFixed(2)}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="mb-3">
+                        <p>
+                          {" "}
+                          <span className="fw-bold"> Group: </span>
+                          {bill.group ? bill.group.groupName : "None"}
+                        </p>
+                        <div className="d-flex justify-content-between align-items-center">
                           <p>
                             {" "}
-                            <span className="fw-bold"> Group: </span>
-                            {bill.group ? bill.group.groupName : "None"}
+                            <span className="fw-bold"> Category: </span>
+                            {bill.category}
                           </p>
                           <div className="d-flex justify-content-between align-items-center">
-                            <p>
-                              {" "}
-                              <span className="fw-bold"> Category: </span>
-                              {bill.category}
-                            </p>
-                            <div className="d-flex justify-content-between align-items-center">
-                              <button
-                                onClick={() => handleEditBill(bill._id)}
-                                className="btn btn-primary me-1"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteBill(bill._id)}
-                                className="btn btn-danger"
-                              >
-                                Delete
-                              </button>
+                            <button
+                              onClick={() => handleEditBill(bill._id)}
+                              className="btn btn-primary me-1"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteBill(bill._id)}
+                              className="btn btn-danger"
+                            >
+                              Delete
+                            </button>
+                          </div>
+
+                          {/* Bootstrap Modal for Edit Expense */}
+                          <div
+                            className={`modal ${showEditModal ? "show" : ""}`}
+                            tabIndex="-1"
+                            role="dialog"
+                            style={{
+                              display: showEditModal ? "block" : "none",
+                            }}
+                          >
+                            <div className="modal-dialog">
+                              <div className="modal-content">
+                                <div className="modal-header">
+                                  <h5 className="modal-title">Edit Expense</h5>
+                                  <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setShowEditModal(false)}
+                                    aria-label="Close"
+                                  ></button>
+                                </div>
+                                <div className="modal-body">
+                                  {/* Pass editBill data to EditBill component */}
+                                  {editBill && (
+                                    <EditBill
+                                      key={editBill._id} // Add key prop to force re-render when editBill changes
+                                      bill={editBill}
+                                      onSave={handleSaveBill}
+                                    />
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -395,10 +429,10 @@ function ViewBill() {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </>
-        )}
+              </div>
+            ))}
+          </div>
+        </>
       </div>
     </Layout>
   );

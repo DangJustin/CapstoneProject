@@ -157,7 +157,7 @@ const getExpenses = async (userId) => {
     }
 
     const bills = await Bill.find({ "users.user": user })
-      .populate("users.user", "username")
+      .populate("users.user")
       .populate("group", "groupName");
       
     return { bills }; // Return an object with bills property

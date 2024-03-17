@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Multiselect from "multiselect-react-dropdown";
 import axios from "axios";
 
 const auth = getAuth();
@@ -23,6 +24,7 @@ function EditBill({ bill, onSave }) {
     fetchGroupParticipants(selectedGroup);
   }, [currentUser]);
 
+  
   const fetchGroupParticipants = async (groupId) => {
     try {
       const response = await axios.get(
@@ -60,7 +62,9 @@ function EditBill({ bill, onSave }) {
         },
         ...updatedBill.users.map((user) => ({
           user: user._id, // Assuming user._id is the correct user ID field
-          amountOwed: splitUnevenly ? user.individualAmount : (updatedBill.totalAmount / (updatedBill.users.length + 1)) || 0, // Defaulting to 0 if amountOwed is missing
+          amountOwed: splitUnevenly
+            ? user.individualAmount
+            : updatedBill.totalAmount / (updatedBill.users.length + 1) || 0, // Defaulting to 0 if amountOwed is missing
         })),
       ];
 
@@ -101,7 +105,7 @@ function EditBill({ bill, onSave }) {
       </div>
       <div className="mb-3">
         <label className="form-label">
-          billName:
+          Describe your expense:
           <input
             type="text"
             name="billName"
@@ -112,30 +116,44 @@ function EditBill({ bill, onSave }) {
         </label>
       </div>
       <div className="mb-3">
-        <label className="form-label">
-          Participants:
-          <select
-            multiple
-            value={updatedBill.users.map((participant) => participant._id)}
-            onChange={(e) =>
-              setUpdatedBill({
-                ...updatedBill,
-                users: Array.from(e.target.selectedOptions, (option) =>
-                  allParticipants.find(
-                    (participant) => participant._id === option.value
-                  )
-                ),
-              })
-            }
-            className="form-select"
-          >
-            {allParticipants.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.email}
-              </option>
-            ))}
-          </select>
-        </label>
+        <label className="form-label">Participants:</label>
+        <Multiselect
+          options={allParticipants.map((participant) => ({
+            value: participant._id,
+            label: participant.email,
+          }))}
+          // selectedValues={updatedBill.users
+          //   .filter((participant) => participant.user && allParticipants.some((p) => p._id === participant.user._id))
+          //   .map((participant) => ({
+          //     value: participant.user._id,
+          //     label: participant.user.email,
+          //   }))
+          // }          
+          
+          onSelect={(selectedList) =>
+            setUpdatedBill({
+              ...updatedBill,
+              users: selectedList.map((user) =>
+                allParticipants.find(
+                  (participant) => participant._id === user.value
+                )
+              ),
+            })
+          }
+          onRemove={(selectedList) =>
+            setUpdatedBill({
+              ...updatedBill,
+              users: updatedBill.users.filter((user) =>
+                selectedList.every((selected) => selected.value !== user._id)
+              ),
+            })
+          }
+          displayValue="label"
+          showCheckbox={true}
+          closeIcon="cancel"
+          placeholder="Select participants"
+          required
+        />
       </div>
       <div className="mb-3">
         <label className="form-label">

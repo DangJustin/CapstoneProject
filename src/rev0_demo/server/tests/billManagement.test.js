@@ -75,7 +75,7 @@ describe("POST /split-expense", () => {
     const bill1 = await billManagementService.splitExpense({
       userID: user1.userID,
       amount: 100,
-      description: "random",
+      billName: "random",
       participants: [user2._id],
       groupID: group._id,
     });
@@ -241,7 +241,7 @@ describe("POST /split-expense", () => {
     const bill1 = await splitExpense({
       userID: user1.userID,
       amount: 100,
-      description: "random",
+      billName: "random",
       participants: [user2._id],
       groupID: group._id,
     });
@@ -275,7 +275,7 @@ describe("POST /split-expense", () => {
     const bill2 = await splitExpense({
       userID: user1.userID,
       amount: 200,
-      description: "random",
+      billName: "random",
       participants: [user2._id],
       groupID: group._id,
       individualAmounts: [150], // Custom individual amount for user2
@@ -299,7 +299,7 @@ describe("POST /split-expense", () => {
     await expect(splitExpense({
       userID: "invalidUserID",
       amount: 100,
-      description: "random",
+      billName: "random",
       participants: ["validUserID"],
       groupID: "validGroupID",
     })).rejects.toThrow("Internal Server Error");
@@ -310,7 +310,7 @@ describe("POST /split-expense", () => {
     await expect(splitExpense({
       userID: "validUserID",
       amount: 100,
-      description: "random",
+      billName: "random",
       participants: ["validUserID"],
       groupID: "invalidGroupID",
     })).rejects.toThrow("Internal Server Error");
