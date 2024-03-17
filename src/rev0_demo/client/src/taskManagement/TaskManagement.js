@@ -74,19 +74,10 @@ function TaskManagement() {
     setSelectedTask(task);
   }
 
-  //Modal handlers for add task
-  const openModal = () => {
-    setShowModal(true);
-  };
-
+  //Close Modal handler for add task
   const closeModal = () => {
     setShowModal(false);
     window.location.reload();
-  };
-
-  // Go to add task page
-  const goToAddTask = () => {
-    navigate('addTask');
   };
 
   // Toggle showing History of all tasks
@@ -174,7 +165,7 @@ function TaskManagement() {
             {/* Modal to Display individual task data */}
             {selectedTask && (
               <div className="modal fade show" style={{ display: 'block' }} tabindex="-1" role="dialog">
-                <div className="modal-dialog" role="document">
+                <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
                     <div className="modal-header">
                       <h1 className="modal-title" >{selectedTask.taskName}</h1>
@@ -198,12 +189,12 @@ function TaskManagement() {
             )}
 
             {/* Modal for AddTask component */}
-            <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
+            <div className="modal fade" id="addTaskModal" tabIndex="-1" role="dialog">
               <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Add New Task</h5>
-                    <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowModal(false)}></button>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div className="modal-body">
                     {/* Render the AddTask component */}
@@ -231,9 +222,10 @@ function TaskManagement() {
             </div>
 
             <div className="d-grid mb-3">
-              <button type="button" className="btn btn-outline-primary btn-lg me-1" onClick={openModal}> ➕ Add Task</button>
+              <button type="button" class="btn btn-outline-primary btn-lg me-1" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+              ➕ Add Task
+              </button>
             </div>
-            
 
             {/* Display Incomplete Tasks */}
             <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
