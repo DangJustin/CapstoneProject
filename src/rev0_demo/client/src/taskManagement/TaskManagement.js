@@ -5,6 +5,8 @@ import axios from 'axios';
 import { getGroupName, getUserNames } from '../utils/nameConversions';
 import Layout from '../Layout';
 import AddTask from './AddTask';
+import EditTask from './EditTask';
+import Modal from 'bootstrap/js/dist/modal';
 
 const auth = getAuth();
 
@@ -69,6 +71,16 @@ function TaskManagement() {
     setShowResults(false);
     setSelectedTask(null);
   }
+
+   // Go to individual Task Page
+   const handleEdit = (task) => {
+    setShowModal(false);
+    const myModal  = document.getElementById('editTaskModal');
+    const modal = new Modal(myModal);
+    modal.show();
+    setShowResults(false);
+  }
+
   const handleOpen = (task) => {
     console.log(task);
     setSelectedTask(task);
@@ -79,6 +91,7 @@ function TaskManagement() {
     setShowModal(false);
     window.location.reload();
   };
+
 
   // Toggle showing History of all tasks
   const toggleShowHistory = () => {
@@ -181,7 +194,8 @@ function TaskManagement() {
                     <div className="modal-footer">
                       {!selectedTask.completed?(<button type="button" className="btn btn-success" onClick={()=>{toggleCompletion();handleClose();}}>Complete Task</button>)
                       :(<button type="button" className="btn btn-danger" onClick={()=>{toggleCompletion();handleClose();}}>Reopen task</button>)}
-                      <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button>
+                      {/* <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button> */}
+                      <button type="button" className="btn btn-warning" onClick={() => handleEdit()}>Edit Task</button>
                     </div>
                   </div>
                 </div>
@@ -190,7 +204,7 @@ function TaskManagement() {
 
             {/* Modal for AddTask component */}
             <div className="modal fade" id="addTaskModal" tabIndex="-1" role="dialog">
-              <div className="modal-dialog modal-dialog-centered" role="document">
+              <div className="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Add New Task</h5>
@@ -199,6 +213,21 @@ function TaskManagement() {
                   <div className="modal-body">
                     {/* Render the AddTask component */}
                     <AddTask closeModal={closeModal}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal for EditTask component */}
+            <div className="modal fade" id="editTaskModal" tabIndex="-1" role="dialog">
+              <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Edit Task</h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div className="modal-body">
+                    <EditTask closeModal={closeModal} inputTask={{...selectedTask}}/>
                   </div>
                 </div>
               </div>
