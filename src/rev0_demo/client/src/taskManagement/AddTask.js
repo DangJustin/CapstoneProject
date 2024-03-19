@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import Multiselect from 'multiselect-react-dropdown';
+import presetData from './tasks.json';
 
 const auth = getAuth();
 
 function AddTask({ closeModal }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState('');
   const [taskName, setTaskName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [deadlineDate, setDeadlineDate] = useState('');
@@ -16,8 +17,8 @@ function AddTask({ closeModal }) {
   const [allParticipants, setAllParticipants] = useState([]);
   const [usersResponsible, setUsersResponsible] = useState([]);
   const [showUserSelectionError, setShowUserSelectionError] = useState(false);
-  const navigate = useNavigate();
-
+  const presets = presetData.chores;
+  
   //Checking if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -114,9 +115,38 @@ function AddTask({ closeModal }) {
     }
   };
 
+  const handlePreset = (presetName) => {
+    for (const preset of presets){
+      if (preset.name===presetName){
+        setSelectedPreset(preset);
+        setTaskName(preset.name);
+        setDescription(preset.taskDescription);
+        break;
+      }
+    }
+  };
+
   return (
     <div>
       <form onSubmit={(e) => { e.preventDefault(); handleAddTask();}}>
+        
+        {/* Description Box Spanning Both Columns */}
+        <div className="row">
+            <div className="col-md-12">
+              <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+                <div className="mb-3">
+                  <label className="form-label">Preset:</label>
+                  <select className="form-select" value = {selectedPreset} onChange={(e) => handlePreset(e.target.value)}>
+                    <option value="" disabled>Select a preset</option>
+                    {presets.map((preset) => (
+                      <option key={preset.name} value={preset.name}>{preset.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
         <div className="row">
           {/* First Column */}
           <div className="col-md-6">
