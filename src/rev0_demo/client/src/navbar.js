@@ -86,7 +86,7 @@ function Navbar() {
                         </ul>
                         
                         <div className="d-lg-none">
-                            {currentUser && <span className="navbar-text me-2">Hello, {userInfo.email}</span>}
+                            {/* {currentUser && <span className="navbar-text me-2">Hello, {userInfo.email}</span>} */}
                             {currentUser && (
                                 <button className="btn btn-outline-primary me-2" type="button" onClick={goToAccount}>Account</button>
                             )}

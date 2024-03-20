@@ -14,7 +14,7 @@ async function getGroupName(groupID){
 }
 
 async function getUserName(userID){
-    console.log(userID);
+    // console.log(userID);
     if(!userID){
         return null;
     }
@@ -28,14 +28,14 @@ async function getUserName(userID){
 }
 
 async function getUserNames(users){
-    console.log(users);
+    // console.log(users);
     if(!users){
         return null;
     }
     try {
         const modifiedUsers = [...users];
         for (let i = 0; i < modifiedUsers.length; i++){
-            console.log(await getUserName(users[i]));
+            // console.log(await getUserName(users[i]));
             modifiedUsers[i] = await getUserName(users[i]);
           }
         return modifiedUsers;

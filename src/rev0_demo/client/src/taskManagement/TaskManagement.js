@@ -82,7 +82,7 @@ function TaskManagement() {
   }
 
   const handleOpen = (task) => {
-    console.log(task);
+    // console.log(task);
     setSelectedTask(task);
   }
 
@@ -129,7 +129,7 @@ function TaskManagement() {
         const tasksData = tasksResponse.data;
 
         setTasks(tasksData);
-        console.log(tasksData);
+        // console.log(tasksData);
       } catch (error) {
         console.error('Error fetching tasks data:', error);
       }
@@ -251,7 +251,7 @@ function TaskManagement() {
             </div>
 
             <div className="d-grid mb-3">
-              <button type="button" class="btn btn-outline-primary btn-lg me-1" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+              <button type="button" className="btn btn-outline-primary btn-lg me-1" data-bs-toggle="modal" data-bs-target="#addTaskModal">
               ➕ Add Task
               </button>
             </div>
@@ -264,7 +264,7 @@ function TaskManagement() {
                 background = "card bg-danger h-100";
               } 
               return(
-                <div class="col">
+                <div className="col">
                   <div key={task._id} className={background}>
                     <div className="card-header">
                       <h2 className="card-title">{task.taskName}</h2>
@@ -272,9 +272,9 @@ function TaskManagement() {
                       <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
                     </div>
                     <div className="card-body">
-                      <p className="card-text">{task.description}</p>
+                      <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
                     </div>
-                    <div class="card-footer">
+                    <div className="card-footer">
                       <button className="btn btn-primary stretched-link w-100" onClick ={() => handleOpen(task)}>Details</button>
                     </div>
                   </div>
@@ -294,7 +294,7 @@ function TaskManagement() {
               {completeTasks.sort(sortDate).map((task)=>{
                 var background = "card bg-success h-100";
                 return(
-                  <div class="col">
+                  <div className="col">
                     <div key={task._id} className={background}>
                       <div className="card-header">
                         <h2 className="card-title">{task.taskName}</h2>
@@ -302,9 +302,9 @@ function TaskManagement() {
                         <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
                       </div>
                       <div className="card-body">
-                        <p className="card-text">{task.description}</p>
+                        <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
                       </div>
-                      <div class="card-footer">
+                      <div className="card-footer">
                         <button className="btn btn-primary stretched-link w-100" onClick ={() => handleOpen(task)}>Details</button>
                       </div>
                     </div>
@@ -317,7 +317,7 @@ function TaskManagement() {
           </div>
         ) : (
           <div>
-            <h1 className="text-center pt-3">Task Management Page</h1>
+            <h1 className="text-center pt-3">Tasks</h1>
             <p>No user currently logged in.</p>
           </div>
         )}
