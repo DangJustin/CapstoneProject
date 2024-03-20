@@ -13,6 +13,8 @@ function AddTask({ closeModal }) {
   const [selectedGroup, setSelectedGroup] = useState('');
   const [deadlineDate, setDeadlineDate] = useState('');
   const [description, setDescription] = useState('');
+  const [recurring, setReccuring] = useState(false);
+  const [weeks, setWeeks] = useState(1);
   const [groups, setGroups] = useState([]);
   const [allParticipants, setAllParticipants] = useState([]);
   const [usersResponsible, setUsersResponsible] = useState([]);
@@ -87,6 +89,7 @@ function AddTask({ closeModal }) {
       setShowUserSelectionError(false);
     }
 
+    if (!recurring) {
     try {
       const response = await axios.post('http://localhost:5000/api/taskManagement/addTask', {
         taskName: taskName,
@@ -113,6 +116,43 @@ function AddTask({ closeModal }) {
     } catch (error) {
       console.error('Error adding task. Details:', error);
     }
+    } else {
+
+      // Recurring Task
+      for (let i = 0; i < weeks; i++){
+
+        // Add weeks to original date based off weeks state variable
+        var date = new Date(deadlineDate);
+        date.setDate(date.getDate() + 7*i);
+
+        // add task with modified date
+        try {
+          const response = await axios.post('http://localhost:5000/api/taskManagement/addTask', {
+            taskName: taskName,
+            groupID: selectedGroup,
+            deadlineDate: date,
+            description: description,
+            usersResponsible: usersResponsible,
+          });
+    
+          if (response.status !== 200) {
+            console.error('Unexpected response status:', response.status);
+            return;
+          }
+      
+          const data = response.data;
+          
+          if (!data) {
+            console.error('Failed to add task. Data:', data);
+            return;
+          }
+    
+        } catch (error) {
+          console.error('Error adding task. Details:', error);
+        }
+      }
+      closeModal();
+    }
   };
 
   const handlePreset = (presetName) => {
@@ -126,11 +166,19 @@ function AddTask({ closeModal }) {
     }
   };
 
+  const handleCheckboxChange = () => {
+    setReccuring(!recurring);
+  };
+
+  const handleWeekChange = (event) => {
+    setWeeks(event.target.value);
+  };
+
   return (
     <div>
       <form onSubmit={(e) => { e.preventDefault(); handleAddTask();}}>
         
-        {/* Description Box Spanning Both Columns */}
+        {/* Preset Select */}
         <div className="row">
             <div className="col-md-12">
               <div className="w-75 mx-auto d-flex flex-column justify-content-center">
@@ -213,6 +261,22 @@ function AddTask({ closeModal }) {
               </div>
             </div>
           </div>
+
+          {/* Reccuring Task */}
+          <div className="row">
+              <div className="col-md-12">
+                <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+                  <div className="mb-3 form-check">
+                    <input type="checkbox" className="form-check-input" checked={recurring} onChange={handleCheckboxChange} />
+                    <label className="form-check-label">Recurring Task</label>
+                  </div>
+                  {recurring && (<div className='mb-3'>
+                  <label className="form-label"># of weeks</label>
+                  <input type="number" min="1" className="form-control" value={weeks} onChange={handleWeekChange}/>
+                  </div>)}
+                </div>
+              </div>
+            </div>
 
           {/* Move the buttons to the center */}
           <div className="d-flex justify-content-center pt-">
