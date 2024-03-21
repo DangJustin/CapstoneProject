@@ -9,6 +9,10 @@ import EditTask from './EditTask';
 import Modal from 'bootstrap/js/dist/modal';
 
 const auth = getAuth();
+const editIcon = require('../images/edit-icon.png');
+const completeIcon = require('../images/complete-icon.png');
+const reopenIcon = require('../images/reopen-icon.png');
+const infoIcon = require('../images/info-icon.png');
 
 function TaskManagement() {
   // User State
@@ -201,10 +205,19 @@ function TaskManagement() {
                       <p>{selectedTask.description}</p>
                     </div>
                     <div className="modal-footer">
-                      {!selectedTask.completed?(<button type="button" className="btn btn-success" data-bs-dismiss="modal" onClick={()=>{toggleCompletion();handleClose();}}>Complete Task</button>)
-                      :(<button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={()=>{toggleCompletion();handleClose();}}>Reopen task</button>)}
-                      {/* <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button> */}
-                      <button type="button" className="btn btn-warning" onClick={() => handleEdit()}>Edit Task</button>
+                      {!selectedTask.completed ? (
+                        <button type="button" className="btn btn-success" data-bs-dismiss="modal" onClick={()=>{toggleCompletion();handleClose();}}>
+                          <img src={completeIcon} alt="Complete Task" style={{ width: '28px', height: '28px' }} /> Complete
+                        </button>
+                      ) : (
+                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={()=>{toggleCompletion();handleClose();}}>
+                          <img src={reopenIcon} alt="Restore Task" style={{ width: '28px', height: '28px' }} /> Restore
+                        </button>
+                      )}
+                      
+                      <button type="button" className="btn btn-warning" onClick={() => handleEdit()}>
+                        <img src={editIcon} alt="Edit Task" style={{ width: '28px', height: '28px' }} /> Edit
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -242,21 +255,40 @@ function TaskManagement() {
               </div>
             </div>
 
+            {/* Modal for Info component */}
+            <div className="modal fade" id="infoModal" tabIndex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="infoModalLabel">Information</h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div className="modal-body">
+                    <ul>
+                      <li><span style={{ backgroundColor: 'grey', color: 'white' }}>White Cards:</span> Upcoming due tasks</li>
+                      <li><span style={{ backgroundColor: 'red', color: 'white' }}>Red Cards:</span> Overdue tasks</li>
+                      <li><span style={{ backgroundColor: 'green', color: 'white' }}>Green Cards:</span> Completed tasks</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Search Bar to search for tasks */}
             <div className ="mb-3">
-            <input type="search" className="form-control" placeholder="Search for Task" value={query} onChange={handleSearch}/>
-            {showResults && (
-              <div className="list-group">
-                {results.map(task => (
-                  <div key={task._id} className="list-group-item list-group-item-action" onClick={()=>handleOpen(task)}>
-                    <h4 className='mb-2'>{task.taskName}</h4>
-                    <h5 className="mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
-                    <h6 className="mb-2 text-muted">{task.groupID}</h6>
-                    <p>{task.description}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+              <input type="search" className="form-control" placeholder="Search for Task" value={query} onChange={handleSearch}/>
+              {showResults && (
+                <div className="list-group">
+                  {results.map(task => (
+                    <div key={task._id} className="list-group-item list-group-item-action" onClick={()=>handleOpen(task)}>
+                      <h4 className='mb-2'>{task.taskName}</h4>
+                      <h5 className="mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
+                      <h6 className="mb-2 text-muted">{task.groupID}</h6>
+                      <p>{task.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="d-flex mb-3">
@@ -265,6 +297,9 @@ function TaskManagement() {
               </button>
               <button type="button" className={`btn btn-outline-info btn-lg me-1 w-100 ${isHistoryActive ? 'active' : ''}`} onClick={toggleShowHistory}>
                 Task History
+              </button>
+              <button type="button" className="btn btn-light border-0" data-bs-toggle="modal" data-bs-target="#infoModal">
+                <img src={infoIcon} alt="Info" style={{ width: '28px', height: '28px' }} />
               </button>
             </div>
             

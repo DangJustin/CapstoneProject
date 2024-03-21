@@ -54,7 +54,7 @@ function EditTask({closeModal, inputTask}) {
                   <input type="date" className="form-control" name="deadlineDate"  value={form.deadlineDate} onChange={handleInputChange} />
             </div>
             
-            <div className='btn-toolbar mb-3'>
+            <div className='d-flex justify-content-center mb-3'>
               <button className="btn btn-primary me-1" type="submit">Save</button>
             </div>
           </form>
