@@ -180,25 +180,25 @@ function AddTask({ closeModal }) {
         
         {/* Preset Select */}
         <div className="row">
-            <div className="col-md-12">
-              <div className="w-75 mx-auto d-flex flex-column justify-content-center">
-                <div className="mb-3">
-                  <label className="form-label">Preset:</label>
-                  <select className="form-select" value = {selectedPreset.name || ""} onChange={(e) => handlePreset(e.target.value)}>
-                    <option value="" disabled>Select a preset</option>
-                    {presets.map((preset) => (
-                      <option key={preset.name} value={preset.name}>{preset.name}</option>
-                    ))}
-                  </select>
-                </div>
+          <div className="col px-5">
+            <div className="w-100 mx-auto d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label">Preset:</label>
+                <select className="form-select" value={selectedPreset.name || ""} onChange={(e) => handlePreset(e.target.value)}>
+                  <option value="" disabled>Select a preset</option>
+                  {presets.map((preset) => (
+                    <option key={preset.name} value={preset.name}>{preset.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
+        </div>
 
         <div className="row">
           {/* First Column */}
-          <div className="col-md-6">
-            <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+          <div className="col-md-6 px-5">
+            <div className="mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
                 <label className="form-label">Task Name:</label>
@@ -216,8 +216,8 @@ function AddTask({ closeModal }) {
           </div>
 
           {/* Second Column */}
-          <div className="col-md-6">
-            <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+          <div className="col-md-6 px-5">
+            <div className="mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
                 <label className="form-label">Select Group:</label>
@@ -243,17 +243,14 @@ function AddTask({ closeModal }) {
                     placeholder={selectedGroup ? "Select users" : "Select group first"}
                     required
                   />
-                  
               </div>
-
             </div>
-
           </div>
 
           {/* Description Box Spanning Both Columns */}
           <div className="row">
-            <div className="col-md-12">
-              <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+            <div className="col-12 ps-5 pe-4">
+              <div className="w-100 mx-auto">
                 <div className="mb-3">
                   <label className="form-label">Description:</label>
                   <textarea className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -264,19 +261,21 @@ function AddTask({ closeModal }) {
 
           {/* Reccuring Task */}
           <div className="row">
-              <div className="col-md-12">
-                <div className="w-75 mx-auto d-flex flex-column justify-content-center">
-                  <div className="mb-3 form-check">
-                    <input type="checkbox" className="form-check-input" checked={recurring} onChange={handleCheckboxChange} />
-                    <label className="form-check-label">Recurring Task</label>
-                  </div>
-                  {recurring && (<div className='mb-3'>
-                  <label className="form-label"># of weeks</label>
-                  <input type="number" min="1" className="form-control" value={weeks} onChange={handleWeekChange}/>
-                  </div>)}
+            <div className="col-12 ps-5 pe-4">
+              <div className="w-100 mx-auto">
+                <div className="mb-3 form-check">
+                  <input type="checkbox" className="form-check-input" checked={recurring} onChange={handleCheckboxChange} />
+                  <label className="form-check-label">Recurring Task</label>
                 </div>
+                {recurring && (
+                  <div className="mb-3">
+                    <label className="form-label"># of weeks</label>
+                    <input type="number" min="1" className="form-control" value={weeks} onChange={handleWeekChange} />
+                  </div>
+                )}
               </div>
             </div>
+          </div>
 
           {/* Move the buttons to the center */}
           <div className="d-flex justify-content-center pt-">

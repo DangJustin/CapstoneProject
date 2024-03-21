@@ -213,7 +213,7 @@ function TaskManagement() {
 
             {/* Modal for AddTask component */}
             <div className="modal fade" id="addTaskModal" tabIndex="-1" role="dialog">
-              <div className="modal-dialog modal-dialog-centered modal-xl" role="document">
+              <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Add New Task</h5>
