@@ -185,7 +185,7 @@ function TaskManagement() {
       <div>
         {currentUser ? (
           <div>
-            <h1 className="text-center pt-3">Tasks</h1>
+            <h1 className="text-center text-white pt-3">Tasks</h1>
             <hr></hr>
 
             {/* Modal to Display individual task data */}
@@ -229,7 +229,7 @@ function TaskManagement() {
               <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Add New Task</h5>
+                    <h5 className="modal-title exo-bold">Add New Task</h5>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div className="modal-body">
@@ -298,7 +298,7 @@ function TaskManagement() {
               <button type="button" className={`btn btn-outline-info btn-lg me-1 w-100 ${isHistoryActive ? 'active' : ''}`} onClick={toggleShowHistory}>
                 Task History
               </button>
-              <button type="button" className="btn btn-light border-0" data-bs-toggle="modal" data-bs-target="#infoModal">
+              <button type="button" className="btn btn-outline-secondary border-0" data-bs-toggle="modal" data-bs-target="#infoModal">
                 <img src={infoIcon} alt="Info" style={{ width: '28px', height: '28px' }} />
               </button>
             </div>
@@ -307,7 +307,7 @@ function TaskManagement() {
             {!showHistory && (
               <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
                 {incompleteTasks.sort(sortDate).map((task) => {
-                  var background = "card bg-light h-100";
+                  var background = "card greyish h-100";
                   if (new Date(task.deadlineDate) < Date.now()) {
                     background = "card bg-danger h-100";
                   }
@@ -361,8 +361,8 @@ function TaskManagement() {
           </div>
         ) : (
           <div>
-            <h1 className="text-center pt-3">Tasks</h1>
-            <p>No user currently logged in.</p>
+            <h1 className="text-center text-white pt-3">Tasks</h1>
+            <p className='text-white'>No user currently logged in.</p>
           </div>
         )}
       </div>

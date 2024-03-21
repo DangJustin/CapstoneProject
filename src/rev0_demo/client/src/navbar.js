@@ -60,7 +60,7 @@ function Navbar() {
 
     return (
         <div className="bootstrap-scope">
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav className="navbar navbar-expand-lg navbar-dark">
 
                 <div className="container">
                     <a className="navbar-brand" href="/">
@@ -101,7 +101,7 @@ function Navbar() {
                     </div>
 
                     <div className="d-none d-lg-flex ">
-                        {currentUser && <span className="navbar-text me-2">Hello, {userInfo.email} </span>}
+                        {currentUser && <span className="navbar-text me-2">Hello, {userInfo.firstname} </span>}
                         {currentUser && (
                         <button className="btn btn-outline-primary me-2" type="button" onClick={goToAccount}>Account</button>
                         )}

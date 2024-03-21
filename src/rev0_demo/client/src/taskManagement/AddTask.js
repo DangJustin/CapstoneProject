@@ -183,7 +183,7 @@ function AddTask({ closeModal }) {
           <div className="col px-5">
             <div className="w-100 mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
-                <label className="form-label">Preset:</label>
+                <label className="form-label exo-bold">Preset:</label>
                 <select className="form-select" value={selectedPreset.name || ""} onChange={(e) => handlePreset(e.target.value)}>
                   <option value="" disabled>Select a preset</option>
                   {presets.map((preset) => (
@@ -201,13 +201,13 @@ function AddTask({ closeModal }) {
             <div className="mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Task Name:</label>
+                <label className="form-label exo-bold">Task Name:</label>
                 <input type="text" className="form-control" required value={taskName} onChange={(e) => setTaskName(e.target.value)} />
               </div>
               
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Deadline Date:</label>
+                <label className="form-label exo-bold">Deadline Date:</label>
                 <input type="date" className="form-control" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
               </div>
 
@@ -220,7 +220,7 @@ function AddTask({ closeModal }) {
             <div className="mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Select Group:</label>
+                <label className="form-label exo-bold">Select Group:</label>
                   <select className="form-select" value={selectedGroup} required onChange={(e) => setSelectedGroup(e.target.value)}>
                     <option value="" disabled>Select a group</option>
                     {groups.map((group) => (
@@ -231,7 +231,7 @@ function AddTask({ closeModal }) {
 
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Select Users:</label>
+                <label className="form-label exo-bold">Select Users:</label>
                   <Multiselect
                     options={allParticipants.map((user) => ({ value: user._id, label: user.username }))}
                     selectedValues={usersResponsible.map((userId) => ({ value: userId, label: allParticipants.find((user) => user._id === userId).username }))}
@@ -252,7 +252,7 @@ function AddTask({ closeModal }) {
             <div className="col-12 ps-5 pe-4">
               <div className="w-100 mx-auto">
                 <div className="mb-3">
-                  <label className="form-label">Description:</label>
+                  <label className="form-label exo-bold">Description:</label>
                   <textarea className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
               </div>
