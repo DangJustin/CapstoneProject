@@ -8,7 +8,7 @@ const auth = getAuth();
 
 function AddTask({ closeModal }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [selectedPreset, setSelectedPreset] = useState('');
+  const [selectedPreset, setSelectedPreset] = useState({});
   const [taskName, setTaskName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [deadlineDate, setDeadlineDate] = useState('');
@@ -184,7 +184,7 @@ function AddTask({ closeModal }) {
               <div className="w-75 mx-auto d-flex flex-column justify-content-center">
                 <div className="mb-3">
                   <label className="form-label">Preset:</label>
-                  <select className="form-select" value = {selectedPreset} onChange={(e) => handlePreset(e.target.value)}>
+                  <select className="form-select" value = {selectedPreset.name} onChange={(e) => handlePreset(e.target.value)}>
                     <option value="" disabled>Select a preset</option>
                     {presets.map((preset) => (
                       <option key={preset.name} value={preset.name}>{preset.name}</option>
