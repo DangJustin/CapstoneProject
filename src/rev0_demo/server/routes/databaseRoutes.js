@@ -170,19 +170,56 @@ router.get("/userDebts/:userID", async (req, res) => {
   }
 });
 
+router.put("/updateUserAmount/:userId", async (req, res) => {
+  const { userId } = req.params.userId;
+  const { owedUserEmail, settlementAmount, owingUserEmail } = req.body;
 
-router.put('/updateUserAmount/:userId', (req, res) => {
-  const userId = req.params.userId;
-  const { user, amount } = req.body;
+  try {
 
-  User.findOneAndUpdate({ userId: userId }, { $inc: { amount: -amount } })
-    .then(() => {
-      res.status(200).json({ message: 'Debt settled successfully' });
-    })
-    .catch((err) => {
-      console.error("Error settling debt:", err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
+    const owingUser = await User.findOne({ email: owingUserEmail });
+    if (!owingUser) {
+        console.log("Owing user not found");
+        return;
+    }
+
+    const owedUser = await User.findOne({ email: owedUserEmail });
+    if (!owedUser) {
+        console.log("Owed user not found");
+        return;
+    }
+
+    owingUser.amount += settlementAmount;
+    owedUser.amount -= settlementAmount;
+
+    await owingUser.save();
+    await owedUser.save();
+
+    const owingUserDebt = await UserDebt.findOne({ from: owingUser._id, to: owedUser._id });
+    const owedUserDebt = await UserDebt.findOne({ from: owedUser._id, to: owingUser._id });
+
+    const greaterAmount = Math.max(owingUserDebt.amount, owedUserDebt.amount);
+    const lesserAmount = Math.min(owingUserDebt.amount, owedUserDebt.amount);
+
+        // Update UserDebt amounts
+        if (owingUserDebt.amount === greaterAmount) {
+            owingUserDebt.amount -= Math.min(greaterAmount, settlementAmount);
+            owedUserDebt.amount -= Math.max(0, settlementAmount - greaterAmount);
+        } else {
+            owedUserDebt.amount -= Math.min(greaterAmount, settlementAmount);
+            owingUserDebt.amount -= Math.max(0, settlementAmount - greaterAmount);
+        }
+
+        await owingUserDebt.save();
+        await owedUserDebt.save();
+    
+    
+    console.log("Settlement amount updated successfully");
+
+
+  } catch (err) {
+    console.error("Error settling debt:", err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
