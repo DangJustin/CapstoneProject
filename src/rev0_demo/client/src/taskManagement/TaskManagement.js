@@ -90,6 +90,25 @@ function TaskManagement() {
     setSelectedTask(task);
   }
 
+  const handleDocumentClick = (event) => {
+    if (!event.target.closest('.form-control') && !event.target.closest('.list-group')) {
+      setShowResults(false);
+    }
+  };
+
+  const toggleResults = () => {
+    setShowResults(!showResults);
+  };
+
+  // Add event listener to handle clicks outside of the search input and results
+  React.useEffect(() => {
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, []);
+
   useEffect(() => {
     if (selectedTask) {
         const myModal = document.getElementById('taskDetailsModal');
@@ -275,13 +294,24 @@ function TaskManagement() {
             </div>
 
             {/* Search Bar to search for tasks */}
-            <div className ="mb-3">
-              <input type="search" className="form-control" placeholder="Search for Task" value={query} onChange={handleSearch}/>
+            <div className="mb-3">
+              <input
+                type="search"
+                className="form-control"
+                placeholder="Search for Task"
+                value={query}
+                onChange={handleSearch}
+                onClick={toggleResults}
+              />
               {showResults && (
                 <div className="list-group">
-                  {results.map(task => (
-                    <div key={task._id} className="list-group-item list-group-item-action" onClick={()=>handleOpen(task)}>
-                      <h4 className='mb-2'>{task.taskName}</h4>
+                  {results.map((task) => (
+                    <div
+                      key={task._id}
+                      className="list-group-item list-group-item-action"
+                      onClick={() => handleOpen(task)}
+                    >
+                      <h4 className="mb-2">{task.taskName}</h4>
                       <h5 className="mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
                       <h6 className="mb-2 text-muted">{task.groupID}</h6>
                       <p>{task.description}</p>
@@ -307,9 +337,9 @@ function TaskManagement() {
             {!showHistory && (
               <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
                 {incompleteTasks.sort(sortDate).map((task) => {
-                  var background = "card greyish h-100";
+                  var background = "card due-tasks h-100";
                   if (new Date(task.deadlineDate) < Date.now()) {
-                    background = "card bg-danger h-100";
+                    background = "card overdue-tasks h-100";
                   }
                   return (
                     <div className="col" key={task._id}>
@@ -336,7 +366,7 @@ function TaskManagement() {
             {showHistory && (
               <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
               {completeTasks.sort(sortDate).map((task)=>{
-                var background = "card bg-success h-100";
+                var background = "card done-tasks h-100";
                 return(
                   <div className="col">
                     <div key={task._id} className={background}>
