@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.navbar-brand,
+.nav-link,
+.navbar-text {
+  font-family: 'Exo 2', sans-serif;
+}
+
+.container {
+  font-family: 'Dosis', sans-serif;
+}

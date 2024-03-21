@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
@@ -8,6 +8,8 @@ function Navbar() {
     const [userInfo, setUserInfo] = useState('');
     const navigate = useNavigate();
     const auth = getAuth();
+    const location = useLocation();
+    const logo = require('./images/logo.png');
 
     // Function to handle form submission for signing out user
     async function handleLogout(e) {
@@ -61,25 +63,28 @@ function Navbar() {
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 
                 <div className="container">
-                    <a className="navbar-brand" href="/">Housemates</a>
+                    <a className="navbar-brand" href="/">
+                        <img src={logo} alt="Logo" className="mx-2 mb-1" style={{ width: '22px', height: '22px' }} />
+                        Housemates
+                    </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
 
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/account/group">Groups</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/taskManagement">Tasks</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/scheduling">Schedules</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/billManagement">Bills</a>
-                        </li>
+                            <li className="nav-item">
+                                <NavLink className={`nav-link ${location.pathname === '/account/group' ? 'active' : ''}`} to="/account/group">Groups</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className={`nav-link ${location.pathname === '/taskManagement' ? 'active' : ''}`} to="/taskManagement">Tasks</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className={`nav-link ${location.pathname === '/scheduling' ? 'active' : ''}`} to="/scheduling">Schedules</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className={`nav-link ${location.pathname === '/billManagement' ? 'active' : ''}`} to="/billManagement">Bills</NavLink>
+                            </li>
                         </ul>
                         
                         <div className="d-lg-none">
