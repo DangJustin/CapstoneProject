@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
-import Layout from '../Layout';
 import Multiselect from 'multiselect-react-dropdown';
+import presetData from './tasks.json';
 
 const auth = getAuth();
 
-function AddTask() {
+function AddTask({ closeModal }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState('');
   const [taskName, setTaskName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [deadlineDate, setDeadlineDate] = useState('');
   const [description, setDescription] = useState('');
+  const [recurring, setReccuring] = useState(false);
+  const [weeks, setWeeks] = useState(1);
   const [groups, setGroups] = useState([]);
   const [allParticipants, setAllParticipants] = useState([]);
   const [usersResponsible, setUsersResponsible] = useState([]);
   const [showUserSelectionError, setShowUserSelectionError] = useState(false);
-  const navigate = useNavigate();
-
+  const presets = presetData.chores;
+  
   //Checking if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -87,6 +89,7 @@ function AddTask() {
       setShowUserSelectionError(false);
     }
 
+    if (!recurring) {
     try {
       const response = await axios.post('http://localhost:5000/api/taskManagement/addTask', {
         taskName: taskName,
@@ -108,34 +111,103 @@ function AddTask() {
         return;
       }
 
-      navigate('/taskManagement');
+      closeModal();
 
     } catch (error) {
       console.error('Error adding task. Details:', error);
     }
+    } else {
+
+      // Recurring Task
+      for (let i = 0; i < weeks; i++){
+
+        // Add weeks to original date based off weeks state variable
+        var date = new Date(deadlineDate);
+        date.setDate(date.getDate() + 7*i);
+
+        // add task with modified date
+        try {
+          const response = await axios.post('http://localhost:5000/api/taskManagement/addTask', {
+            taskName: taskName,
+            groupID: selectedGroup,
+            deadlineDate: date,
+            description: description,
+            usersResponsible: usersResponsible,
+          });
+    
+          if (response.status !== 200) {
+            console.error('Unexpected response status:', response.status);
+            return;
+          }
+      
+          const data = response.data;
+          
+          if (!data) {
+            console.error('Failed to add task. Data:', data);
+            return;
+          }
+    
+        } catch (error) {
+          console.error('Error adding task. Details:', error);
+        }
+      }
+      closeModal();
+    }
   };
 
-  const goToTaskManagement = () => {
-    navigate('/taskManagement');
+  const handlePreset = (presetName) => {
+    for (const preset of presets){
+      if (preset.name===presetName){
+        setSelectedPreset(preset);
+        setTaskName(preset.name);
+        setDescription(preset.taskDescription);
+        break;
+      }
+    }
+  };
+
+  const handleCheckboxChange = () => {
+    setReccuring(!recurring);
+  };
+
+  const handleWeekChange = (event) => {
+    setWeeks(event.target.value);
   };
 
   return (
-    <Layout>
-      <h1 className="text-center pb-3 pt-3">Add New Task</h1>
+    <div>
       <form onSubmit={(e) => { e.preventDefault(); handleAddTask();}}>
+        
+        {/* Preset Select */}
+        <div className="row">
+          <div className="col px-5">
+            <div className="w-100 mx-auto d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label exo-bold">Preset:</label>
+                <select className="form-select" value={selectedPreset.name || ""} onChange={(e) => handlePreset(e.target.value)}>
+                  <option value="" disabled>Select a preset</option>
+                  {presets.map((preset) => (
+                    <option key={preset.name} value={preset.name}>{preset.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="row">
           {/* First Column */}
-          <div className="col-md-6">
-            <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+          <div className="col-md-6 px-5">
+            <div className="mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Task Name:</label>
+                <label className="form-label exo-bold">Task Name:</label>
                 <input type="text" className="form-control" required value={taskName} onChange={(e) => setTaskName(e.target.value)} />
               </div>
               
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Deadline Date:</label>
+                <label className="form-label exo-bold">Deadline Date:</label>
                 <input type="date" className="form-control" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
               </div>
 
@@ -144,11 +216,11 @@ function AddTask() {
           </div>
 
           {/* Second Column */}
-          <div className="col-md-6">
-            <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+          <div className="col-md-6 px-5">
+            <div className="mx-auto d-flex flex-column justify-content-center">
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Select Group:</label>
+                <label className="form-label exo-bold">Select Group:</label>
                   <select className="form-select" value={selectedGroup} required onChange={(e) => setSelectedGroup(e.target.value)}>
                     <option value="" disabled>Select a group</option>
                     {groups.map((group) => (
@@ -159,7 +231,7 @@ function AddTask() {
 
               <div className="mb-3">
                 <label className="text-danger">*</label>
-                <label className="form-label">Select Users:</label>
+                <label className="form-label exo-bold">Select Users:</label>
                   <Multiselect
                     options={allParticipants.map((user) => ({ value: user._id, label: user.username }))}
                     selectedValues={usersResponsible.map((userId) => ({ value: userId, label: allParticipants.find((user) => user._id === userId).username }))}
@@ -171,21 +243,36 @@ function AddTask() {
                     placeholder={selectedGroup ? "Select users" : "Select group first"}
                     required
                   />
-                  
               </div>
-
             </div>
-
           </div>
 
           {/* Description Box Spanning Both Columns */}
           <div className="row">
-            <div className="col-md-12">
-              <div className="w-75 mx-auto d-flex flex-column justify-content-center">
+            <div className="col-12 ps-5 pe-4">
+              <div className="w-100 mx-auto">
                 <div className="mb-3">
-                  <label className="form-label">Description:</label>
+                  <label className="form-label exo-bold">Description:</label>
                   <textarea className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Reccuring Task */}
+          <div className="row">
+            <div className="col-12 ps-5 pe-4">
+              <div className="w-100 mx-auto">
+                <div className="mb-3 form-check">
+                  <input type="checkbox" className="form-check-input" checked={recurring} onChange={handleCheckboxChange} />
+                  <label className="form-check-label">Recurring Task</label>
+                </div>
+                {recurring && (
+                  <div className="mb-3">
+                    <label className="form-label"># of weeks</label>
+                    <input type="number" min="1" className="form-control" value={weeks} onChange={handleWeekChange} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -193,7 +280,6 @@ function AddTask() {
           {/* Move the buttons to the center */}
           <div className="d-flex justify-content-center pt-">
               <button type="submit" className="btn btn-primary me-2">Add Task</button>
-              <button type="button" className="btn btn-danger" onClick={goToTaskManagement}>Cancel</button>
             </div>
         </div>
       </form>
@@ -205,7 +291,7 @@ function AddTask() {
         </div>
       )}
 
-    </Layout>
+    </div>
   );
 }
 

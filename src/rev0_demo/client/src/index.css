@@ -1,3 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +15,68 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background: #141E30;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.navbar-brand,
+.nav-link,
+.navbar-text {
+  font-family: 'Exo', sans-serif;
+}
+
+.container {
+  font-family: 'Dosis', sans-serif;
+  color: white;
+}
+
+.exo-bold {
+  font-family: "Exo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.card {
+  -webkit-transition: all 100ms ease-in-out;
+  transition: all 100ms ease-in-out;
+  border: none;
+  -webkit-box-shadow: 0 1px 7px rgba(0,0,0,.05);
+  box-shadow: 0 1px 7px rgba(0,0,0,.05);
+}
+
+.card:hover {
+  transform: scale(1.04);
+  border: none;
+}
+
+.modal {
+  color: black;
+}
+
+.overdue-tasks {
+  background: #CB356B;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #BD3F32, #CB356B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: black;  
+}
+
+.done-tasks {
+  background: #134E5E;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #71B280, #134E5E);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #71B280, #134E5E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: black;
+}
+
+.due-tasks {
+  background: #ADA996;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
