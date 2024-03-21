@@ -1,0 +1,51 @@
+/* customCalendar.css */
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.react-calendar__tile {
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.react-calendar__tile:hover {
+  background-color: #e6f7ff;
+}
+
+.react-calendar__tile--active {
+  background-color: #ffeded;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background-color: #ffc2c2;
+}
+
+/* Style for the event names */
+.events-tile {
+  margin-top: 5px;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.event {
+  background-color: #add8e6;
+  color: #333;
+  margin-bottom: 2px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more-events {
+  color: #555;
+  font-weight: bold;
+  cursor: pointer;
+}
