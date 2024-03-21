@@ -199,6 +199,12 @@ function TaskManagement() {
     return new Date(task1.deadlineDate)- new Date(task2.deadlineDate);
   }
 
+  // Display Date Properly
+  const displayDate = (dateString) => {
+    var date = new Date(dateString);
+    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()).toDateString();
+  }
+
   return (
     <Layout>
       <div>
@@ -217,7 +223,7 @@ function TaskManagement() {
                       <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={handleClose} aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                      <h4>Due: {new Date(selectedTask.deadlineDate).toLocaleDateString()}</h4>
+                      <h4>Due: {displayDate(selectedTask.deadlineDate)}</h4>
                       <h4 className='text-muted'>{selectedTask.groupID}</h4>
                       <h4>Users Responsible: {selectedTask.usersResponsible.join(', ')}</h4>
                       <hr></hr>
@@ -312,7 +318,7 @@ function TaskManagement() {
                       onClick={() => handleOpen(task)}
                     >
                       <h4 className="mb-2">{task.taskName}</h4>
-                      <h5 className="mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h5>
+                      <h5 className="mb-2">Due: {displayDate(task.deadlineDate)}</h5>
                       <h6 className="mb-2 text-muted">{task.groupID}</h6>
                       <p>{task.description}</p>
                     </div>
@@ -346,7 +352,7 @@ function TaskManagement() {
                       <div className={background}>
                         <div className="card-header">
                           <h2 className="card-title">{task.taskName}</h2>
-                          <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                          <h4 className="card-subtitle mb-2">Due: {displayDate(task.deadlineDate)}</h4>
                           <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
                         </div>
                         <div className="card-body">
@@ -372,7 +378,7 @@ function TaskManagement() {
                     <div key={task._id} className={background}>
                       <div className="card-header">
                         <h2 className="card-title">{task.taskName}</h2>
-                        <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                        <h4 className="card-subtitle mb-2">Due: {displayDate(task.deadlineDate)}</h4>
                         <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
                       </div>
                       <div className="card-body">
