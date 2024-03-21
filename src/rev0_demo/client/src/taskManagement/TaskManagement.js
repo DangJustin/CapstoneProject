@@ -22,6 +22,7 @@ function TaskManagement() {
 
   // History State
   const [showHistory, setShowHistory] = useState(false);
+  const [isHistoryActive, setIsHistoryActive] = useState(false);
 
   // Search State
   const [query, setQuery] = useState('');
@@ -56,7 +57,6 @@ function TaskManagement() {
       for (let i = 0; i < displayTasks.length; i++){
         if ((selectedTask._id)===(displayTasks[i]._id)){
           modifiedTasks[i] = {...modifiedTasks[i],completed:!modifiedTasks[i].completed};
-          console.log("modified");
         }
       }
       setDisplayTasks(modifiedTasks);
@@ -86,6 +86,14 @@ function TaskManagement() {
     setSelectedTask(task);
   }
 
+  useEffect(() => {
+    if (selectedTask) {
+        const myModal = document.getElementById('taskDetailsModal');
+        const modal = new Modal(myModal);
+        modal.show();
+    }
+  }, [selectedTask]);
+
   //Close Modal handler for add task
   const closeModal = () => {
     setShowModal(false);
@@ -96,6 +104,7 @@ function TaskManagement() {
   // Toggle showing History of all tasks
   const toggleShowHistory = () => {
     setShowHistory(!showHistory);
+    setIsHistoryActive(!isHistoryActive);
   }
 
   // Go to individual Task Page
@@ -177,12 +186,12 @@ function TaskManagement() {
 
             {/* Modal to Display individual task data */}
             {selectedTask && (
-              <div className="modal fade show" style={{ display: 'block' }} tabindex="-1" role="dialog">
+              <div className="modal fade" id="taskDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" role="dialog">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
                     <div className="modal-header">
                       <h1 className="modal-title" >{selectedTask.taskName}</h1>
-                      <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
+                      <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={handleClose} aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
                       <h4>Due: {new Date(selectedTask.deadlineDate).toLocaleDateString()}</h4>
@@ -192,8 +201,8 @@ function TaskManagement() {
                       <p>{selectedTask.description}</p>
                     </div>
                     <div className="modal-footer">
-                      {!selectedTask.completed?(<button type="button" className="btn btn-success" onClick={()=>{toggleCompletion();handleClose();}}>Complete Task</button>)
-                      :(<button type="button" className="btn btn-danger" onClick={()=>{toggleCompletion();handleClose();}}>Reopen task</button>)}
+                      {!selectedTask.completed?(<button type="button" className="btn btn-success" data-bs-dismiss="modal" onClick={()=>{toggleCompletion();handleClose();}}>Complete Task</button>)
+                      :(<button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={()=>{toggleCompletion();handleClose();}}>Reopen task</button>)}
                       {/* <button type="button" className="btn btn-warning" onClick={() => handleSelect(selectedTask._id)}>Edit Task</button> */}
                       <button type="button" className="btn btn-warning" onClick={() => handleEdit()}>Edit Task</button>
                     </div>
@@ -219,7 +228,7 @@ function TaskManagement() {
             </div>
 
             {/* Modal for EditTask component */}
-            <div className="modal fade" id="editTaskModal" tabIndex="-1" role="dialog">
+            <div className="modal fade" id="editTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" role="dialog">
               <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -250,43 +259,43 @@ function TaskManagement() {
             )}
             </div>
 
-            <div className="d-grid mb-3">
-              <button type="button" className="btn btn-outline-primary btn-lg me-1" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-              ➕ Add Task
+            <div className="d-flex mb-3">
+              <button type="button" className="btn btn-outline-primary btn-lg me-1 w-100" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                ➕ Add Task
+              </button>
+              <button type="button" className={`btn btn-outline-info btn-lg me-1 w-100 ${isHistoryActive ? 'active' : ''}`} onClick={toggleShowHistory}>
+                Task History
               </button>
             </div>
-
-            {/* Display Incomplete Tasks */}
-            <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
-            {incompleteTasks.sort(sortDate).map((task)=>{
-              var background = "card bg-light h-100";
-              if ((new Date(task.deadlineDate)<Date.now())){
-                background = "card bg-danger h-100";
-              } 
-              return(
-                <div className="col">
-                  <div key={task._id} className={background}>
-                    <div className="card-header">
-                      <h2 className="card-title">{task.taskName}</h2>
-                      <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
-                      <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
-                    </div>
-                    <div className="card-body">
-                      <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
-                    </div>
-                    <div className="card-footer">
-                      <button className="btn btn-primary stretched-link w-100" onClick ={() => handleOpen(task)}>Details</button>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-            </div>
-
-            <div className="d-grid mb-3">
-              <button type="button" className="btn btn-outline-info btn-lg me-1" onClick={toggleShowHistory}>Task History</button>
-            </div>
             
+            {/* Display Incomplete Tasks */}
+            {!showHistory && (
+              <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
+                {incompleteTasks.sort(sortDate).map((task) => {
+                  var background = "card bg-light h-100";
+                  if (new Date(task.deadlineDate) < Date.now()) {
+                    background = "card bg-danger h-100";
+                  }
+                  return (
+                    <div className="col" key={task._id}>
+                      <div className={background}>
+                        <div className="card-header">
+                          <h2 className="card-title">{task.taskName}</h2>
+                          <h4 className="card-subtitle mb-2">Due: {new Date(task.deadlineDate).toLocaleDateString()}</h4>
+                          <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                        </div>
+                        <div className="card-body">
+                          <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
+                        </div>
+                        <div className="card-footer">
+                          <button className="btn btn-primary stretched-link w-100" onClick={() => handleOpen(task)}>Details</button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Task History */}
             {showHistory && (
