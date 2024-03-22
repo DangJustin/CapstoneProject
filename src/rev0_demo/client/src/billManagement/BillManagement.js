@@ -5,7 +5,6 @@ import axios from "axios";
 import Layout from "../Layout";
 import AddBill from "./AddBill"; // Import AddBill component
 
-
 const auth = getAuth();
 
 function BillManagement() {

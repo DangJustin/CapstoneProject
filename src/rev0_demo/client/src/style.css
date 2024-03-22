@@ -1,0 +1,127 @@
+/* style.css */
+
+.wrapper {
+  overflow: hidden;
+  position: relative;
+  /* font-size: 1vw; */
+}
+
+
+
+.outerBox {
+  word-wrap: normal;
+  align-items: center;
+  position: relative;
+  padding: 8px 8px;
+  max-width: 90%;
+  min-width: 1350px;
+  width: 100%;
+  margin: 0 auto; /* Center horizontally */
+  background-color: #f0f0f0; /* Change background color */
+  border-radius: 10px; /* Round the edges */
+}
+
+.innerBox {
+  word-wrap: normal;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.innerBox::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.card {
+  word-wrap: normal;
+  flex: 0 0 25%; /* Each card takes up 35% of the screen width */
+  margin-right: 15px; /* Adjust spacing between cards */
+}
+
+.btnBox {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  transition: all 1s;
+  cursor: pointer;
+}
+
+.leftBtnBox {
+  left: 0;
+}
+
+.rightBtnBox {
+  right: 0;
+}
+
+.btn {
+  width: 70px; /* Adjust the width of the button */
+  height: 60px; /* Adjust the height of the button */
+}
+
+.outerBox2 {
+  padding: 8px 8px;
+  display: flex;
+  justify-content: space-between;
+  max-height: 45vh;
+}
+
+.taskBox {
+  width: 50%;
+  max-width: 50%;
+  overflow-y: scroll;
+  background-color: #f0f0f0; /* Change background color */
+  border-radius: 10px; /* Round the edges */
+}
+
+.rewardBox {
+  width: 50%;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.taskBox::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.taskBox {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.outerBox3 {
+  padding: 8px 8px;
+  display: flex;
+}
+
+/* xs < 768 */
+@media screen and (max-width: 767px) {
+  body {
+      font-size: 0.9em;
+  }
+}
+
+/* sm */
+@media screen and (min-width: 768px) {
+  body {
+      font-size: 1em;
+  }
+}
+
+/* md */
+@media screen and (min-width: 992px) {
+  body {
+      font-size: 1.2em;
+  }
+}
+
+/* lg */
+@media screen and (min-width: 1200px) {
+  body {
+      font-size: 1.3em;
+  }
+}

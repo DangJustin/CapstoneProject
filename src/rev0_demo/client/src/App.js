@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './Homepage';
 import Login from './account/Login';
 import Register from './account/Register';
 import Account from './account/Account';
 import Group from './account/Group';
 import Editinfo from './account/Editinfo'
+import HomePage from './Homepage';
 import TaskManagement from './taskManagement/TaskManagement';
 import AddTask from './taskManagement/AddTask';
 import Task from './taskManagement/Task';
