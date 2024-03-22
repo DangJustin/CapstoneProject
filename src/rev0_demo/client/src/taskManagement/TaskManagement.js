@@ -270,7 +270,7 @@ function TaskManagement() {
               <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Task</h5>
+                    <h5 className="modal-title exo-bold">Edit Task</h5>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div className="modal-body">

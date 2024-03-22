@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { DatePicker } from "antd";
+import dayjs from 'dayjs';
 
 function EditTask({closeModal, inputTask}) {
   const [task,setTask] = useState([]);
@@ -14,15 +16,11 @@ function EditTask({closeModal, inputTask}) {
     setForm(inputTask)
   },[inputTask]);
 
-
-
-
   // Change fields in form
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (dateString) => {
     setForm((prevForm) => ({
       ...prevForm,
-      [name]: value,
+      ['deadlineDate']: dateString,
     }));
   }
 
@@ -41,17 +39,21 @@ function EditTask({closeModal, inputTask}) {
         {task &&  (<div>
           <form onSubmit={handleSubmit}>
             <div className="mb-3 w-100">
-                  <label className="form-label">Task Name:</label>
+                  <label className="form-label exo-bold">Task Name:</label>
                   <input type="text" name="taskName"  className="form-control" value={form.taskName} onChange={handleInputChange} />
             </div>
             <div className="mb-3 w-100">
-                  <label className="form-label">Description:</label>
+                  <label className="form-label exo-bold">Description:</label>
                   <textarea name="description" className="form-control" rows="3" value={form.description} onChange={handleInputChange}
             />
             </div>
             <div className="mb-3 w-100">
-                  <label className="form-label">Deadline Date:</label>
-                  <input type="date" className="form-control" name="deadlineDate"  value={form.deadlineDate} onChange={handleInputChange} />
+                  <label className="form-label exo-bold">Deadline Date:</label>
+                  <DatePicker
+                  className="form-control date-font"
+                  defaultValue={dayjs(form.deadlineDate)}
+                  onChange={(dateString) => handleInputChange(dateString)}
+                />
             </div>
             
             <div className='d-flex justify-content-center mb-3'>
