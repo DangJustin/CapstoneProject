@@ -295,19 +295,25 @@ function HomePageSlider() {
         </div>
 
         <div className="rewardBox">
+          <div className="d-flex justify-content-end">
+            <div className="d-flex align-self-end">
+              <h6>{`Max Streak: ${streakInfo.maxStreak}`}</h6>
+            </div>
+          </div>
+
           <div className="d-flex flex-column align-items-center">
             {streakInfo.currentStreak >= 3 ? (
               <img
                 src={StreakPng}
                 className="mx-2 my-3 img-fluid"
-                style={{width: "150px", height: "150px" }}
+                style={{ width: "150px", height: "150px" }}
                 alt="Streak"
               />
             ) : (
               <img
                 src={NoStreakPng}
-                className="mx-2"
-                style={{ width: "25px", height: "25px" }}
+                className="mx-2 my-3 img-fluid"
+                style={{ width: "150px", height: "150px" }}
                 alt="Streak"
               />
             )}
