@@ -17,10 +17,19 @@ function EditTask({closeModal, inputTask}) {
   },[inputTask]);
 
   // Change fields in form
-  const handleInputChange = (dateString) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setForm((prevForm) => ({
       ...prevForm,
-      ['deadlineDate']: dateString,
+      [name]: value,
+    }));
+  }
+
+  // Change date in form
+  const handleDateChange = (dateString) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      deadlineDate: dateString,
     }));
   }
 
@@ -52,7 +61,7 @@ function EditTask({closeModal, inputTask}) {
                   <DatePicker
                   className="form-control date-font"
                   defaultValue={dayjs(form.deadlineDate)}
-                  onChange={(dateString) => handleInputChange(dateString)}
+                  onChange={(dateString) => handleDateChange(dateString)}
                 />
             </div>
             
