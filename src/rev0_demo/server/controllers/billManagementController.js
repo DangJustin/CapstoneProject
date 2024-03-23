@@ -59,3 +59,17 @@ exports.getExpenses = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+exports.editBill = async (req, res) => {
+  try {
+    const billId = req.params.billId;
+    const updatedData = req.body;
+
+    const updatedBill = await billManagementService.editBill(billId, updatedData);
+
+    res.json(updatedBill);
+  } catch (error) {
+    console.error("Error updating bill:", error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
+}

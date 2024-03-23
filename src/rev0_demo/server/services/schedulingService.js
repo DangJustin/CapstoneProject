@@ -2,7 +2,7 @@ const Event = require('../models/eventModel');
 const Group = require('../models/groupModel');
 
 // Add an event to the group
-async function addEvent(eventname, datetime, minutes, groupID) {
+async function addEvent(eventname, datetime, enddatetime, groupID) {
   try {
     // Check if the group exists
     const group = await Group.findById(groupID);
@@ -14,7 +14,7 @@ async function addEvent(eventname, datetime, minutes, groupID) {
     const newEvent = new Event({
       eventname,
       datetime,
-      minutes,
+      enddatetime,
       groupID
     });
 

@@ -25,7 +25,7 @@
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get User">
             <stringProp name="HTTPSampler.domain">localhost</stringProp>
             <stringProp name="HTTPSampler.port">5000</stringProp>
-            <stringProp name="HTTPSampler.path">/api/account/users/user/oBRZh65UMga3ltYf2tihfrFLToY2</stringProp>
+            <stringProp name="HTTPSampler.path">/api/account/users/user/Ck9tOyzo60O2sJDsGGYZRa9QhhF3</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -38,7 +38,7 @@
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Tasks">
             <stringProp name="HTTPSampler.domain">localhost</stringProp>
             <stringProp name="HTTPSampler.port">5000</stringProp>
-            <stringProp name="HTTPSampler.path">/api/taskmanagement/tasks/user/oBRZh65UMga3ltYf2tihfrFLToY2</stringProp>
+            <stringProp name="HTTPSampler.path">/api/taskmanagement/tasks/user/Ck9tOyzo60O2sJDsGGYZRa9QhhF3</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -51,7 +51,7 @@
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Groups">
             <stringProp name="HTTPSampler.domain">localhost</stringProp>
             <stringProp name="HTTPSampler.port">5000</stringProp>
-            <stringProp name="HTTPSampler.path">/api/database/user-groups/oBRZh65UMga3ltYf2tihfrFLToY2</stringProp>
+            <stringProp name="HTTPSampler.path">/api/database/user-groups/Ck9tOyzo60O2sJDsGGYZRa9QhhF3</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -64,7 +64,7 @@
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Bills">
             <stringProp name="HTTPSampler.domain">localhost</stringProp>
             <stringProp name="HTTPSampler.port">5000</stringProp>
-            <stringProp name="HTTPSampler.path">/api/database/user-bills/oBRZh65UMga3ltYf2tihfrFLToY2</stringProp>
+            <stringProp name="HTTPSampler.path">/api/billManagement/user-bills/Ck9tOyzo60O2sJDsGGYZRa9QhhF3</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -77,7 +77,7 @@
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Events">
             <stringProp name="HTTPSampler.domain">localhost</stringProp>
             <stringProp name="HTTPSampler.port">5000</stringProp>
-            <stringProp name="HTTPSampler.path">/api/scheduling/group/65c086d930a05dc9ec5d1c5d/events</stringProp>
+            <stringProp name="HTTPSampler.path">/api/scheduling/group/65e70d1f7ba7e3088b35e972/events</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>

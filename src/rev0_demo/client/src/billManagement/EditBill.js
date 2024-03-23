@@ -74,7 +74,7 @@ function EditBill({ bill, onSave }) {
 
       // Send the updated bill data to the server
       const response = await axios.put(
-        `http://localhost:5000/api/database/edit-bill/${bill._id}`,
+        `http://localhost:5000/api/billManagement/edit-bill/${bill._id}`,
         updatedBillData
       );
 

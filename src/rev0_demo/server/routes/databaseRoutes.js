@@ -124,157 +124,7 @@ router.get("/group-participants/:groupId/all-users/:userId", async (req, res) =>
     }
   });
 
-router.put("/edit-bill/:billId", async (req, res) => {
-  try {
-    const billId = req.params.billId;
-    const updatedData = req.body;
 
-    // Find the bill by ID
-    let bill = await Bill.findById(billId).populate("users.user", "amountOwed");
-
-    if (!bill) {
-      return res.status(404).json({ error: "Bill not found" });
-    }
-
-    // Update specific fields of the bill
-    if (updatedData.totalAmount) {
-      bill.totalAmount = updatedData.totalAmount;
-    }
-    if (updatedData.description) {
-      bill.description = updatedData.description;
-    }
-    if (updatedData.users) {
-      // Calculate the amount owed per user
-      const oldUsers = bill.users.slice(1);
-      newUsers = updatedData.users.slice(1);
-      // Extract user IDs from oldUsers
-
-      // Find users present in oldUsers but not in newUsers using filter and includes
-      const usersNotInNewList = oldUsers.filter(
-        (user) =>
-          !newUsers.some((newUser) => newUser.user === user.user._id.toString())
-      );
-
-      const usersNotInOldList = newUsers.filter(
-        (newUser) => !oldUsers.some((oldUser) => oldUser.user._id.toString() === newUser.user.toString())
-      );
-
-      // Find users present in both oldUsers and newUsers using filter and includes
-      const usersInBothLists = oldUsers.filter((user) =>
-        newUsers.some((newUser) => newUser.user === user.user._id.toString())
-      );
-
-      const firstUserId = bill.users[0].user;
-
-      if (usersNotInNewList) {
-        await Promise.all(
-          usersNotInNewList.map(async (userData, index) => {
-            const user = await User.findById(userData.user);
-            let userAmountOwe = bill.users.find(
-              (u) => u.user._id.toString() === user._id.toString()
-            ).amountOwed;
-
-            if (user) {
-              user.amount += userAmountOwe;
-              await user.save();
-            }
-
-            await UserDebt.findOneAndUpdate(
-              { from: firstUserId, to: userData.user },
-              { $inc: { amount: -userAmountOwe } },
-              { upsert: true }
-            );
-          })
-        );
-      }
-
-      if (usersNotInOldList) {
-        await Promise.all(
-          usersNotInOldList.map(async (userData) => {
-            const user = await User.findById(userData.user);
-            let userAmountOwe = updatedData.users.find(
-              (u) => u.user.toString() === user._id.toString()
-            ).amountOwed;
-            if (user) {
-              user.amount -= userAmountOwe;
-              await user.save();
-            }
-
-            await UserDebt.findOneAndUpdate(
-              { from: firstUserId, to: userData.user },
-              { $inc: { amount: userAmountOwe } },
-              { upsert: true }
-            );
-          })
-        );
-      }
-
-      if (usersInBothLists) {
-        await Promise.all(
-          usersInBothLists.map(async (userData) => {
-            const user = await User.findById(userData.user);
-            const newAmount = updatedData.users.find(
-              (u) => u.user.toString() === user._id.toString()
-            ).amountOwed;
-            const oldAmount = bill.users.find(
-              (u) => u.user._id.toString() === user._id.toString()
-            ).amountOwed;
-            if (user) {
-              user.amount -= newAmount - oldAmount;
-              await user.save();
-            }
-
-            await UserDebt.findOneAndUpdate(
-              { from: firstUserId, to: userData.user },
-              { $inc: { amount: newAmount - oldAmount } },
-              { upsert: true }
-            );
-          })
-        );
-      }
-      const userA = await User.findById(firstUserId);
-      const usersAmountOwedSum = updatedData.users.reduce((total, user) => {
-        // Convert the amountOwed to a number (if it's a string)
-        const amountOwed = typeof user.amountOwed === 'string' ? parseFloat(user.amountOwed) : user.amountOwed;
-        // Add the amountOwed to the total
-        return total + amountOwed;
-      }, 0);
-      
-      // Calculate the total amount minus the sum of all user amounts owed
-      const remainingAmount = usersAmountOwedSum;
-      
-      if (userA) {
-        newAmount = remainingAmount;
-        oldAmount = bill.totalAmount - bill.users[0].amountOwed;
-        userA.amount += newAmount - oldAmount;
-        await userA.save();
-      }
-
-      // Update each user's amount owed
-      bill.users = updatedData.users.map((user, index) => ({
-        user: index === 0 ? bill.users[0].user : user.user, // Change the first user's ID manually
-        amountOwed: index === 0 ? updatedData.totalAmount - remainingAmount : user.amountOwed,
-      }));
-
-      // Update user amounts
-    }
-    if (updatedData.group) {
-      bill.group = updatedData.group;
-    }
-
-    // Save the updated bill
-    const updatedBill = await bill.save();
-    const populateBill = await Bill.findById(updatedBill._id)
-    .populate("users.user")
-    .populate("group");
-
-    // Send the updated bill as the response
-    res.json(populateBill);
-  } catch (error) {
-    console.error("Error updating bill:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 
 // Route to fetch all user debts
 router.get("/userDebts/:userID", async (req, res) => {
@@ -320,19 +170,56 @@ router.get("/userDebts/:userID", async (req, res) => {
   }
 });
 
+router.put("/updateUserAmount/:userId", async (req, res) => {
+  const { userId } = req.params.userId;
+  const { owedUserEmail, settlementAmount, owingUserEmail } = req.body;
 
-router.put('/updateUserAmount/:userId', (req, res) => {
-  const userId = req.params.userId;
-  const { user, amount } = req.body;
+  try {
 
-  User.findOneAndUpdate({ userId: userId }, { $inc: { amount: -amount } })
-    .then(() => {
-      res.status(200).json({ message: 'Debt settled successfully' });
-    })
-    .catch((err) => {
-      console.error("Error settling debt:", err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
+    const owingUser = await User.findOne({ email: owingUserEmail });
+    if (!owingUser) {
+        console.log("Owing user not found");
+        return;
+    }
+
+    const owedUser = await User.findOne({ email: owedUserEmail });
+    if (!owedUser) {
+        console.log("Owed user not found");
+        return;
+    }
+
+    owingUser.amount += settlementAmount;
+    owedUser.amount -= settlementAmount;
+
+    await owingUser.save();
+    await owedUser.save();
+
+    const owingUserDebt = await UserDebt.findOne({ from: owingUser._id, to: owedUser._id });
+    const owedUserDebt = await UserDebt.findOne({ from: owedUser._id, to: owingUser._id });
+
+    const greaterAmount = Math.max(owingUserDebt.amount, owedUserDebt.amount);
+    const lesserAmount = Math.min(owingUserDebt.amount, owedUserDebt.amount);
+
+        // Update UserDebt amounts
+        if (owingUserDebt.amount === greaterAmount) {
+            owingUserDebt.amount -= Math.min(greaterAmount, settlementAmount);
+            owedUserDebt.amount -= Math.max(0, settlementAmount - greaterAmount);
+        } else {
+            owedUserDebt.amount -= Math.min(greaterAmount, settlementAmount);
+            owingUserDebt.amount -= Math.max(0, settlementAmount - greaterAmount);
+        }
+
+        await owingUserDebt.save();
+        await owedUserDebt.save();
+    
+    
+    console.log("Settlement amount updated successfully");
+
+
+  } catch (err) {
+    console.error("Error settling debt:", err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
