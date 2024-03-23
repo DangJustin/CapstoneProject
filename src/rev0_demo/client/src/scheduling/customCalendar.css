@@ -5,19 +5,19 @@
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   font-family: 'Arial', sans-serif;
-  overflow: hidden; /* Added to prevent the shadows from being cut off */
+  overflow: hidden;
 }
 
 .react-calendar__month-view__days__day {
-  height: auto; /* To ensure the height adjusts to the content */
+  height: auto;
 }
 
 .react-calendar__tile {
   border-radius: 6px;
   transition: background-color 0.3s;
-  padding: 10px 6px; /* More padding for aesthetic spacing */
-  flex-direction: column; /* Stack the content vertically */
-  display: flex; /* Use flex to align content */
+  padding: 10px 6px;
+  flex-direction: column;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -74,5 +74,5 @@
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background-color: #7bade0;
+  background-color: #69a2dc;
 }
