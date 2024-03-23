@@ -57,6 +57,7 @@ function BillManagement() {
 
   const handleSettle = async (user, amount) => {
     try {
+      setSettlementAmount(amount);
       setSettlingDebt(user);
       setShowSettlementModal(true);
     } catch (error) {
