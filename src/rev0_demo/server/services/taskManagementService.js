@@ -1,4 +1,5 @@
 const Task = require('../models/taskModel');
+const UserStreak = require('../models/userStreakModel');
 const accountService = require('../services/accountService');
 
 async function getTask(taskID) {
@@ -50,16 +51,45 @@ async function addTask(taskName, groupID, deadlineDate, description, usersRespon
       }
 }
 
-async function completeTask(taskID){
-    try {
-      const task = await getTask(taskID);
-      task.completed = true;
-      await task.save();
-    } catch (error) {
-      // Handle any errors during the task completion
-      console.error('Error completing task:', error);
-      throw error; // You may want to handle errors in a more specific way
+async function completeTask(taskID) {
+  try {
+    const task = await getTask(taskID);
+    
+    // Check if the task is completed within the deadline
+    const completionDate = new Date();
+    const deadlineDate = new Date(task.deadlineDate);
+    const isOnTime = completionDate <= deadlineDate;
+
+    // Update streaks based on completion status
+    if (isOnTime) {
+      // Task completed on time, increment current streak for each user
+      for (const userId of task.usersResponsible) {
+        const userStreak = await UserStreak.findOne({ user: userId });
+        const currentStreak = userStreak ? userStreak.currentStreak + 1 : 1;
+        await UserStreak.findOneAndUpdate(
+          { user: userId },
+          { $inc: { currentStreak: 1 }, $max: { maxStreak: currentStreak } },
+          { upsert: true } // Create streak document if it doesn't exist
+        );
+      }
+    } else {
+      // Task completed after deadline, reset current streak
+      await UserStreak.findOneAndUpdate(
+        { user: task.user },
+        { $set: { currentStreak: 0 } },
+        { upsert: true } // Create streak document if it doesn't exist
+      );
     }
+
+    // Mark the task as completed
+    task.completed = true;
+    await task.save();
+    console.log("Task completed successfully");
+  } catch (error) {
+    // Handle any errors during the task completion
+    console.error('Error completing task:', error);
+    throw error; // You may want to handle errors in a more specific way
+  }
 }
 
 async function editTask(taskData){
