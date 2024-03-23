@@ -46,7 +46,7 @@ beforeEach(async () => {
     testEvent = await Event.create({
         eventname: "Test Event",
         datetime: new Date(),
-        minutes: 60,
+        enddatetime: new Date(new Date().setDate(new Date().getDate() + 1)),
         groupID: testGroup._id
     });
 });
@@ -56,26 +56,26 @@ describe('Scheduling tests', () => {
     it('should add a new event', async () => {
         const eventname = "Meeting";
         const datetime = new Date();
-        const minutes = 30;
+        const enddatetime = new Date();
 
-        const newEvent = await schedulingService.addEvent(eventname, datetime, minutes, testGroup._id);
+        const newEvent = await schedulingService.addEvent(eventname, datetime, enddatetime, testGroup._id);
         expect(newEvent).toHaveProperty('_id');
         expect(newEvent.eventname).toBe(eventname);
         expect(newEvent.datetime).toEqual(datetime);
-        expect(newEvent.minutes).toBe(minutes);
+        expect(newEvent.enddatetime).toBe(enddatetime);
     });
 
     it('should edit an event', async () => {
         const updateData = {
             eventname: "Updated Meeting",
             datetime: new Date(new Date().setDate(new Date().getDate() + 1)), // Tomorrow
-            minutes: 45
+            enddatetime: new Date()
         };
 
         const editedEvent = await schedulingService.editEvent(testEvent._id, updateData);
         expect(editedEvent.eventname).toBe(updateData.eventname);
         expect(editedEvent.datetime.toISOString()).toBe(updateData.datetime.toISOString());
-        expect(editedEvent.minutes).toBe(updateData.minutes);
+        expect(editedEvent.enddatetime.toISOString()).toBe(updateData.enddatetime.toISOString());
     });
 
     it('should delete an event', async () => {
@@ -105,10 +105,10 @@ describe('Scheduling tests - Error Handling', () => {
   it('should throw an error when adding an event to a non-existent group', async () => {
       const eventname = "Non-existent Group Meeting";
       const datetime = new Date();
-      const minutes = 60;
+      const enddatetime = new Date();
       const nonExistentGroupId = new mongoose.Types.ObjectId();
 
-      await expect(schedulingService.addEvent(eventname, datetime, minutes, nonExistentGroupId))
+      await expect(schedulingService.addEvent(eventname, datetime, enddatetime, nonExistentGroupId))
           .rejects
           .toThrow('Group not found');
   });
@@ -118,7 +118,7 @@ describe('Scheduling tests - Error Handling', () => {
       const updateData = {
           eventname: "Updated Meeting",
           datetime: new Date(),
-          minutes: 45
+          enddatetime: new Date()
       };
 
       await expect(schedulingService.editEvent(nonExistentEventId, updateData))
