@@ -76,10 +76,6 @@ function EventAdd() {
       "groupID": groupName
     };
 
-    // Check if correct
-    console.log(event);
-
-
     axios.post('http://localhost:5000/api/scheduling/', event)
       .then(response => {
         console.log('Event added to the database', response.data);

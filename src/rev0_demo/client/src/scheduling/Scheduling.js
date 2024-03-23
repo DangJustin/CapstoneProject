@@ -78,19 +78,24 @@ function Scheduling() {
 
   const tileContent = ({ date, view }) => {
     const dayEvents = view === 'month' && getEventsForDate(date);
-    // Limit the display to a certain number of events
-    const displayEvents = dayEvents.slice(0, 3);
-    const overflowCount = dayEvents.length - displayEvents.length;
-
     return (
       <div className="events-tile">
-        {displayEvents.map(event => (
-          <div key={event._id} className="event">{event.eventname}</div>
+        {dayEvents.map(event => (
+          <div key={event._id} className="event">
+            <div className="event-name">{event.eventname}</div>
+            <div className="event-time">{formatEventTime(event.datetime, event.enddatetime)}</div>
+          </div>
         ))}
-        {overflowCount > 0 && <div className="more-events">+{overflowCount} more</div>}
       </div>
     );
   };
+  const formatEventTime = (startIsoString, endIsoString) => {
+    const startTime = new Date(startIsoString);
+    const endTime = new Date(endIsoString);
+    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, hourCycle: 'h11' };
+    return `${startTime.toLocaleTimeString('en-US', timeOptions)} - ${endTime.toLocaleTimeString('en-US', timeOptions)}`;
+  };
+  
 
   return (
     <Layout>
