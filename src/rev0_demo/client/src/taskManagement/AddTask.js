@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import Multiselect from 'multiselect-react-dropdown';
 import presetData from './tasks.json';
+import { DatePicker } from "antd";
 
 const auth = getAuth();
 
@@ -208,7 +209,11 @@ function AddTask({ closeModal }) {
               <div className="mb-3">
                 <label className="text-danger">*</label>
                 <label className="form-label exo-bold">Deadline Date:</label>
-                <input type="date" className="form-control" required value={deadlineDate} onChange={(e) => setDeadlineDate(e.target.value)} />
+                <DatePicker
+                  className="form-control date-font"
+                  required
+                  onChange={(dateString) => setDeadlineDate(dateString)}
+                />
               </div>
 
             </div>
