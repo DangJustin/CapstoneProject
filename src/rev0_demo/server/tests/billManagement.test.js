@@ -5,7 +5,7 @@ const Bill = require("../models/billModel");
 const UserDebt = require("../models/userDebtModel");
 const billManagementService = require("../services/billManagementService");
 const accountService = require("../services/accountService");
-const { splitExpense } = require('../services/billManagementService');
+const { splitExpense, editBill } = require('../services/billManagementService');
 // const router = require("../routes/databaseRoutes")
 // const request = require('supertest')
 
@@ -225,6 +225,41 @@ describe('Get Expenses', () => {
     expect(expenses.error).toEqual('User not found');
   });
 });
+
+describe('Edit Expenses', () => {
+  it('Should edit bill total amount', async () => {
+    // Create a mock bill
+    const bill = await Bill.create({ totalAmount: 100, users: [] });
+  
+    // Update data
+    const updatedData = { totalAmount: 150};
+  
+    // Call the function to edit the bill
+    await editBill(bill._id, updatedData);
+  
+    // Retrieve the updated bill from the database
+    const updatedBill = await Bill.findById(bill._id);
+  
+    // Check if the bill was updated successfully
+    expect(updatedBill.totalAmount).toEqual(updatedData.totalAmount);
+    
+  });
+
+  it('Should return error when editing a non-existent bill', async () => {
+    // Attempt to edit a bill with a non-existent ID
+    const nonExistentBillId = '6062f29118a53a2d98c1b4e6'; // Assuming this ID does not exist
+  
+    // Update data
+    const updatedData = { totalAmount: 150 };
+  
+    // Call the function to edit the bill
+    const result = await editBill(nonExistentBillId, updatedData);
+  
+    expect(result.error).toEqual('Bill not found');
+  });
+
+});
+
 describe("POST /split-expense", () => {
   it("Should split an expense among users and create a bill with equal individual amounts", async () => {
     // Test data
@@ -286,12 +321,11 @@ describe("POST /split-expense", () => {
     expect(bills.length).toBe(1); 
 
     // Check bill details
-    const bill = bills[0]; // Get the newly created bill
+    const bill = bills[0];
     expect(bill.totalAmount).toBe(200);
-    expect(bill.users.length).toBe(2); // Assuming only 2 users are involved
-    expect(bill.users[0].amountOwed).toBe(50); // User 1 owes 50
-    expect(bill.users[1].amountOwed).toBe(150); // User 2 owes 150
-    // Add more assertions based on your bill schema
+    expect(bill.users.length).toBe(2);
+    expect(bill.users[0].amountOwed).toBe(50); 
+    expect(bill.users[1].amountOwed).toBe(150);
   });
 
   it("Should throw an error if the initiating user is not found", async () => {
@@ -316,5 +350,4 @@ describe("POST /split-expense", () => {
     })).rejects.toThrow("Internal Server Error");
   });
 
-  // Add more test cases for error scenarios, edge cases, etc.
 });

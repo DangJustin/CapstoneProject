@@ -11,6 +11,7 @@ router.get('/tasks/user/:id',taskManagementController.getUserTasks);
 router.get('/tasks/task/:id',taskManagementController.getTask);
 router.put('/tasks/task/:id',taskManagementController.editTask);
 router.put('/tasks/task/:id/complete',taskManagementController.completeTask);
+router.put('/tasks/task/:id/reopen',taskManagementController.reopenTask);
 
 
 

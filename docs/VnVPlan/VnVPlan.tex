@@ -3,6 +3,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \usepackage{float}
 \hypersetup{
     colorlinks,
@@ -18,9 +19,9 @@
 
 \begin{document}
 
-\title{Housemates: System Verification and Validation Plan for \progname{}} 
+\title{Verification and Validation Plan for \progname{}} 
 \author{\authname}
-\date{\today}
+\date{March 6, 2024}
 	
 \maketitle
 
@@ -32,6 +33,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 3 2023 & 0 & Revision 0\\
+Mar 6 2024 & 1 & Update with Unit Testing\\
 \bottomrule
 \end{tabularx}
 
@@ -131,8 +133,8 @@ The objective of this verification and validation plan is to
     \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/DevelopmentPlan/DevelopmentPlan.pdf}{Development Plan}: The development plan contains the tools planned to be used in the development of the application along with the overall schedule for this project. These items will be referenced to in this VnV plan.  
     \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/SRS-Volere/SRS.pdf}{SRS}: The software requirements specification contains the functional and non-functional requirements of the Housemates application. These requirements will be tested for in the VnV plan under system testing. 
     \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/HazardAnalysis/HazardAnalysis.pdf}{Hazard Analysis}: The hazard analysis document contains the hazards associated with the application. These hazards will need to be tested for in the VnV plan in order to be sure that they are mitigated.
-    % \item \href{https://github.com/DangJustin/CapstoneProject/tree/main/docs/Design}{Design}: The design document will contain the underlying design of the Housemates application. The elements of this design will be tested in the unit testing section of this VnV plan.
-    % \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Repor}t: The VnV report will document the results of the VnV plan used in this document.
+    \item \href{https://github.com/DangJustin/CapstoneProject/tree/main/docs/Design}{Design}: The design document will contain the underlying design of the Housemates application. The elements of this design will be tested in the unit testing section of this VnV plan.
+    \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Repor}t: The VnV report will document the results of the VnV plan used in this document.
 \end{itemize}
 
 
@@ -151,11 +153,11 @@ This section contains the different verification and validation plans that will 
 \subsection{Verification and Validation Team}
 
 \begin{itemize}
-    \item Justin Dang: Will focus on non-functional testing and usability survey.
-    \item Harris Hamid: Will focus on bill management system as a part of functional testing
-    \item Fady Marcos: Will focus on Account system as a part of functional testing
-    \item Rizwan Ahsan: Will focus on scheduling system as a part of functional testing 
-    \item Sheikh Afsar: Will focus on task management system as part of functional testing
+    \item Justin Dang: Will focus on task management system and performance testing.
+    \item Harris Hamid: Will focus on bill management system and usability testing.
+    \item Fady Marcos: Will focus on Account system, scheduling system as a part of functional testing
+    \item Rizwan Ahsan: Will focus on task management system and usability testing. 
+    \item Sheikh Afsar: Will focus on bill management system and usability testing.
 \end{itemize}
 
 
@@ -213,7 +215,9 @@ This section contains the different verification and validation plans that will 
 
 \subsection{Implementation Verification Plan}
 
-After the completion of the Housemates application a code inspection and walkthrough will be conducted on the source code of the application. This will be used to identify any potential errors in the source code that prevent the application from satisfying its requirements.
+Verification of the implementation will be conducted through performing the system tests described in the VnV plan.
+
+% After the completion of the Housemates application a code inspection and walkthrough will be conducted on the source code of the application. This will be used to identify any potential errors in the source code that prevent the application from satisfying its requirements.
 
 % \wss{You should at least point to the tests listed in this document and the unit
 %   testing plan.}
@@ -224,7 +228,7 @@ After the completion of the Housemates application a code inspection and walkthr
 
 \subsection{Automated Testing and Verification Tools}
 
-The automated testing and verification tools used in the VnV of the Housemates application is covered the development plan under sections 4,6 and 7.
+Automatic testing of the document will be done through the jest.
 
 % \wss{What tools are you using for automated testing.  Likely a unit testing
 %   framework and maybe a profiling tool, like ValGrind.  Other possible tools
@@ -289,8 +293,6 @@ This subsection covers the tests for the task management system of the Housemate
 
 \item{test-TM1-1\\}
 
-Control: Manual
-
 Description: Verify navigation to Task Management page via tasks icon.
 					
 Initial State: Housemates app is open.
@@ -333,8 +335,7 @@ Description: Verify creation of a new task.
 Initial State: Task Management page is open.
 					
 Input: Task Name: "Clean the Living Room"
-Due Date: 2023-11-05
-Roommate Assignment: Fardeen Afsar.
+Due Date: 2024-4-05
 					
 Output: New task "Clean the Living Room" is added to the list of tasks.
 
@@ -347,26 +348,29 @@ Fill out the task creation form with the provided input.
 Click "Create" button.
 Verify that the new task appears in the list of tasks.
 
+
 \item{test-TM4-1\\}
 
 Control: Manual
 
 Description: Verify assigning a task to a roommate.
 					
-Initial State: Task Management page is open with at least one task.
+Initial State: Task Management page is open.
 					
-Input: Task Name: Select a task from the list.
-Choose roommate: Fardeen.
+Input: Task Name: "Take out the garbage".
+Due Date: 2024-4-05
+Roommate Assignment: Fardeen Afsar.
 					
-Output: Task is assigned to Fardeen.
+Output: Task is assigned to Fardeen, Fardeen can see.
 
 Test Case Derivation: This feature enables users to divide tasks among roommates.
 
 How test will be performed: 
 Open the Task Management page.
-Select a task from the list.
+Create a task.
 Choose roommate "Fardeen" from the list of roommates.
-Verify that the task is now assigned to Fardeen.
+Login as Fardeen
+Verify that the task is now assigned to Fardeen and Fardeen can see task.
 
 \item{test-TM5-1\\}
 
@@ -389,63 +393,7 @@ Select a task from the list.
 Mark the task as completed.
 Verify that the task is now marked as completed on the Task Management page.
 
-\item{test-TM3-2\\}
 
-Control: Automatic
-
-Description: Create New Task.
-					
-Initial State: Task management page is open.
-					
-Input: Task Name: Task Name: "Clean the Kitchen"
-Due Date: 2023-11-05
-Roommate Assignment: Fardeen.
-					
-Output: New task "Clean the Kitchen" is added to the list of tasks.
-
-How test will be performed: 
-Call the function createNewTask() with parameters:
-Task Name: "Clean the Kitchen"
-Due Date: 2023-11-05
-Roommate Assignment: Fardeen.
-Verify that the new task "Clean the Kitchen" is added to the list of tasks.
-
-\item{test-TM4-2\\}
-
-Control: Automatic
-
-Description: Verify that a task can be assigned to the roommate.
-					
-Initial State: Task Management page is open with at least one task.
-					
-Input: Task Name: Select a task from the list. Choose Roommate: Fardeen.
-					
-Output: Task is assigned to Fardeen.
-
-
-How test will be performed:
-Call the function 'assignTaskToRoommate()' with parameters:
-Task: Selected Task (from the list)
-Roommate: Fardeen.
-Verify that the task is now assigned to Jane Doe.
-
-\item{test-TM5-2\\}
-
-Control: Automatic
-
-Description: Verify that a task can be marked as completed.
-					
-Initial State: Task Management page is open with at least one task.
-					
-Input: Task Name: Select a task from the list.
-Mark task as completed.
-					
-Output: Task is marked as completed and status is updated.
-
-How test will be performed:
-Call the function 'markTaskAsCompleted()' with parameter:
-Task: Selected Task (from the list).
-Verify that the task is marked as completed and status is updated.
 
 \end{enumerate}
 
@@ -894,11 +842,11 @@ Type: Non-functional, Dynamic, Manual
 					
 Initial State: The application is run on a phone.
 					
-Input/Condition: 100 users will be simulated trying to login to application servers.
+Input/Condition: 100 users will be simulated trying to use the application at the same time.
 					
-Output/Result: The application servers will be able to process those login requests.
+Output/Result: The application servers will be able to process their requests.
 					
-How test will be performed: Once the development of the application is complete, the developers will simulate 100 people trying to use the application at the same time. The application servers should show no slow down.
+How test will be performed: Once the development of the application is complete, the developers will simulate 100 people trying to use the application at the same time. The application servers should show no slow down. This will be done using Jmeter.
 
 
 \end{enumerate}
@@ -1032,11 +980,8 @@ FR ID & TM1 & TM2 & TM3 & TM4 & TM5 & BM1 & BM2 & BM3 & BM4 & BM5 \\
 test-TM1-1 & $\times$ & & & & & & & & & \\
 test-TM2-1 & & $\times$ & & & & & & & & \\
 test-TM3-1 & & & $\times$ & & & & & & & \\
-test-TM3-2 & & &  $\times$& & & & & & & \\
 test-TM4-1 & & & & $\times$ & & & & & & \\
-test-TM4-2 & & & & $\times$ & & & & & & \\
 test-TM5-1 & & & & & $\times$ & & & & & \\
-test-TM5-2 & & & & & $\times$ & & & & & \\
 test-BM1-1/2-1 & & & & & & $\times$ & $\times$ & & & \\
 test-BM3-1 & & & & & & & & $\times$ & & \\
 test-BM4-1 & & & & & & & & & $\times$ & \\
@@ -1116,7 +1061,7 @@ test-C-SC1 &  &  & & &    &  &  & $\times$  \\
 
 \section{Unit Test Description}
 
-This section will be completed after the creation of the design document.
+Unit testing for \progname{} will be performed automatically with jest. Unit tests will cover the normal behavior and any notable edge cases of the modules. Tests are labeled as \textit{ModuleName}.test.js in the tests folder. The tests for each module are broken into blocks where \textit{describe} describes what the block does and \textit{it} describes the individual test and what should be its' result.
 
 % \wss{This section should not be filled in until after the MIS (detailed design
 %   document) has been completed.}
@@ -1134,7 +1079,7 @@ This section will be completed after the creation of the design document.
 
 \subsection{Unit Testing Scope}
 
-N/A
+Unit testing for \progname{} will occur  for the four modules listed earlier in this document, the Task Management System, the Bill Management System, the Scheduling System, and the Account System.
 
 % \wss{What modules are outside of the scope.  If there are modules that are
 %   developed by someone else, then you would say here if you aren't planning on
@@ -1142,9 +1087,52 @@ N/A
 %   have a lower priority for verification than others.  If this is the case,
 %   explain your rationale for the ranking of module importance.}
 
-\subsection{Tests for Functional Requirements}
+\subsection{Unit Tests for Task Management Module}
 
-N/A
+Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src/rev0_demo/server/tests/taskManagement.test.js}{taskManagement.test.js}
+
+\begin{enumerate}
+    \item UT-T1: Create Task
+    \item UT-T2: Get Tasks
+    \item UT-T3: Complete Task
+    \item UT-T4: Edit Task
+\end{enumerate}
+
+\subsection{Unit Tests for Bill Management Module}
+
+Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src/rev0_demo/server/tests/billManagement.test.js}{billManagement.test.js}
+
+\begin{enumerate}
+    \item UT-B1: Get Expense
+    \item UT-B2: Delete Bill
+    \item UT-B3: Split Expense
+\end{enumerate}
+
+
+\subsection{Unit Tests for Scheduling Module}
+
+Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src/rev0_demo/server/tests/scheduling.test.js}{scheduling.test.js}
+
+\begin{enumerate}
+    \item UT-S1: Add Event
+    \item UT-S2: Edit Event
+    \item UT-S3: Get Events for Group
+    \item UT-S4: Get Events for a user
+    \item UT-S5: Delete Event
+\end{enumerate}
+
+
+\subsection{Unit Tests for Account Module}
+
+Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src/rev0_demo/server/tests/account.test.js}{account.test.js}
+
+\begin{enumerate}
+    \item UT-A1: Get User based off built in ID
+    \item UT-A2: Get User based off userID
+    \item UT-A3: Get Group
+    \item UT-A4: Get User Groups
+\end{enumerate}
+
 
 % \wss{Most of the verification will be through automated unit testing.  If
 %   appropriate specific modules can be verified by a non-testing based
@@ -1197,9 +1185,9 @@ N/A
 
 % ...
 
-\subsection{Tests for Nonfunctional Requirements}
+% \subsection{Tests for Nonfunctional Requirements}
 
-N/A
+% N/A
 
 % \wss{If there is a module that needs to be independently assessed for
 %   performance, those test cases can go here.  In some projects, planning for
@@ -1243,9 +1231,9 @@ N/A
 
 % ...
 
-\subsection{Traceability Between Test Cases and Modules}
+% \subsection{Traceability Between Test Cases and Modules}
 
-N/A
+% N/A
 
 
 % \wss{Provide evidence that all of the modules have been considered.}
@@ -1267,50 +1255,81 @@ N/A
 % The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
 % Their values are defined in this section for easy maintenance.
 
-\subsection{Usability Survey Questions}
+\subsection{Usability Survey}
 
 The following usability survey would be distributed by Google Forms to potential stakeholders after a showcase of a preliminary version of the Housemates application. The information in this usability survey will be used in tests in the VnV plan as well as collecting information on potential stakeholders.
 
-\begin{enumerate}
-    \item Do you have housemates?
-    \begin{enumerate}
-        \item Yes
-        \item No
-    \end{enumerate}
-    \item What operating system is run on your phone?
-    \begin{enumerate}
-        \item IOS
-        \item Android
-        \item Others
-    \end{enumerate}
-    \item What do you find frustrating about having housemates?
-    \item Which feature of the Housemates application do you find the most interesting/would use the most often?
-    \begin{enumerate}
-        \item Split bills
-        \item Delegate chores
-        \item Schedule events
-    \end{enumerate}
-    \item Did you find the Housemates application visually appealing and intuitive?
-    \begin{enumerate}
-        \item Yes
-        \item No
-    \end{enumerate}
-    \item Did you find the Housemates application easy to navigate?
-    \begin{enumerate}
-        \item Yes
-        \item No
-    \end{enumerate}
-    \item Did you find the features of the Housemate application easy to learn?
-    \begin{enumerate}
-        \item Yes
-        \item No
-    \end{enumerate}
-    \item Would you use the Housemates application in your regular life?
-    \begin{enumerate}
-        \item Yes
-        \item No
-    \end{enumerate}
-\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{survey_part_1.png}
+    \caption{Part 1 of survey}
+    \label{fig:pt1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{survey_part_2.png}
+    \includegraphics[width=1\linewidth]{survey_part_2_5.png}
+    \caption{Part 2 of survey}
+    \label{fig:pt2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{survey_part_3.png}
+    \includegraphics[width=1\linewidth]{survey_part_3_5.png}
+    \caption{Part 3 of survey}
+    \label{fig:pt3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{survey_part_4.png}
+    \includegraphics[width=1\linewidth]{survey_part_4_5.png}
+    \caption{Part 4 of survey}
+    \label{fig:pt4}
+\end{figure}
+
+% \begin{enumerate}
+%     \item Do you have housemates?
+%     \begin{enumerate}
+%         \item Yes
+%         \item No
+%     \end{enumerate}
+%     \item What operating system is run on your phone?
+%     \begin{enumerate}
+%         \item IOS
+%         \item Android
+%         \item Others
+%     \end{enumerate}
+%     \item What do you find frustrating about having housemates?
+%     \item Which feature of the Housemates application do you find the most interesting/would use the most often?
+%     \begin{enumerate}
+%         \item Split bills
+%         \item Delegate chores
+%         \item Schedule events
+%     \end{enumerate}
+%     \item Did you find the Housemates application visually appealing and intuitive?
+%     \begin{enumerate}
+%         \item Yes
+%         \item No
+%     \end{enumerate}
+%     \item Did you find the Housemates application easy to navigate?
+%     \begin{enumerate}
+%         \item Yes
+%         \item No
+%     \end{enumerate}
+%     \item Did you find the features of the Housemate application easy to learn?
+%     \begin{enumerate}
+%         \item Yes
+%         \item No
+%     \end{enumerate}
+%     \item Would you use the Housemates application in your regular life?
+%     \begin{enumerate}
+%         \item Yes
+%         \item No
+%     \end{enumerate}
+% \end{enumerate}
 
 % \wss{This is a section that would be appropriate for some projects.}
 

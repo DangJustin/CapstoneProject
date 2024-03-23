@@ -70,3 +70,15 @@ exports.completeTask = async (req, res, next) => {
   }
 }
 
+exports.reopenTask = async (req, res, next) => {
+  const taskID = req.params.id;
+  console.log("Task Management reopenTask: " + String(taskID));
+  try {
+    await taskManagementService.reopenTask(taskID);
+    res.status(200).send("Success");
+  } catch (error){
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+

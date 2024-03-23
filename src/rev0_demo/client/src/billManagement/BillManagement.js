@@ -31,7 +31,12 @@ function BillManagement() {
         const response = await axios.get(
           `http://localhost:5000/api/database/userDebts/${currentUser.uid}`
         );
-        setDebts(response.data.netDebts);
+
+        const newDebts = {};
+        Object.entries(response.data.netDebts).forEach(([user, amount]) => {
+          newDebts[user] = amount;
+        });
+        setDebts(newDebts);
         setUserAmount(response.data.userAmount);
         setUpdatedUserAmount(response.data.userAmount);
       } catch (error) {
@@ -50,20 +55,36 @@ function BillManagement() {
   const goToViewExpenses = () => {
     navigate("viewExpenses");
   };
+
+  const handleSettle = async (user, amount) => {
+    try {
+      setSettlingDebt(user);
+    } catch (error) {
+      console.error("Error Settling", error)
+    }
+  }
+  
   const handleSettleExpense = async () => {
     try {
       if (settlingDebt && settlementAmount) {
         const updatedDebts = { ...debts };
         updatedDebts[settlingDebt] -= settlementAmount;
         setDebts(updatedDebts);
-        setUpdatedUserAmount(updatedUserAmount - settlementAmount);
-        setSettlingDebt(null);
-        setSettlementAmount(0);
+        if (updatedUserAmount >= 0) {
+          setUpdatedUserAmount(updatedUserAmount - settlementAmount);
+        }
+        else {
+          setUpdatedUserAmount(updatedUserAmount + settlementAmount);
+        }
+        
       }
       const updatedDebt = {
-        userId: currentUser.userId,
-        amount: updatedUserAmount,
+        owedUserEmail: currentUser.email,
+        settlementAmount: settlementAmount,
+        owingUserEmail: settlingDebt
       };
+      setSettlingDebt(null);
+      // setSettlementAmount(0);
 
       await axios.put(
         `http://localhost:5000/api/database/updateUserAmount/${currentUser.uid}`,
@@ -122,20 +143,12 @@ function BillManagement() {
         </h1>
         <h2>Interpersonal Debt Relations:</h2>
         <ul className="list-group">
-          {Object.entries(debts).map(([user, amount]) => (
-            <li
-              key={user}
-              className="list-group-item d-flex justify-content-between align-items-center"
-            >
+          {Object.entries(debts).filter(([user, amount]) => user !== currentUser.email).map(([user, amount]) => (
+            <li key={user} className="list-group-item d-flex justify-content-between align-items-center">
               {amount < 0
                 ? `You owe user ${user} $${Math.abs(amount).toFixed(2)}`
                 : `User ${user} owes you $${Math.abs(amount).toFixed(2)}`}
-              <button
-                className="btn btn-outline-danger"
-                onClick={() => setSettlingDebt(user)}
-              >
-                Settle
-              </button>
+              <button className="btn btn-outline-danger" onClick={() => handleSettle(user, amount)}>Settle</button>
             </li>
           ))}
         </ul>
@@ -149,12 +162,7 @@ function BillManagement() {
               onChange={(e) => setSettlementAmount(parseFloat(e.target.value))}
               className="form-control"
             />
-            <button
-              className="btn btn-success mt-2"
-              onClick={handleSettleExpense}
-            >
-              Settle Expense
-            </button>
+            <button className="btn btn-success mt-2" onClick={handleSettleExpense} disabled={settlementAmount > Math.abs(debts[settlingDebt])}>Settle Expense</button>
           </div>
         )}
       </div>

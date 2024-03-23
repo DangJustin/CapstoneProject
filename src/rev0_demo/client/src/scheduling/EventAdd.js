@@ -1,23 +1,28 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 // import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import AuthDetails from "../AuthDetails"
 import Layout from "../Layout"
 import axios from "axios"
 import { useUser } from '../UserContext';
-
+import Multiselect from 'multiselect-react-dropdown';
 
 function EventAdd() {
 
-  const { currentUser, isLoading, error } = useUser();
+  // const { presentUser, isLoading, error } = useUser();
+  const [currentUser, setCurrentUser] = useState(null);
+  
   // State variables for managing input values and error messages
   const [eventName, setEventName] = useState('');
   const [dateTime, setDateTime] = useState('');
+  const [endDateTime, setEndDateTime] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [groupName, setGroupName] = useState('');
   const [groupid, setGroupid] = useState();
+  const [groups, setGroups] = useState([]);
 
   // React hook to manage navigation between pages
   const navigate = useNavigate();
@@ -29,70 +34,92 @@ function EventAdd() {
   const handleEventSubmit = async (e) => {
     e.preventDefault();
 
-    const durationMinutes = parseInt(minutes);
-    if (isNaN(durationMinutes) || durationMinutes > 1439 ||  durationMinutes < 1) {
-      alert('The duration of the event must be less than or equal to 1439 and greater than 0');
-      return;
-    }
-
-    try{
-      const groupInvolvedRes = await axios.get(`http://localhost:5000/api/database/user-groups/${currentUser.userID}`);
+    try {
+      console.log(currentUser)
+      const groupInvolvedRes = await axios.get(`http://localhost:5000/api/database/user-groups/${currentUser.uid}`);
+      console.log("made it here")
       var listOfGroups = [];
       const n = (groupInvolvedRes.data).length;
-      for (var i = 0; i < n; i++) {listOfGroups.push((groupInvolvedRes.data)[i].groupName);}
+      for (var i = 0; i < n; i++) { listOfGroups.push((groupInvolvedRes.data)[i]._id); }
 
-      if (!listOfGroups.includes(groupName)){
+      if (!listOfGroups.includes(groupName)) {
         alert("You can only add an event to a group you are in!");
         return;
       }
 
     } catch (error) {
-        alert("Failed checking group authentication")
+      alert(error)
+      alert("Failed checking group authentication")
+
     }
-    
-    try{
-      const groupRes = await axios.get(`http://localhost:5000/api/account/groups/${groupName}/id`);
-      
-      if (groupRes.data && groupRes.data.groupId){
-        console.log('Group ID: ', groupRes.data.groupId);
-        var groupid = groupRes.data.groupId;
-      } else {
-        alert('The group you mentioned does not exist, please try again.');
-        return;
-      }
+
+    try {
+      console.log("HERE")
+      console.log(groupName)
+      console.log("HERE")
+
     } catch (error) {
       console.error('Error fetching group: ', error);
       alert('Failed to get the group details.');
       return;
     }
-    
+
     // Convert dateTime string to a Date object
     const eventDateTime = new Date(dateTime);
+    const eventEndDateTime = new Date(endDateTime);
 
     // Create event object
     const event = {
       "eventname": eventName,
       "datetime": eventDateTime.toISOString(),
-      "minutes": durationMinutes,
-      "groupID": groupid
+      "enddatetime": eventEndDateTime.toISOString(),
+      "groupID": groupName
     };
 
-    // Check if correct
-    console.log(event);
-    
-    
     axios.post('http://localhost:5000/api/scheduling/', event)
-    .then(response => {
-      console.log('Event added to the database', response.data);
-    })
-    .catch(error => {
-      console.error('Error adding event to the database', error);
-    });
+      .then(response => {
+        console.log('Event added to the database', response.data);
+      })
+      .catch(error => {
+        console.error('Error adding event to the database', error);
+      });
 
     navigate("/scheduling")
   }
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
 
+    return () => unsubscribe();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (!currentUser) {
+          return;
+        }
+
+        const groupsResponse = await axios.get(`http://localhost:5000/api/database/user-groups/${currentUser.uid}`);
+
+        if (!groupsResponse) {
+          console.error('Failed to fetch group data');
+          return;
+        }
+
+        const groupsData = groupsResponse.data;
+
+        setGroups(groupsData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [currentUser]);
 
   return (
     <Layout>
@@ -144,28 +171,27 @@ function EventAdd() {
 
                   <div className="mb-3">
                     <label className="text-danger">*</label>
-                    <label htmlFor="duration" className="form-label">Duration (minutes)</label>
+                    <label htmlFor="dateTime" className="form-label">End Date and Time</label>
                     <input
-                      type="text"
+                      type="datetime-local"
                       className="form-control"
-                      id="duration"
-                      onChange={(e) => { setMinutes(e.target.value) }}
-                      placeholder="Enter duration (Must be at least one and less than 1440)"
+                      id="dateTime"
+                      onChange={(e) => { setEndDateTime(e.target.value) }}
                       required
                     />
                   </div>
 
+
+
                   <div className="mb-3">
                     <label className="text-danger">*</label>
-                    <label htmlFor="groupName" className="form-label">Group Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="groupName"
-                      onChange={(e) => { setGroupName(e.target.value) }}
-                      placeholder="Enter group name"
-                      required
-                    />
+                    <label className="form-label">Select Group:</label>
+                    <select className="form-select" value={groupName} required onChange={(e) => setGroupName(e.target.value)}>
+                      <option value="" disabled>Select a group</option>
+                      {groups.map((group) => (
+                        <option key={group._id} value={group._id}>{group.groupName}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="text-center mb-2">

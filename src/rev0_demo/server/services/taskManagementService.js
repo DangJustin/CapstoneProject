@@ -8,7 +8,7 @@ async function getTask(taskID) {
     return task;
   } catch (error){
     console.log("Error getting task: ", taskID, error);
-    throw error; // You may want to handle errors in a more specific way
+    throw error;
   }
 }
 
@@ -18,13 +18,13 @@ async function getUserTasks(userID){
     tasks = [];
     for (let i = 0; i < userGroups.length; i++){
       group = userGroups[i];
-      task = await Task.find({groupID:group._id})
+      task = await Task.find({groupID:group._id});
       tasks = tasks.concat(task);
     }
     return tasks;
   } catch (error){
     console.log("Error getting task: ", error);
-    throw error; // You may want to handle errors in a more specific way
+    throw error;
   }
 }
 
@@ -42,12 +42,12 @@ async function addTask(taskName, groupID, deadlineDate, description, usersRespon
         // Save the new task to the database
         const savedTask = await newTask.save();
     
-        // Return the saved task or perform additional actions
+        // Return the saved task
         return savedTask;
       } catch (error) {
         // Handle any errors during the task creation
         console.error('Error adding task:', error);
-        throw error; // You may want to handle errors in a more specific way
+        throw error;
       }
 }
 
@@ -92,6 +92,18 @@ async function completeTask(taskID) {
   }
 }
 
+async function reopenTask(taskID){
+  try {
+    const task = await getTask(taskID);
+    task.completed = false;
+    await task.save();
+  } catch (error) {
+    // Handle any errors during the task reopening
+    console.error('Error reopening task:', error);
+    throw error;
+  }
+}
+
 async function editTask(taskData){
   try {
     const task = await Task.findById(taskData._id);
@@ -102,8 +114,8 @@ async function editTask(taskData){
   } catch (error) {
     // Handle any errors during the task completion
     console.error('Error updating task:', error);
-    throw error; // You may want to handle errors in a more specific way
+    throw error;
   }
 }
 
-module.exports = { getTask, getUserTasks, addTask, completeTask, editTask };
+module.exports = { getTask, getUserTasks, addTask, completeTask, editTask, reopenTask };

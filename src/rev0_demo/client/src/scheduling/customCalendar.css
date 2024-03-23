@@ -1,0 +1,78 @@
+/* customCalendar.css */
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
+
+.react-calendar__month-view__days__day {
+  height: auto;
+}
+
+.react-calendar__tile {
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  padding: 10px 6px;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-calendar__tile--hasActive {
+  background-color: #e6f7ff;
+}
+
+.react-calendar__tile--active {
+  background-color: #ffeded;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background-color: #ffc2c2;
+}
+
+
+.events-tile {
+  width: 100%;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.event {
+  background-color: #add8e6;
+  color: #333;
+  border-radius: 4px;
+  margin: 3px 0;
+  padding: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-name {
+  font-weight: bold;
+}
+
+.event-time {
+  font-size: 0.7rem;
+  color: #555;
+}
+
+.more-events {
+  color: #555;
+  font-weight: bold;
+  cursor: pointer;
+}
+.react-calendar__tile--active {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background-color: #69a2dc;
+}

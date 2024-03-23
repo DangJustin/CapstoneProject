@@ -3,64 +3,159 @@ const db = require('./db');
 const User = require('../models/userModel');
 const Group = require("../models/groupModel");
 const Event = require('../models/eventModel');
+const schedulingService = require('../services/schedulingService');
 
 // Have This block before the tests
-beforeAll(async () => {await db.connect()});
-afterEach(async () => {await db.clearDatabase()});
-afterAll(async () => {await db.disconnect()});
+beforeAll(async () => { await db.connect() });
+afterEach(async () => {
+  console.error.mockRestore();
+await db.clearDatabase();
+});
+
+afterAll(async () => { await db.disconnect() });
+
+let testUser1, testUser2, testGroup, testEvent;
+
 beforeEach(async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
     //Add 2 new users
-    const userID1 = "111111111";
-    const userID2 = "222222222";
-    const email1 = "testTask1@gmail.com";
-    const email2 = "testTask2@gmail.com";
-    const username1 = "testTask1";
-    const username2 = "testTask2";
-    const firstname = "Test";
-    const lastname = "Task";
-    const phone = "1234567890";
-    const user1 = await User.create({
-      userID: userID1,
-      email: email1,
-      username: username1,
-      firstname,
-      lastname,
-      phone,
+    testUser1 = await User.create({
+        userID: "111111111",
+        email: "testTask1@gmail.com",
+        username: "testTask1",
+        firstname: "Test",
+        lastname: "Task1",
+        phone: "1234567890",
     });
-    const user2 = await User.create({
-      userID: userID2,
-      email: email2,
-      username: username2,
-      firstname,
-      lastname,
-      phone,
+    testUser2 = await User.create({
+        userID: "222222222",
+        email: "testTask2@gmail.com",
+        username: "testTask2",
+        firstname: "Test",
+        lastname: "Task2",
+        phone: "1234567890",
     });
-  
+
     //Add new group and users to group
-    const groupName = "Test Events";
-    let group = new Group({ groupName: groupName, users: [] });
-    group.users.push(user1._id, user2._id);
-    await group.save();
-  
-  });
+    testGroup = await Group.create({
+        groupName: "Test Events",
+        users: [testUser1._id, testUser2._id]
+    });
+
+    //Add new event
+    testEvent = await Event.create({
+        eventname: "Test Event",
+        datetime: new Date(),
+        enddatetime: new Date(new Date().setDate(new Date().getDate() + 1)),
+        groupID: testGroup._id
+    });
+});
 
 // Tests
 describe('Scheduling tests', () => {
-    it('Placeholder', async () => {
-        const userID = "123456789";
-        const email = "123456@gmail.com";
-        const username = "123username";
-        const firstname = "Bill";
-        const lastname = "Nye";
-        const phone = "1234567890";
-        const user = await User.create({ userID, email, username, firstname, lastname, phone });
-        const id = user._id;
-        const checkUser = await User.findById(id);
-        expect(checkUser.userID).toEqual(userID);
-    });
-    it('Placeholder', async () => {
-        const user = await User.findOne({userID:"123456789"});
-        expect(user).toEqual(null);
-    });
-})
+    it('should add a new event', async () => {
+        const eventname = "Meeting";
+        const datetime = new Date();
+        const enddatetime = new Date();
 
+        const newEvent = await schedulingService.addEvent(eventname, datetime, enddatetime, testGroup._id);
+        expect(newEvent).toHaveProperty('_id');
+        expect(newEvent.eventname).toBe(eventname);
+        expect(newEvent.datetime).toEqual(datetime);
+        expect(newEvent.enddatetime).toBe(enddatetime);
+    });
+
+    it('should edit an event', async () => {
+        const updateData = {
+            eventname: "Updated Meeting",
+            datetime: new Date(new Date().setDate(new Date().getDate() + 1)), // Tomorrow
+            enddatetime: new Date()
+        };
+
+        const editedEvent = await schedulingService.editEvent(testEvent._id, updateData);
+        expect(editedEvent.eventname).toBe(updateData.eventname);
+        expect(editedEvent.datetime.toISOString()).toBe(updateData.datetime.toISOString());
+        expect(editedEvent.enddatetime.toISOString()).toBe(updateData.enddatetime.toISOString());
+    });
+
+    it('should delete an event', async () => {
+        const response = await schedulingService.deleteEvent(testEvent._id);
+        expect(response.message).toBe('Event deleted successfully');
+        const deletedEvent = await Event.findById(testEvent._id);
+        expect(deletedEvent).toBeNull();
+    });
+
+    it('should get all events for a group', async () => {
+        const events = await schedulingService.getGroupEvents(testGroup._id);
+        expect(Array.isArray(events)).toBe(true);
+        expect(events).toHaveLength(1);
+        expect(events[0]._id.toString()).toBe(testEvent._id.toString());
+    });
+
+    it('should get all events for a user', async () => {
+        const events = await schedulingService.getUserEvents(testUser1._id);
+        expect(Array.isArray(events)).toBe(true);
+        expect(events).toHaveLength(1);
+        expect(events[0]._id.toString()).toBe(testEvent._id.toString());
+    });
+
+});
+
+describe('Scheduling tests - Error Handling', () => {
+  it('should throw an error when adding an event to a non-existent group', async () => {
+      const eventname = "Non-existent Group Meeting";
+      const datetime = new Date();
+      const enddatetime = new Date();
+      const nonExistentGroupId = new mongoose.Types.ObjectId();
+
+      await expect(schedulingService.addEvent(eventname, datetime, enddatetime, nonExistentGroupId))
+          .rejects
+          .toThrow('Group not found');
+  });
+
+  it('should throw an error when editing a non-existent event', async () => {
+      const nonExistentEventId = new mongoose.Types.ObjectId();
+      const updateData = {
+          eventname: "Updated Meeting",
+          datetime: new Date(),
+          enddatetime: new Date()
+      };
+
+      await expect(schedulingService.editEvent(nonExistentEventId, updateData))
+          .rejects
+          .toThrow('Event not found');
+  });
+
+  it('should throw an error when deleting a non-existent event', async () => {
+      const nonExistentEventId = new mongoose.Types.ObjectId();
+
+      await expect(schedulingService.deleteEvent(nonExistentEventId))
+          .rejects
+          .toThrow('Event not found');
+  });
+
+  it('should return an empty array when getting events for a non-existent group', async () => {
+      const nonExistentGroupId = new mongoose.Types.ObjectId();
+
+      const events = await schedulingService.getGroupEvents(nonExistentGroupId);
+      expect(Array.isArray(events)).toBe(true);
+      expect(events).toHaveLength(0);
+  });
+
+  it('should return an empty array when getting events for a user with no groups', async () => {
+      // Create a user that isn't part of any group
+      const newUser = await User.create({
+          userID: "333333333",
+          email: "noGroupsUser@example.com",
+          username: "noGroupsUser",
+          firstname: "Test",
+          lastname: "User",
+          phone: "1234567890"
+      });
+
+      const events = await schedulingService.getUserEvents(newUser._id);
+      expect(Array.isArray(events)).toBe(true);
+      expect(events).toHaveLength(0);
+  });
+
+});

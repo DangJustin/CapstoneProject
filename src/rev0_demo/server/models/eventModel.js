@@ -11,8 +11,8 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    minutes: {
-        type: Number,
+    enddatetime: {
+        type: Date,
         required: true,
     },
     groupID: {

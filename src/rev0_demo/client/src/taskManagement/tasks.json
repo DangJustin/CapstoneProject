@@ -1,0 +1,53 @@
+{
+    "chores": [
+        {
+          "name": "Vacuum Common Areas",
+          "taskDescription": "Use a vacuum cleaner to clean carpets, rugs, and floors in shared spaces such as the living room, hallway, or common areas."
+        },
+        {
+          "name": "Mop Floors",
+          "taskDescription": "Use a mop and appropriate cleaning solution to clean hard floor surfaces in common areas"
+        },
+        {
+          "name": "Clean the Bathroom",
+          "taskDescription": "Scrub and sanitize bathroom including the sink, toilet, bathtub/shower, and mirrors."
+        },
+        {
+          "name": "Wipe Down Kitchen Counters and Appliances",
+          "taskDescription": "Clean kitchen surfaces, countertops, and appliances to remove spills, stains, and food residue."
+        },
+        {
+          "name": "Wash Dishes",
+          "taskDescription": "Clean dirty dishes, utensils, pots, and pans either by handwashing or the dishwasher."
+        },
+        {
+          "name": "Take Out the Trash and Recycling",
+          "taskDescription": "Empty trash bins and recycling bins and dispose of waste properly."
+        },
+        {
+          "name": "Cleaning out the Refrigerator",
+          "taskDescription": "Remove expired food items and wipe down shelves and drawers to maintain cleanliness and prevent odors."
+        },
+        {
+          "name": "Do Laundry",
+          "taskDescription": "Do laundry including washing clothes, drying them either in dryer, and folding them neatly for storage."
+        },
+        {
+          "name": "Buy Groceries",
+          "taskDescription": "Visit grocery stores or markets to purchase items from the grocery list."
+        },
+        {
+          "name": "Water Plants",
+          "taskDescription": "Give plants appropriate amount of water."
+        },
+        {
+          "name": "Rake Leaves",
+          "taskDescription": "Use a rake to gather leaves and debris."
+        },
+        {
+          "name": "Shovel Snow",
+          "taskDescription": "Remove snow from pathways, driveways, and sidewalks using a shovel."
+        }
+    ]    
+}
+  
