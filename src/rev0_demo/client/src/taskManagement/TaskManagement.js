@@ -12,7 +12,6 @@ const auth = getAuth();
 const editIcon = require('../images/edit-icon.png');
 const completeIcon = require('../images/complete-icon.png');
 const reopenIcon = require('../images/reopen-icon.png');
-const infoIcon = require('../images/info-icon.png');
 
 function TaskManagement() {
   // User State
@@ -23,10 +22,7 @@ function TaskManagement() {
   const [displayTasks,setDisplayTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
   const [completeTasks, setCompleteTasks] = useState([]);
-
-  // History State
-  const [showHistory, setShowHistory] = useState(false);
-  const [isHistoryActive, setIsHistoryActive] = useState(false);
+  const [overdueTasks, setOverdueTasks] = useState([]);
 
   // Search State
   const [query, setQuery] = useState('');
@@ -36,7 +32,12 @@ function TaskManagement() {
   // Modal State
   const [selectedTask, setSelectedTask] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
+
+  const [expanded, setExpanded] = useState(false);
+  const [expandedOverdue, setExpandedOverdue] = useState(false);
+  const [expandedDue, setExpandedDue] = useState(false);
+  const [expandedCompleted, setExpandedCompleted] = useState(false);
+  const [numCols, setNumCols] = useState(1);
 
   // Search handler
   const handleSearch = (e) => {
@@ -123,18 +124,6 @@ function TaskManagement() {
     window.location.reload();
   };
 
-
-  // Toggle showing History of all tasks
-  const toggleShowHistory = () => {
-    setShowHistory(!showHistory);
-    setIsHistoryActive(!isHistoryActive);
-  }
-
-  // Go to individual Task Page
-  const handleSelect = (task) => {
-    navigate('tasks/task/'+String(task))
-  }
-
   //Checking if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -186,13 +175,18 @@ function TaskManagement() {
     changeTaskData();
   },[tasks])
 
-  // Filter Between Incomplete and Completed Tasks
-  useEffect(()=>{
-    const incompleteList = displayTasks.filter(task => !task.completed);
+  // Filter Between Incomplete, Completed and Overdue Tasks
+  useEffect(() => {
+    const now = new Date();
+    
+    const incompleteList = displayTasks.filter(task => !task.completed && new Date(task.deadlineDate) >= now);
     const completeList = displayTasks.filter(task => task.completed);
+    const overdueList = displayTasks.filter(task => !task.completed && new Date(task.deadlineDate) < now);
+  
     setIncompleteTasks(incompleteList);
     setCompleteTasks(completeList);
-  },[displayTasks])
+    setOverdueTasks(overdueList);
+  }, [displayTasks]);
   
   // Function to Sort By Deadline Date of Tasks
   const sortDate= (task1,task2) => {
@@ -204,6 +198,36 @@ function TaskManagement() {
     var date = new Date(dateString);
     return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()).toDateString();
   }
+
+  function toggleExpand(value) {
+    setExpanded(!expanded);
+    if(value == 1) setExpandedOverdue(!expandedOverdue);
+    else if(value == 2) setExpandedDue(!expandedDue);
+    else setExpandedCompleted(!expandedCompleted);
+  }
+
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 1280) {
+        setNumCols(4);
+      } else if (screenWidth >= 1000) {
+        setNumCols(3);
+      } else if (screenWidth >= 768) {
+        setNumCols(2);
+      } else {
+        setNumCols(1);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Initial call to set the initial number of columns
+    handleResize();
+
+    // Cleanup function to remove event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <Layout>
@@ -280,25 +304,6 @@ function TaskManagement() {
               </div>
             </div>
 
-            {/* Modal for Info component */}
-            <div className="modal fade" id="infoModal" tabIndex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title" id="infoModalLabel">Information</h5>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div className="modal-body">
-                    <ul>
-                      <li><span style={{ backgroundColor: 'grey', color: 'white' }}>White Cards:</span> Upcoming due tasks</li>
-                      <li><span style={{ backgroundColor: 'red', color: 'white' }}>Red Cards:</span> Overdue tasks</li>
-                      <li><span style={{ backgroundColor: 'green', color: 'white' }}>Green Cards:</span> Completed tasks</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Search Bar to search for tasks */}
             <div className="mb-3">
               <input
@@ -328,25 +333,53 @@ function TaskManagement() {
             </div>
 
             <div className="d-flex mb-3">
-              <button type="button" className="btn btn-outline-primary btn-lg me-1 w-100" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-                ➕ Add Task
-              </button>
-              <button type="button" className={`btn btn-outline-info btn-lg me-1 w-100 ${isHistoryActive ? 'active' : ''}`} onClick={toggleShowHistory}>
-                Task History
-              </button>
-              <button type="button" className="btn btn-outline-secondary border-0" data-bs-toggle="modal" data-bs-target="#infoModal">
-                <img src={infoIcon} alt="Info" style={{ width: '28px', height: '28px' }} />
+              <button type="button" className="btn btn-outline-primary btn-lg w-100" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                <i className="bi bi-plus-circle"></i> Add Task
               </button>
             </div>
-            
-            {/* Display Incomplete Tasks */}
-            {!showHistory && (
-              <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
-                {incompleteTasks.sort(sortDate).map((task) => {
-                  var background = "card due-tasks h-100";
-                  if (new Date(task.deadlineDate) < Date.now()) {
-                    background = "card overdue-tasks h-100";
-                  }
+
+            {/* 3 task cards - Overdue, due and completed */}
+            <div className={`d-flex flex-fill mb-3 task-card-row ${expanded ? 'child-expanded' : ''}`}>
+              <div className={`card bg-white task-card hvr-sweep-to-right ${expandedOverdue ? 'expanded expand-left' : 'me-2'}`} style={{ cursor: 'pointer' }} onClick={() => toggleExpand(1)}>
+                <div className="content collapse-content">
+                  <div className="card-header">
+                    <h5 className="card-title">Overdue Tasks</h5>
+                  </div>
+                  <div className="card-body fs-1">
+                    <p className="card-text">{overdueTasks.length}</p>
+                  </div>
+                </div>
+                <div className="card-body content expand-content">Overdue Tasks</div>
+              </div>
+              <div className={`card bg-primary bg-white task-card hvr-shutter-out-horizontal ${expandedDue ? 'expanded expand-both' : 'mx-2'}`} style={{ cursor: 'pointer' }} onClick={() => toggleExpand(2)}>
+                <div className="content collapse-content">
+                  <div className="card-header">
+                    <h5 className="card-title">Due Tasks</h5>
+                  </div>
+                  <div className="card-body fs-1">
+                    <p className="card-text">{incompleteTasks.length}</p>
+                  </div>
+                </div>
+                <div className="card-body content expand-content">Due Tasks</div>
+              </div>
+              <div className={`card bg-white task-card hvr-sweep-to-left ${expandedCompleted ? 'expanded expand-right' : 'ms-2'}`} style={{ cursor: 'pointer' }} onClick={() => toggleExpand(3)}>
+                <div className="content collapse-content">
+                  <div className="card-header">
+                    <h5 className="card-title">Completed Tasks</h5>
+                  </div>
+                  <div className="card-body fs-1">
+                    <p className="card-text">{completeTasks.length}</p>
+                  </div>
+                </div>
+                <div className="card-body content expand-content task-wrap">Completed Tasks</div>
+              </div>
+            </div>
+
+            {/* Display Overdue Tasks */}
+            {expandedOverdue && (
+              <div className={`row row-cols-1 row-cols-md-${numCols} g-4 mb-3`}>
+                {overdueTasks.sort(sortDate).map((task) => {
+                  var background = "card overdue-tasks h-100";
                   return (
                     <div className="col" key={task._id}>
                       <div className={background}>
@@ -359,7 +392,33 @@ function TaskManagement() {
                           <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
                         </div>
                         <div className="card-footer">
-                          <button className="btn btn-primary stretched-link w-100" onClick={() => handleOpen(task)}>Details</button>
+                          <button className="btn details-button stretched-link w-100" onClick={() => handleOpen(task)}><i className="bi bi-chevron-expand"></i> Details</button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            
+            {/* Display Due Tasks */}
+            {expandedDue && (
+              <div className={`row row-cols-1 row-cols-md-${numCols} g-4 mb-3`}>
+                {incompleteTasks.sort(sortDate).map((task) => {
+                  var background = "card due-tasks h-100";
+                  return (
+                    <div className="col" key={task._id}>
+                      <div className={background}>
+                        <div className="card-header">
+                          <h2 className="card-title">{task.taskName}</h2>
+                          <h4 className="card-subtitle mb-2">Due: {displayDate(task.deadlineDate)}</h4>
+                          <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                        </div>
+                        <div className="card-body">
+                          <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
+                        </div>
+                        <div className="card-footer">
+                          <button className="btn btn-primary stretched-link w-100" onClick={() => handleOpen(task)}><i className="bi bi-chevron-expand"></i> Details</button>
                         </div>
                       </div>
                     </div>
@@ -368,29 +427,29 @@ function TaskManagement() {
               </div>
             )}
 
-            {/* Task History */}
-            {showHistory && (
-              <div className="row row-cols-1 row-cols-md-4 g-4 mb-3">
-              {completeTasks.sort(sortDate).map((task)=>{
-                var background = "card done-tasks h-100";
-                return(
-                  <div className="col">
-                    <div key={task._id} className={background}>
-                      <div className="card-header">
-                        <h2 className="card-title">{task.taskName}</h2>
-                        <h4 className="card-subtitle mb-2">Due: {displayDate(task.deadlineDate)}</h4>
-                        <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
-                      </div>
-                      <div className="card-body">
-                        <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
-                      </div>
-                      <div className="card-footer">
-                        <button className="btn btn-primary stretched-link w-100" onClick ={() => handleOpen(task)}>Details</button>
+            {/* Display Completed Tasks */}
+            {expandedCompleted && (
+              <div className={`row row-cols-1 row-cols-md-${numCols} g-4 mb-3`}>
+                {completeTasks.sort(sortDate).map((task) => {
+                  var background = "card done-tasks h-100";
+                  return (
+                    <div className="col" key={task._id}>
+                      <div className={background}>
+                        <div className="card-header">
+                          <h2 className="card-title">{task.taskName}</h2>
+                          <h4 className="card-subtitle mb-2">Due: {displayDate(task.deadlineDate)}</h4>
+                          <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                        </div>
+                        <div className="card-body">
+                          <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>
+                        </div>
+                        <div className="card-footer">
+                          <button className="btn btn-success stretched-link w-100" onClick={() => handleOpen(task)}><i className="bi bi-chevron-expand"></i> Details</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
+                  );
+                })}
               </div>
             )}
 
