@@ -43,7 +43,8 @@ function TaskManagement() {
   const handleSearch = (e) => {
     const inputValue = e.target.value;
     setQuery(inputValue);
-    const result = incompleteTasks.filter(task =>
+    const searchList = [...overdueTasks, ...incompleteTasks];
+    const result = searchList.filter(task =>
       task.taskName.toLowerCase().includes(inputValue.toLowerCase())
     );
     setResults(result);
