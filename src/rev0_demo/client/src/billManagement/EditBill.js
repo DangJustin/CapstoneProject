@@ -144,7 +144,7 @@ function EditBill({ bill, onSave }) {
                 <Multiselect
                   options={allParticipants.map((participant) => ({
                     value: participant._id,
-                    label: participant.email,
+                    label: participant.username,
                   }))}
                   // selectedValues={updatedBill.users
                   //   .filter((participant) => participant.user && allParticipants.some((p) => p._id === participant.user._id))
