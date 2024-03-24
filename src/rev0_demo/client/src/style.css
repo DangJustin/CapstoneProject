@@ -1,27 +1,25 @@
 /* style.css */
 
-.wrapper {
+.homepage .wrapper {
   overflow: hidden;
   position: relative;
   /* font-size: 1vw; */
 }
 
-
-
-.outerBox {
+.homepage .outerBox {
   word-wrap: normal;
   align-items: center;
   position: relative;
   padding: 8px 8px;
   max-width: 90%;
-  min-width: 1350px;
+  /* min-width: 1350px; */
   width: 100%;
   margin: 0 auto; /* Center horizontally */
-  background-color: #f0f0f0; /* Change background color */
+  background-color: #9290C3; /* Change background color */
   border-radius: 10px; /* Round the edges */
 }
 
-.innerBox {
+.homepage .innerBox {
   word-wrap: normal;
   display: flex;
   flex-wrap: nowrap;
@@ -30,18 +28,23 @@
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-.innerBox::-webkit-scrollbar {
+.homepage .innerBox::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-.card {
+.homepage .card {
   word-wrap: normal;
   flex: 0 0 25%; /* Each card takes up 35% of the screen width */
   margin-right: 15px; /* Adjust spacing between cards */
 }
 
-.btnBox {
+.homepage .cardView {
+  /* max-width: 500px; */
+  min-width: 400px;
+}
+
+.homepage .btnBox {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -50,22 +53,22 @@
   cursor: pointer;
 }
 
-.leftBtnBox {
-  left: 0;
+.homepage .leftBtnBox {
+  left: -4%;
 }
 
-.rightBtnBox {
-  right: 0;
+.homepage .rightBtnBox {
+  right: -4%;
 }
 
-.btn {
+.homepage .outerBox .btn {
   width: 70px; /* Adjust the width of the button */
   height: 60px; /* Adjust the height of the button */
 }
 
-.outerBox2 {
+.homepage .outerBox2 {
   padding-top: 30px;
-  padding-bottom: 30px;
+  padding-bottom: 15px;
   display: flex;
   justify-content: space-between;
   max-height: 45vh;
@@ -73,58 +76,265 @@
   margin: 0 auto; /* Center horizontally */
 }
 
-.taskBox {
+.homepage .username, .homepage .useremail, .homepage .userOweText {
+  color: #ddcbee;
+}
+
+.homepage .greeting {
+  padding: 15px 0px;
+  display: flex;
+  justify-content: space-between;
+  max-width: 90%;
+  margin: 0 auto; /* Center horizontally */
+  color: #ebddf7;
+}
+
+.homepage .userAmount-danger {
+  color: rgb(236, 82, 82);
+}
+
+.homepage .userAmount-success {
+  color: rgb(53, 193, 53);
+}
+
+.homepage .taskBox {
   width: 50%;
   max-width: 50%;
   overflow-y: scroll;
-  background-color: #f0f0f0; /* Change background color */
+  background-color: #9290C3; /* Change background color */
   border-radius: 10px; /* Round the edges */
 }
 
-.rewardBox {
+.homepage .outerBox2 .card {
+  background-color: #2c2b53;
+  color: #ddcbee;
+}
+
+.homepage .choreText {
+  color: white;
+}
+
+.homepage .outerBox .card {
+  background-color: #2c2b53;
+  color: white;
+}
+
+.homepage .rewardBox {
+  width: 50%;
+  max-width: 50%;
+  margin-left: 20px;
+  /* background-color: #b9c2d1; Change background color */
+  border-radius: 10px; /* Round the edges */
+}
+
+.homepage .outerBox3 .card {
+  background-color: #9290C3;
+  color: white;
+}
+
+.homepage .rewardBox {
   width: 50%;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.taskBox::-webkit-scrollbar {
+.homepage .taskBox::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.taskBox {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.homepage .taskBox {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-.outerBox3 {
-  padding: 8px 8px;
+.homepage .outerBox3 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  max-width: 90%;
+  margin: 0 auto; /* Center horizontally */
+}
+
+.homepage .innerBox3 {
   display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.homepage .eventCard {
+  max-width: 20vw;
+  min-width: 300px;
+  margin-bottom: 20px;
+}
+.homepage .streakImage {
+  width: 150px;
+  height: auto;
+}
+
+.homepage .btnCheck {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%; /* Use 50% to make it a circle */
+  display: flex;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  transition: all 0.3s ease; /* Add smooth transition */
+}
+
+.homepage .btnCheck:hover {
+  width: 50px; /* Increase width on hover */
+  height: 50px; /* Increase height on hover */
+  background-color: #20c446; /* Change background color on hover */
+}
+
+.homepage .btnCheck img {
+  width: 100%;
+  height: 100%;
+}
+
+.homepage .eventsText {
+  color: white;
+  text-align: center;
 }
 
 /* xs < 768 */
 @media screen and (max-width: 767px) {
-  body {
-      font-size: 0.9em;
+  .homepage body {
+    font-size: 0.9em;
+  }
+  .homepage .streakImage {
+    width: 100px;
+    height: auto;
+  }
+  .homepage .streakText {
+    font-size: 0.5rem;
+  }
+  .homepage .leftBtnBox {
+    left: 100%;
+  }
+  
+  .homepage .rightBtnBox {
+    right: 100%;
+  }
+  
+  .homepage .outerBox .btn {
+    width: 70px; /* Adjust the width of the button */
+    height: 60px; /* Adjust the height of the button */
+  }
+}
+
+/* xs < 576px */
+@media screen and (max-width: 575.98px) {
+  .homepage body {
+    font-size: 0.9em;
+  }
+  .homepage .streakImage {
+    width: 60px;
+    height: auto;
+  }
+  .homepage .streakText {
+    font-size: 0.8rem;
   }
 }
 
 /* sm */
-@media screen and (min-width: 768px) {
-  body {
-      font-size: 1em;
+@media screen and (min-width: 576px) and (max-width: 767.98px) {
+  .homepage body {
+    font-size: 1em;
+  }
+  .homepage .streakImage {
+    width: 80px;
+    height: auto;
+  }
+  .homepage .streakText {
+    font-size: 1rem;
+  }
+  .homepage .leftBtnBox {
+    left: -7%;
+  }
+  
+  .homepage .rightBtnBox {
+    right: -7%;
+  }
+  
+  .homepage .outerBox .btn {
+    width: 60px; /* Adjust the width of the button */
+    height: 50px; /* Adjust the height of the button */
   }
 }
 
 /* md */
-@media screen and (min-width: 992px) {
-  body {
-      font-size: 1.2em;
+@media screen and (min-width: 768px) and (max-width: 991.98px) {
+  .homepage body {
+    font-size: 1.2em;
+  }
+  .homepage .streakImage {
+    width: 100px;
+    height: auto;
+  }
+  .homepage .streakText {
+    font-size: 1.2rem;
+  }
+  .homepage .leftBtnBox {
+    left: -6%;
+  }
+  
+  .homepage .rightBtnBox {
+    right: -6%;
+  }
+  
+  .homepage .outerBox .btn {
+    width: 60px; /* Adjust the width of the button */
+    height: 50px; /* Adjust the height of the button */
   }
 }
 
 /* lg */
-@media screen and (min-width: 1200px) {
-  body {
-      font-size: 1.3em;
+@media screen and (min-width: 992px) and (max-width: 1199.98px) {
+  .homepage body {
+    font-size: 1.3em;
+  }
+  .homepage .streakImage {
+    width: 120px;
+    height: auto;
+  }
+  .homepage .streakText {
+    font-size: 1.5rem;
+  }
+  .homepage .leftBtnBox {
+    left: -6%;
+  }
+  
+  .homepage .rightBtnBox {
+    right: -6%;
+  }
+  
+  .homepage .outerBox .btn {
+    width: 65px; /* Adjust the width of the button */
+    height: 55px; /* Adjust the height of the button */
   }
 }
+
+/* xl */
+@media screen and (min-width: 1200px) {
+  .homepage body {
+    font-size: 1.3em;
+  }
+  .homepage .streakImage {
+    width: 150px;
+    height: auto;
+  }
+  .homepage .leftBtnBox {
+    left: -4%;
+  }
+  
+  .homepage .rightBtnBox {
+    right: -4%;
+  }
+  .homepage .outerBox .btn {
+    width: 70px; /* Adjust the width of the button */
+    height: 60px; /* Adjust the height of the button */
+  }
+}
+

@@ -1,28 +1,36 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import RightArrowSvg from "./images/right_arrow.png";
+import RightArrowSvg from "./images/arrow_white.png";
 import CirclePng from "./images/circle.png";
 import CheckPng from "./images/circle_check.png";
 import StreakPng from "./images/streak.png";
 import NoStreakPng from "./images/no_streak.png";
+import CompletePng from "./images/check.png";
 import axios from "axios";
 import Avatar, { genConfig } from "react-nice-avatar";
-import "./style.css";
+import Sidebar from "./Sidebar";
 
 const auth = getAuth();
 
-function HomePageSlider() {
+function HomePage() {
   const innerBoxRef = useRef(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
   const [debtRelations, setDebtRelations] = useState([]);
   const [upcomingTasks, setUpcomingTasks] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [userInfo, setUserInfo] = useState([]);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [streakInfo, setStreakInfo] = useState({
     currentStreak: 0,
     maxStreak: 0,
   });
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -31,6 +39,34 @@ function HomePageSlider() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        if (!currentUser) {
+          return;
+        }
+
+        // Make a GET request to the route to grab current user info
+        const response = await axios.get(
+          `http://localhost:5000/api/database/user/${currentUser.uid}`
+        );
+
+        if (!response) {
+          console.error("Failed to fetch user data");
+          return;
+        }
+
+        setUserInfo(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    // Call the fetchUserInfo function
+    fetchUserInfo();
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,6 +195,41 @@ function HomePageSlider() {
   }, [currentUser, upcomingTasks]);
 
   useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const userGroupsResponse = await axios.get(
+          `http://localhost:5000/api/database/user-groups/${currentUser.uid}`
+        );
+        const groups = userGroupsResponse.data;
+
+        const eventsPromises = groups.map((group) =>
+          axios.get(
+            `http://localhost:5000/api/scheduling/group/${group._id}/events`
+          )
+        );
+
+        const eventsResponses = await Promise.all(eventsPromises);
+        const allEvents = eventsResponses.flatMap((response) => response.data);
+
+        const currentDateTime = new Date();
+        const upcomingEvents = allEvents.filter(
+          (event) => new Date(event.enddatetime) > currentDateTime
+        );
+        upcomingEvents.sort(
+          (a, b) => new Date(a.datetime) - new Date(b.datetime)
+        );
+        setEvents(upcomingEvents);
+        console.log(upcomingEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+    if (currentUser) {
+      fetchEvents();
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (innerBoxRef.current) {
         const scrollLeft = innerBoxRef.current.scrollLeft;
@@ -209,204 +280,255 @@ function HomePageSlider() {
   };
 
   return (
-    <div className="wrapper">
-      <h1>Hello Fardeen</h1>
-      <div className="outerBox">
-        <div className="innerBox" ref={innerBoxRef}>
-          {debtRelations.map((relation, index) => (
-            <Card key={index}>
-              <Card.Body>
-                <div className="d-flex justify-content-between">
-                  <div className="d-flex">
-                    <Avatar
-                      style={{ width: "4rem", height: "4rem" }}
-                      {...genConfig(relation.email)}
-                    />
-                    <div className="ms-2">
-                      <h3 className="my-0">{relation.username}</h3>
+    <div>
+      <Sidebar className={sidebarCollapsed ? "collapsed" : ""} />
+      {/* Render the toggle button */}
+      <button className="toggle-btn" onClick={toggleSidebar}>
+      </button>
+
+      <div className="homepage">
+        <div className="wrapper">
+          <div className="greeting d-flex flex-row">
+            <h1>Hello {userInfo.username}</h1>
+          </div>
+          <div className="d-flex flex-row">
+            <div className="outerBox">
+              <div className="innerBox" ref={innerBoxRef}>
+                {debtRelations.map((relation, index) => (
+                  <Card key={index} className="cardView">
+                    <Card.Body>
+                      <div className="d-flex justify-content-between">
+                        <div className="d-flex">
+                          <Avatar
+                            style={{ width: "4rem", height: "4rem" }}
+                            {...genConfig(relation.email)}
+                          />
+                          <div className="ms-2">
+                            <h3 className="my-0 username">
+                              {relation.username}
+                            </h3>
+                            <div>
+                              <p className="useremail">{relation.email}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="ms-3 text-secondary">
+                            <span className="userOweText">
+                              {relation.amount < 0 ? "You owe" : "Owes you"}
+                            </span>
+                          </div>
+                          <h5
+                            className={`fw-bold userAmount ${
+                              relation.amount < 0
+                                ? "userAmount-danger"
+                                : "userAmount-success"
+                            }`}
+                          >
+                            ${Math.abs(relation.amount).toFixed(2)}
+                          </h5>
+                        </div>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
+              {showLeftArrow && (
+                <div
+                  className="btnBox leftBtnBox"
+                  onClick={handleLeftArrowClick}
+                >
+                  <img
+                    src={RightArrowSvg}
+                    className="btn leftBtn"
+                    style={{ transform: "rotate(180deg)" }}
+                    alt="Left Arrow"
+                  />
+                </div>
+              )}
+              {showRightArrow && (
+                <div
+                  className="btnBox rightBtnBox"
+                  onClick={handleRightArrowClick}
+                >
+                  <img
+                    src={RightArrowSvg}
+                    className="btn rightBtn"
+                    alt="Right Arrow"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="outerBox2">
+            <div className="taskBox">
+              {/* Display upcoming tasks */}
+              <h4 className="my-2 mx-3 choreText">Chores for the week</h4>
+              {upcomingTasks.map((task, index) => (
+                <Card key={index} className="mt-3 mb-3 mx-3">
+                  <Card.Body>
+                    <div className="d-flex justify-content-between">
                       <div>
-                        <p>{relation.email}</p>
+                        <h3 className="my-0">{task.taskName}</h3>
+                        <p className="mb-1">{task.description}</p>
+                        <p className="mb-0">{task.formattedDeadline}</p>
+                      </div>
+                      <button
+                        className="btnCheck my-auto"
+                        onClick={() => {
+                          handleTaskComplete(task._id);
+                        }}
+                      >
+                        <img
+                          src={CompletePng}
+                          alt="Complete Task"
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                          }}
+                        />
+                      </button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+
+            <div className="rewardBox">
+              <div className="d-flex justify-content-end">
+                <div className="d-flex align-self-end">
+                  <h6 className="text-white">{`Max Streak: ${streakInfo.maxStreak}`}</h6>
+                </div>
+              </div>
+
+              <div className="d-flex flex-column align-items-center">
+                {streakInfo.currentStreak >= 3 ? (
+                  <img
+                    src={StreakPng}
+                    className="mx-2 my-3 img-fluid streakImage"
+                    alt="Streak"
+                  />
+                ) : (
+                  <img
+                    src={NoStreakPng}
+                    className="mx-2 my-3 img-fluid"
+                    style={{ width: "150px", height: "150px" }}
+                    alt="Streak"
+                  />
+                )}
+                <div className="d-flex">
+                  {streakInfo.currentStreak >= 1 ? (
+                    <img
+                      src={CheckPng}
+                      className="mx-2"
+                      style={{ width: "25px", height: "25px" }}
+                      alt="Streak"
+                    />
+                  ) : (
+                    <img
+                      src={CirclePng}
+                      className="mx-2"
+                      style={{ width: "25px", height: "25px" }}
+                      alt="Streak"
+                    />
+                  )}
+                  {streakInfo.currentStreak >= 2 ? (
+                    <img
+                      src={CheckPng}
+                      className="mx-2"
+                      style={{ width: "25px", height: "25px" }}
+                      alt="Streak"
+                    />
+                  ) : (
+                    <img
+                      src={CirclePng}
+                      className="mx-2"
+                      style={{ width: "25px", height: "25px" }}
+                      alt="Streak"
+                    />
+                  )}
+                  {streakInfo.currentStreak >= 3 ? (
+                    <img
+                      src={CheckPng}
+                      className="mx-2"
+                      style={{ width: "25px", height: "25px" }}
+                      alt="Streak"
+                    />
+                  ) : (
+                    <img
+                      src={CirclePng}
+                      className="mx-2"
+                      style={{ width: "25px", height: "25px" }}
+                      alt="Streak"
+                    />
+                  )}
+                </div>
+                <div className="d-flex flex-column align-items-center">
+                  <h2 className="text-white fs-2">
+                    {streakInfo.currentStreak >= 3
+                      ? `${streakInfo.currentStreak} chores streak!`
+                      : ""}
+                  </h2>
+                  <h4 className="text-white streakText">
+                    {streakInfo.currentStreak >= 3
+                      ? "You're on a roll! Keep the streak going!"
+                      : "Complete 3 tasks on time to start a streak!"}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="outerBox3">
+            <h3 className="eventsText">Upcoming events</h3>
+            <div className="innerBox3 d-flex flex-wrap justify-content-center">
+              {events.slice(0, 3).map((event, index) => (
+                <div key={index} className="card eventCard">
+                  <div className="card-body d-flex flex-column">
+                    <div className="ms-3 mb-4">
+                      <div className="display-4">
+                        {new Date(event.datetime).toLocaleDateString("en-US", {
+                          day: "2-digit",
+                        })}
+                      </div>
+                      <div className="fs-6">
+                        {new Date(event.datetime).toLocaleDateString("en-US", {
+                          month: "short",
+                        })}
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="ms-3 text-secondary">
-                      {relation.amount < 0 ? "You owe" : "Owes you"}
+                    <div className="ms-3 mt-5 pt-1">
+                      <h5 className="card-title fw-bold mt-5">
+                        {event.eventname}
+                      </h5>
                     </div>
-                    <h5
-                      className={`fw-bold ${
-                        relation.amount < 0 ? "text-danger" : "text-success"
-                      }`}
-                    >
-                      ${Math.abs(relation.amount).toFixed(2)}
-                    </h5>
+                    <div>
+                      <p className="card-text ms-3 mb-0">
+                        {new Date(event.datetime).toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        })}{" "}
+                        -{" "}
+                        {new Date(event.enddatetime).toLocaleTimeString(
+                          "en-US",
+                          {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
-
-        {showLeftArrow && (
-          <div className="btnBox leftBtnBox" onClick={handleLeftArrowClick}>
-            <img
-              src={RightArrowSvg}
-              className="btn leftBtn"
-              style={{ transform: "rotate(180deg)" }}
-              alt="Left Arrow"
-            />
-          </div>
-        )}
-        {showRightArrow && (
-          <div className="btnBox rightBtnBox" onClick={handleRightArrowClick}>
-            <img
-              src={RightArrowSvg}
-              className="btn rightBtn"
-              alt="Right Arrow"
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="outerBox2">
-        <div className="taskBox">
-          <div className="innerBox2">
-            {/* Display upcoming tasks */}
-            {upcomingTasks.map((task, index) => (
-              <Card key={index} className="mt-3">
-                <Card.Body>
-                  <div className="d-flex justify-content-between">
-                    <div>
-                      <h3 className="my-0">{task.taskName}</h3>
-                      <p className="mb-1">{task.description}</p>
-                      <p className="mb-0">{task.formattedDeadline}</p>
-                    </div>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleTaskComplete(task._id)}
-                    >
-                      Complete
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        <div className="rewardBox">
-          <div className="d-flex justify-content-end">
-            <div className="d-flex align-self-end">
-              <h6>{`Max Streak: ${streakInfo.maxStreak}`}</h6>
+              ))}
             </div>
           </div>
-
-          <div className="d-flex flex-column align-items-center">
-            {streakInfo.currentStreak >= 3 ? (
-              <img
-                src={StreakPng}
-                className="mx-2 my-3 img-fluid"
-                style={{ width: "150px", height: "150px" }}
-                alt="Streak"
-              />
-            ) : (
-              <img
-                src={NoStreakPng}
-                className="mx-2 my-3 img-fluid"
-                style={{ width: "150px", height: "150px" }}
-                alt="Streak"
-              />
-            )}
-            <div className="d-flex">
-              {streakInfo.currentStreak >= 1 ? (
-                <img
-                  src={CheckPng}
-                  className="mx-2"
-                  style={{ width: "25px", height: "25px" }}
-                  alt="Streak"
-                />
-              ) : (
-                <img
-                  src={CirclePng}
-                  className="mx-2"
-                  style={{ width: "25px", height: "25px" }}
-                  alt="Streak"
-                />
-              )}
-              {streakInfo.currentStreak >= 2 ? (
-                <img
-                  src={CheckPng}
-                  className="mx-2"
-                  style={{ width: "25px", height: "25px" }}
-                  alt="Streak"
-                />
-              ) : (
-                <img
-                  src={CirclePng}
-                  className="mx-2"
-                  style={{ width: "25px", height: "25px" }}
-                  alt="Streak"
-                />
-              )}
-              {streakInfo.currentStreak >= 3 ? (
-                <img
-                  src={CheckPng}
-                  className="mx-2"
-                  style={{ width: "25px", height: "25px" }}
-                  alt="Streak"
-                />
-              ) : (
-                <img
-                  src={CirclePng}
-                  className="mx-2"
-                  style={{ width: "25px", height: "25px" }}
-                  alt="Streak"
-                />
-              )}
-            </div>
-            <div className="d-flex flex-column align-items-center">
-              <h2 className="">
-                {streakInfo.currentStreak >= 3
-                  ? `${streakInfo.currentStreak} chores streak!`
-                  : ""}
-              </h2>
-              <h4>
-                {streakInfo.currentStreak >= 3
-                  ? "You're on a roll! Keep the streak going!"
-                  : "Complete 3 tasks on time to start a streak!"}
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="outerBox3">
-        <div className="innerBox3">
-          <Card style={{ width: "6rem" }}>
-            <Card.Body>
-              <Card.Title>Groups</Card.Title>
-              <Button href="/taskManagement" variant="primary">
-                Go somewhere
-              </Button>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
-
-      <div className="outerBox3">
-        <div className="innerBox3">
-          <Card style={{ width: "6rem" }}>
-            <Card.Body>
-              <Card.Title>Groups</Card.Title>
-              <Button href="/account/group" variant="primary">
-                Go somewhere
-              </Button>
-            </Card.Body>
-          </Card>
         </div>
       </div>
     </div>
   );
 }
 
-export default HomePageSlider;
+export default HomePage;
