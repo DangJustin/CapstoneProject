@@ -264,7 +264,7 @@ function BillManagement() {
                 <div className="modal-body">
                   <input
                     type="number"
-                    value={Math.abs(settlementAmount)}
+                    value={Math.abs(settlementAmount).toFixed(2)}
                     onChange={(e) => {
                       // if (settlementAmount < 0) {
                       //   settlementAmount = Math.abs(settlementAmount);
