@@ -10,7 +10,7 @@ import axios from "axios"
 import { useUser } from '../UserContext';
 import Multiselect from 'multiselect-react-dropdown';
 
-function EventAdd() {
+function EventAdd({ closeModal }) {
 
   // const { presentUser, isLoading, error } = useUser();
   const [currentUser, setCurrentUser] = useState(null);
@@ -84,7 +84,7 @@ function EventAdd() {
         console.error('Error adding event to the database', error);
       });
 
-    navigate("/scheduling")
+    closeModal();
   }
 
   useEffect(() => {
@@ -122,88 +122,85 @@ function EventAdd() {
   }, [currentUser]);
 
   return (
-    <Layout>
-      <div className="container">
-        <h1 className="text-center pb-3 pt-3">Add an Event!</h1>
-        {!auth.currentUser && (
-          <div className="row">
-            <div className="col-md-6 offset-md-3">
-              <div className="mb-3">
-                <h2 className="text-center mb-3">Login first, you are not logged in!</h2>
+    <div className="container">
+      {!auth.currentUser && (
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <div className="mb-3">
+              <h2 className="text-center mb-3">Login first, you are not logged in!</h2>
 
-                <div className="text-center mb-3">
-                  <button className="btn btn-primary" onClick={goToLogin}>Login</button>
-                </div>
+              <div className="text-center mb-3">
+                <button className="btn btn-primary" onClick={goToLogin}>Login</button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {auth.currentUser && (
-          <div>
-            <form onSubmit={handleEventSubmit}>
-              <div className="row">
-                <div className="col-md-6 offset-md-3">
-                  <div className="mb-3">
-                    <label className="text-danger">*</label>
-                    <label htmlFor="eventName" className="form-label">Event Title</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="eventName"
-                      onChange={(e) => { setEventName(e.target.value) }}
-                      placeholder="Enter your event title"
-                      required
-                    />
-                  </div>
+      {auth.currentUser && (
+        <div>
+          <form onSubmit={handleEventSubmit}>
+            <div className="row">
+              <div className="col px-5">
+                <div className="mb-3">
+                  <label className="text-danger">*</label>
+                  <label htmlFor="eventName" className="form-label exo-bold text-black">Event Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="eventName"
+                    onChange={(e) => { setEventName(e.target.value) }}
+                    placeholder="Enter your event title"
+                    required
+                  />
+                </div>
 
-                  <div className="mb-3">
-                    <label className="text-danger">*</label>
-                    <label htmlFor="dateTime" className="form-label">Start Date and Time</label>
-                    <input
-                      type="datetime-local"
-                      className="form-control"
-                      id="dateTime"
-                      onChange={(e) => { setDateTime(e.target.value) }}
-                      required
-                    />
-                  </div>
+                <div className="mb-3">
+                  <label className="text-danger">*</label>
+                  <label htmlFor="dateTime" className="form-label exo-bold text-black">Start Date and Time</label>
+                  <input
+                    type="datetime-local"
+                    className="form-control"
+                    id="dateTime"
+                    onChange={(e) => { setDateTime(e.target.value) }}
+                    required
+                  />
+                </div>
 
-                  <div className="mb-3">
-                    <label className="text-danger">*</label>
-                    <label htmlFor="dateTime" className="form-label">End Date and Time</label>
-                    <input
-                      type="datetime-local"
-                      className="form-control"
-                      id="dateTime"
-                      onChange={(e) => { setEndDateTime(e.target.value) }}
-                      required
-                    />
-                  </div>
+                <div className="mb-3">
+                  <label className="text-danger">*</label>
+                  <label htmlFor="dateTime" className="form-label exo-bold text-black">End Date and Time</label>
+                  <input
+                    type="datetime-local"
+                    className="form-control"
+                    id="dateTime"
+                    onChange={(e) => { setEndDateTime(e.target.value) }}
+                    required
+                  />
+                </div>
 
 
 
-                  <div className="mb-3">
-                    <label className="text-danger">*</label>
-                    <label className="form-label">Select Group:</label>
-                    <select className="form-select" value={groupName} required onChange={(e) => setGroupName(e.target.value)}>
-                      <option value="" disabled>Select a group</option>
-                      {groups.map((group) => (
-                        <option key={group._id} value={group._id}>{group.groupName}</option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="mb-3">
+                  <label className="text-danger">*</label>
+                  <label className="form-label exo-bold text-black">Select Group:</label>
+                  <select className="form-select" value={groupName} required onChange={(e) => setGroupName(e.target.value)}>
+                    <option value="" disabled>Select a group</option>
+                    {groups.map((group) => (
+                      <option key={group._id} value={group._id}>{group.groupName}</option>
+                    ))}
+                  </select>
+                </div>
 
-                  <div className="text-center mb-2">
-                    <button type="submit" className="btn btn-primary">Add Event</button>
-                  </div>
+                <div className="text-center mb-2">
+                  <button type="submit" className="btn btn-primary"><i className="bi bi-plus-circle"></i> Add Event</button>
                 </div>
               </div>
-            </form>
-          </div>
-        )}
-      </div>
-    </Layout>
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
   );
 }
 
