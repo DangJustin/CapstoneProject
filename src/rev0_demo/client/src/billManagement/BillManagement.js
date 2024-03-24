@@ -60,10 +60,15 @@ function BillManagement() {
     try {
       setSettlingDebt(user);
     } catch (error) {
-      console.error("Error Settling", error)
+      console.error("Error Settling", error);
     }
-  }
-  
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
+
   const handleSettleExpense = async () => {
     try {
       if (settlingDebt && settlementAmount) {
@@ -72,16 +77,14 @@ function BillManagement() {
         setDebts(updatedDebts);
         if (updatedUserAmount >= 0) {
           setUpdatedUserAmount(updatedUserAmount - settlementAmount);
-        }
-        else {
+        } else {
           setUpdatedUserAmount(updatedUserAmount + settlementAmount);
         }
-        
       }
       const updatedDebt = {
         owedUserEmail: currentUser.email,
         settlementAmount: settlementAmount,
-        owingUserEmail: settlingDebt
+        owingUserEmail: settlingDebt,
       };
       setSettlingDebt(null);
       // setSettlementAmount(0);
@@ -100,7 +103,12 @@ function BillManagement() {
       <div className="container">
         <h1 className="text-center pt-3">Bill Management Page</h1>
         <hr></hr>
-        <button className="btn btn-primary mt-3" onClick={goToAddExpense}>
+        <button
+          className="btn btn-primary mt-3"
+          data-bs-toggle="modal"
+          data-bs-target="#addExpenseModal"
+          onClick={goToAddExpense}
+        >
           Add Expense
         </button>
         <button
@@ -111,30 +119,35 @@ function BillManagement() {
         </button>
 
         {/* Bootstrap Modal for Add Expense */}
-        <div
-          className={`modal ${showModal ? "show" : ""}`}
-          tabIndex="-1"
-          role="dialog"
-          style={{ display: showModal ? "block" : "none" }}
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Add Expense</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowModal(false)}
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                {/* Include the AddBill component here */}
-                <AddBill setShowModal={setShowModal} />
+          <div
+            className="modal fade"
+            id="addExpenseModal"
+            tabIndex="-1"
+            role="dialog"
+          >
+            <div
+              className="modal-dialog modal-dialog-centered modal-lg"
+              role="document"
+            >
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title exo-bold">Add Expense</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  {/* Render the AddTask component */}
+                  <AddBill
+                    closeModal={closeModal}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
         <h1 className="mt-3">
           {updatedUserAmount < 0
@@ -143,14 +156,24 @@ function BillManagement() {
         </h1>
         <h2>Interpersonal Debt Relations:</h2>
         <ul className="list-group">
-          {Object.entries(debts).filter(([user, amount]) => user !== currentUser.email).map(([user, amount]) => (
-            <li key={user} className="list-group-item d-flex justify-content-between align-items-center">
-              {amount < 0
-                ? `You owe user ${user} $${Math.abs(amount).toFixed(2)}`
-                : `User ${user} owes you $${Math.abs(amount).toFixed(2)}`}
-              <button className="btn btn-outline-danger" onClick={() => handleSettle(user, amount)}>Settle</button>
-            </li>
-          ))}
+          {Object.entries(debts)
+            .filter(([user, amount]) => user !== currentUser.email)
+            .map(([user, amount]) => (
+              <li
+                key={user}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {amount < 0
+                  ? `You owe user ${user} $${Math.abs(amount).toFixed(2)}`
+                  : `User ${user} owes you $${Math.abs(amount).toFixed(2)}`}
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={() => handleSettle(user, amount)}
+                >
+                  Settle
+                </button>
+              </li>
+            ))}
         </ul>
 
         {/* Input for settlement amount */}
@@ -162,7 +185,13 @@ function BillManagement() {
               onChange={(e) => setSettlementAmount(parseFloat(e.target.value))}
               className="form-control"
             />
-            <button className="btn btn-success mt-2" onClick={handleSettleExpense} disabled={settlementAmount > Math.abs(debts[settlingDebt])}>Settle Expense</button>
+            <button
+              className="btn btn-success mt-2"
+              onClick={handleSettleExpense}
+              disabled={settlementAmount > Math.abs(debts[settlingDebt])}
+            >
+              Settle Expense
+            </button>
           </div>
         )}
       </div>

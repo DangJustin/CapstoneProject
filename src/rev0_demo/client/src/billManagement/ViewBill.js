@@ -4,6 +4,9 @@ import axios from "axios";
 import EditBill from "./EditBill";
 import Layout from "../Layout";
 import DatePicker from "react-datepicker";
+import EditPng from '../images/edit-icon.png';
+import DeletePng from '../images/delete.png';
+
 import "react-datepicker/dist/react-datepicker.css";
 
 const auth = getAuth();
@@ -87,16 +90,23 @@ function ViewBill() {
     setBills(updatedBills);
     setEditBill(null); // Clear the editBill state
     setShowEditModal(false);
+    window.location.reload();
   };
 
   const handleCategoryChange = (event) => {
     const { value, checked } = event.target;
-    if (checked) {
-      setSelectedCategories([...selectedCategories, value]);
+    if (value === "") {
+      // If the "All" checkbox is checked, clear all selected categories
+      setSelectedCategories(checked ? [] : categories);
     } else {
-      setSelectedCategories(
-        selectedCategories.filter((category) => category !== value)
-      );
+      // If a specific category checkbox is checked or unchecked
+      if (checked) {
+        setSelectedCategories([...selectedCategories, value]);
+      } else {
+        setSelectedCategories(
+          selectedCategories.filter((category) => category !== value)
+        );
+      }
     }
   };
 
@@ -318,7 +328,7 @@ function ViewBill() {
           <div className="row row-cols-1 row-cols-md-1 g-2">
             {filteredBills.map((bill) => (
               <div key={bill._id} className="col">
-                <div className="card">
+                <div className="card" style={{ transform: "none" }}>
                   <div className="card-body d-flex justify-content-between align-items-center">
                     <div>
                       <h4 className="card-title">{bill.billName}</h4>
@@ -335,9 +345,10 @@ function ViewBill() {
                         data-bs-target={`#collapse${bill._id}`}
                         aria-expanded="false"
                         aria-controls={`collapse${bill._id}`}
-                      >
+                      ><i className="bi bi-chevron-expand"></i>
                         View Details
                       </button>
+
                     </div>
                   </div>
                   <div className="collapse" id={`collapse${bill._id}`}>
@@ -378,36 +389,43 @@ function ViewBill() {
                           </p>
                           <div className="d-flex justify-content-between align-items-center">
                             <button
+                              data-bs-toggle="modal"
+                              data-bs-target="#editExpenseModal"
                               onClick={() => handleEditBill(bill._id)}
-                              className="btn btn-primary me-1"
+                              className="btn btn-warning me-1"
                             >
+                          <img src={EditPng} alt="Edit" style={{ width: '20px', height: '20px', marginRight: "4px", marginBottom: "4px" }} />
                               Edit
                             </button>
                             <button
                               onClick={() => handleDeleteBill(bill._id)}
-                              className="btn btn-danger"
+                              className="btn btn-danger pt-2"
                             >
+                          <i class="bi bi-trash me-1"></i>
                               Delete
                             </button>
                           </div>
 
                           {/* Bootstrap Modal for Edit Expense */}
                           <div
-                            className={`modal ${showEditModal ? "show" : ""}`}
+                            className="modal fade"
+                            id="editExpenseModal"
                             tabIndex="-1"
                             role="dialog"
-                            style={{
-                              display: showEditModal ? "block" : "none",
-                            }}
                           >
-                            <div className="modal-dialog">
+                            <div
+                              className="modal-dialog modal-dialog-centered modal-lg"
+                              role="document"
+                            >
                               <div className="modal-content">
                                 <div className="modal-header">
-                                  <h5 className="modal-title">Edit Expense</h5>
+                                  <h5 className="modal-title exo-bold">
+                                    Edit Expense
+                                  </h5>
                                   <button
                                     type="button"
                                     className="btn-close"
-                                    onClick={() => setShowEditModal(false)}
+                                    data-bs-dismiss="modal"
                                     aria-label="Close"
                                   ></button>
                                 </div>

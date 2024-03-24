@@ -24,7 +24,6 @@ function EditBill({ bill, onSave }) {
     fetchGroupParticipants(selectedGroup);
   }, [currentUser]);
 
-  
   const fetchGroupParticipants = async (groupId) => {
     try {
       const response = await axios.get(
@@ -89,123 +88,183 @@ function EditBill({ bill, onSave }) {
   };
 
   return (
-    <div className="container mt-3">
-      <h1>Edit Bill</h1>
-      <div className="mb-3">
-        <label className="form-label">
-          Amount:
-          <input
-            type="text"
-            name="totalAmount"
-            value={updatedBill.totalAmount}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </label>
-      </div>
-      <div className="mb-3">
-        <label className="form-label">
-          Describe your expense:
-          <input
-            type="text"
-            name="billName"
-            value={updatedBill.billName}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </label>
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Participants:</label>
-        <Multiselect
-          options={allParticipants.map((participant) => ({
-            value: participant._id,
-            label: participant.email,
-          }))}
-          // selectedValues={updatedBill.users
-          //   .filter((participant) => participant.user && allParticipants.some((p) => p._id === participant.user._id))
-          //   .map((participant) => ({
-          //     value: participant.user._id,
-          //     label: participant.user.email,
-          //   }))
-          // }          
-          
-          onSelect={(selectedList) =>
-            setUpdatedBill({
-              ...updatedBill,
-              users: selectedList.map((user) =>
-                allParticipants.find(
-                  (participant) => participant._id === user.value
-                )
-              ),
-            })
-          }
-          onRemove={(selectedList) =>
-            setUpdatedBill({
-              ...updatedBill,
-              users: updatedBill.users.filter((user) =>
-                selectedList.every((selected) => selected.value !== user._id)
-              ),
-            })
-          }
-          displayValue="label"
-          showCheckbox={true}
-          closeIcon="cancel"
-          placeholder="Select participants"
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">
-          Group:
-          <input
-            type="text"
-            value={updatedBill.group.groupName || ""}
-            disabled
-            className="form-control"
-          />
-        </label>
-      </div>
-      <div className="mb-3">
-        <div className="form-check">
-          <input
-            type="checkbox"
-            checked={splitUnevenly}
-            onChange={() => setSplitUnevenly(!splitUnevenly)}
-            className="form-check-input"
-          />
-          <label className="form-check-label">Uneven Split</label>
-        </div>
-      </div>
-      {/* Only show individual amount inputs if split unevenly is selected */}
-      {splitUnevenly && (
-        <div>
-          {updatedBill.users.map((user, index) => (
-            <div key={user._id} className="mb-3">
-              <label className="form-label">
-                {user.email}:
-                <input
-                  type="text"
-                  value={user.individualAmount || ""}
-                  onChange={(e) => {
-                    const newUser = {
-                      ...user,
-                      individualAmount: e.target.value,
-                    };
-                    const newUsers = [...updatedBill.users];
-                    newUsers[index] = newUser;
-                    setUpdatedBill({ ...updatedBill, users: newUsers });
-                  }}
-                  className="form-control"
-                />
-              </label>
+    <div className="editModal mt-3 mx-auto">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSave();
+        }}
+      >
+        <div className="row">
+          <div className="col px-5">
+            <div className=" d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label">
+                  <span className="exo-bold">Amount:</span>
+                  <input
+                    type="text"
+                    name="totalAmount"
+                    value={updatedBill.totalAmount}
+                    onChange={handleChange}
+                    className="form-control form"
+                    required
+                  />
+                </label>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
-      )}
-      <button onClick={handleSave} className="btn btn-primary">
-        Save
-      </button>
+
+        <div className="row">
+          <div className="col px-5">
+            <div className=" d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label">
+                  <span className="exo-bold">Describe your expense:</span>
+                  <input
+                    type="text"
+                    className="form-control form"
+                    name="billName"
+                    value={updatedBill.billName}
+                    onChange={handleChange}
+                    required
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col px-5">
+            <div className=" d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label editModal exo-bold">
+                  Participants:
+                </label>
+                <Multiselect
+                  options={allParticipants.map((participant) => ({
+                    value: participant._id,
+                    label: participant.email,
+                  }))}
+                  // selectedValues={updatedBill.users
+                  //   .filter((participant) => participant.user && allParticipants.some((p) => p._id === participant.user._id))
+                  //   .map((participant) => ({
+                  //     value: participant.user._id,
+                  //     label: participant.user.email,
+                  //   }))
+                  // }
+
+                  onSelect={(selectedList) =>
+                    setUpdatedBill({
+                      ...updatedBill,
+                      users: selectedList.map((user) =>
+                        allParticipants.find(
+                          (participant) => participant._id === user.value
+                        )
+                      ),
+                    })
+                  }
+                  onRemove={(selectedList) =>
+                    setUpdatedBill({
+                      ...updatedBill,
+                      users: updatedBill.users.filter((user) =>
+                        selectedList.every(
+                          (selected) => selected.value !== user._id
+                        )
+                      ),
+                    })
+                  }
+                  className="participants"
+                  displayValue="label"
+                  showCheckbox={true}
+                  closeIcon="cancel"
+                  placeholder="Select participants"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col px-5">
+            <div className=" d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <label className="form-label">
+                  <span className="exo-bold">Group:</span>
+                  <input
+                    type="text"
+                    value={updatedBill.group.groupName || ""}
+                    disabled
+                    className="form-control form"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col px-5">
+            <div className=" d-flex flex-column justify-content-center">
+              <div className="mb-3">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    checked={splitUnevenly}
+                    onChange={() => setSplitUnevenly(!splitUnevenly)}
+                    className="form-check-input"
+                  />
+                  <label className="form-check-label exo-bold">
+                    Uneven Split
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Only show individual amount inputs if split unevenly is selected */}
+        {splitUnevenly && (
+          <div className="row">
+            <div className="col px-5">
+              <div className=" d-flex flex-column justify-content-center">
+                <div className="mb-3">
+                  <div>
+                    {updatedBill.users.map((user, index) => (
+                      <div key={user._id} className="mb-3">
+                        <label className="form-label">
+                          {user.email}:
+                          <input
+                            type="text"
+                            value={user.individualAmount || ""}
+                            onChange={(e) => {
+                              const newUser = {
+                                ...user,
+                                individualAmount: e.target.value,
+                              };
+                              const newUsers = [...updatedBill.users];
+                              newUsers[index] = newUser;
+                              setUpdatedBill({
+                                ...updatedBill,
+                                users: newUsers,
+                              });
+                            }}
+                            className="form-control form"
+                          />
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="d-flex justify-content-center pt-3">
+          <button type="submit" className="btn btn-primary me-2">
+            Save Expense
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

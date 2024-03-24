@@ -240,9 +240,17 @@ function HomePage() {
       }
     };
 
-    innerBoxRef.current.addEventListener("scroll", handleScroll);
-    return () =>
-      innerBoxRef.current.removeEventListener("scroll", handleScroll);
+    const innerBox = innerBoxRef.current;
+
+    if (innerBox) {
+      innerBox.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (innerBox) {
+        innerBox.removeEventListener("scroll", handleScroll);
+      }
+    };
   }, []);
 
   const handleLeftArrowClick = () => {
@@ -283,8 +291,7 @@ function HomePage() {
     <div>
       <Sidebar className={sidebarCollapsed ? "collapsed" : ""} />
       {/* Render the toggle button */}
-      <button className="toggle-btn" onClick={toggleSidebar}>
-      </button>
+      <button className="toggle-btn" onClick={toggleSidebar}></button>
 
       <div className="homepage">
         <div className="wrapper">
