@@ -284,7 +284,7 @@ function AddTask({ closeModal }) {
 
           {/* Move the buttons to the center */}
           <div className="d-flex justify-content-center pt-">
-              <button type="submit" className="btn btn-primary me-2">Add Task</button>
+              <button type="submit" className="btn btn-primary me-2"><i className="bi bi-plus-circle"></i> Add Task</button>
             </div>
         </div>
       </form>
