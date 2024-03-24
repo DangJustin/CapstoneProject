@@ -289,7 +289,7 @@ function HomePage() {
       <Sidebar />
       {/* Render the toggle button */}
 
-      <div className="homepage">
+      <div className="homepage set-font">
         <div className="wrapper">
           <div className="greeting d-flex flex-row">
             <h1>Hello {userInfo.username}</h1>
