@@ -77,6 +77,7 @@ function ViewBill() {
       // Remove the deleted bill from the bills array
       const updatedBills = bills.filter((bill) => bill._id !== billId);
       setBills(updatedBills);
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting bill:", error);
     }

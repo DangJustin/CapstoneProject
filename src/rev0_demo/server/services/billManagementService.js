@@ -141,11 +141,6 @@ const deleteExpense = async (billId) => {
         { from: firstUserId, to: user.user },
         { $inc: { amount: -user.amountOwed } }
       );
-
-      await UserDebt.findOneAndUpdate(
-        { from: user.user, to: firstUserId},
-        { $inc: { amount: user.amountOwed } }
-      );
     }
 
     // Delete the bill ID from the user's bills array

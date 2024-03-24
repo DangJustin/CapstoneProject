@@ -28,6 +28,7 @@ function AddBill({ closeModal }) {
     "Miscellaneous",
   ]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -92,6 +93,9 @@ function AddBill({ closeModal }) {
 
   const handleAddExpense = async () => {
     try {
+      if (isSubmitting) return; // Prevent multiple submissions
+      setIsSubmitting(true); // Set form submission status to true
+
       if (selectedParticipants.length === 0) {
         // Show the popup
         setShowUserSelectionError(true);
@@ -151,8 +155,10 @@ function AddBill({ closeModal }) {
       setSplitUnevenly(false);
       setSelectedCategory("");
       closeModal(); // Close the modal after adding expense
+      setIsSubmitting(false);
     } catch (error) {
       console.error("Error adding expense. Details:", error);
+      setIsSubmitting(false);
     }
   };
 
@@ -293,7 +299,7 @@ function AddBill({ closeModal }) {
         )}
         <div className="d-flex justify-content-center pt-3">
           <button type="submit" className="btn btn-primary me-2">
-            Add Expense
+            {isSubmitting ? "Adding Expense..." : "Add Expense"}
           </button>
         </div>
       </form>
