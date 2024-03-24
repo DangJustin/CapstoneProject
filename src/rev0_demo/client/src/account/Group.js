@@ -77,7 +77,7 @@ function Group() {
                 required
               />
               <button className="btn btn-primary" onClick={handleCreateJoinGroup}>
-                ➕
+                <i className="bi bi-plus-circle"></i>
               </button>
             </div>
             {groups.length > 0 ? (

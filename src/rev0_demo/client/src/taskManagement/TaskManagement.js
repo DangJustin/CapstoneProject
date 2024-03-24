@@ -43,7 +43,8 @@ function TaskManagement() {
   const handleSearch = (e) => {
     const inputValue = e.target.value;
     setQuery(inputValue);
-    const result = incompleteTasks.filter(task =>
+    const searchList = [...overdueTasks, ...incompleteTasks];
+    const result = searchList.filter(task =>
       task.taskName.toLowerCase().includes(inputValue.toLowerCase())
     );
     setResults(result);
@@ -264,9 +265,11 @@ function TaskManagement() {
                         </button>
                       )}
                       
+                      {!expandedCompleted &&
                       <button type="button" className="btn btn-warning" onClick={() => handleEdit()}>
                         <img src={editIcon} alt="Edit Task" style={{ width: '28px', height: '28px' }} /> Edit
                       </button>
+                      }
                     </div>
                   </div>
                 </div>

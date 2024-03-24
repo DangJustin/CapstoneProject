@@ -66,7 +66,7 @@ function EditTask({closeModal, inputTask}) {
             </div>
             
             <div className='d-flex justify-content-center mb-3'>
-              <button className="btn btn-primary me-1" type="submit">Save</button>
+              <button className="btn btn-primary me-1" type="submit"><i className="bi bi-save pe-1"></i> Save</button>
             </div>
           </form>
         </div>)}
