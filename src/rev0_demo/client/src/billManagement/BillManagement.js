@@ -116,13 +116,15 @@ function BillManagement() {
         if (updatedUserAmount >= 0) {
           updatedDebts[settlingDebt] -= settlementAmount;
         } else {
-          updatedDebts[settlingDebt] += settlementAmount;
+          updatedDebts[settlingDebt] -= settlementAmount;
         }
         setDebts(updatedDebts);
         if (updatedUserAmount >= 0) {
+          console.log("Helo", updatedUserAmount - settlementAmount);
           setUpdatedUserAmount(updatedUserAmount - settlementAmount);
         } else {
-          setUpdatedUserAmount(updatedUserAmount + settlementAmount);
+          console.log(updatedUserAmount - settlementAmount);
+          setUpdatedUserAmount(updatedUserAmount - settlementAmount);
         }
       }
 
@@ -212,9 +214,7 @@ function BillManagement() {
                   <div className="card-body d-flex justify-content-between align-items-center">
                     <div>
                       <h5 className="card-title">
-                        {amount < 0
-                          ? `You owe ${user}`
-                          : `${user} owes you`}
+                        {amount < 0 ? `You owe ${user}` : `${user} owes you`}
                       </h5>
                       <p className="card-text">
                         {amount < 0
@@ -264,10 +264,19 @@ function BillManagement() {
                 <div className="modal-body">
                   <input
                     type="number"
-                    value={settlementAmount}
-                    onChange={(e) =>
-                      setSettlementAmount(parseFloat(e.target.value))
-                    }
+                    value={Math.abs(settlementAmount)}
+                    onChange={(e) => {
+                      // if (settlementAmount < 0) {
+                      //   settlementAmount = Math.abs(settlementAmount);
+                      //   setSettlementAmount(parseFloat(e.target.value));
+                      // } else {
+                      if (settlementAmount > 0) {
+                        setSettlementAmount(0 - parseFloat(e.target.value));
+                      } else {
+                        setSettlementAmount(parseFloat(e.target.value));
+                      }
+                      // }
+                    }}
                     className="form-control"
                   />
                 </div>

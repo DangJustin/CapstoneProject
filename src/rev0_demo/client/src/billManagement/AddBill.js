@@ -178,7 +178,13 @@ function AddBill({ closeModal }) {
             className="form-control"
             required
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              const inputAmount = e.target.value;
+              if (/^\d*\.?\d*$/.test(inputAmount)) {
+                // Check if input is a valid positive number
+                setAmount(inputAmount);
+              }
+            }}
           />
         </div>
         <div className="mb-3">

@@ -172,8 +172,9 @@ router.get("/userDebts/:userID", async (req, res) => {
 
 router.put("/updateUserAmount/:userId", async (req, res) => {
   const { userId } = req.params.userId;
-  const { owedUserEmail, settlementAmount, owingUserEmail } = req.body;
-  console.log(owingUserEmail, owedUserEmail);
+  let { owedUserEmail, settlementAmount, owingUserEmail } = req.body;
+
+
 
   try {
 
@@ -188,9 +189,17 @@ router.put("/updateUserAmount/:userId", async (req, res) => {
         console.log("Owed user not found");
         return;
     }
+    console.log("before", owedUser.amount, owingUser.amount);
+    if (settlementAmount < 0) {
+      settlementAmount = Math.abs(settlementAmount);
+      owingUser.amount -= settlementAmount;
+      owedUser.amount += settlementAmount;
+    } else {
+      owingUser.amount += settlementAmount;
+      owedUser.amount -= settlementAmount;
+    }
+    console.log("after", owedUser.amount, owingUser.amount);
 
-    owingUser.amount += settlementAmount;
-    owedUser.amount -= settlementAmount;
 
     await owingUser.save();
     await owedUser.save();
