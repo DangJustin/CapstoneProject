@@ -265,9 +265,11 @@ function TaskManagement() {
                         </button>
                       )}
                       
+                      {!expandedCompleted &&
                       <button type="button" className="btn btn-warning" onClick={() => handleEdit()}>
                         <img src={editIcon} alt="Edit Task" style={{ width: '28px', height: '28px' }} /> Edit
                       </button>
+                      }
                     </div>
                   </div>
                 </div>
