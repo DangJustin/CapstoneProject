@@ -221,7 +221,7 @@ function AddBill({ closeModal }) {
           <Multiselect
             options={allParticipants.map((user) => ({
               value: user._id,
-              label: user.email,
+              label: user.username,
             }))}
             selectedValues={selectedParticipants.map((participant) => ({
               value: participant._id,

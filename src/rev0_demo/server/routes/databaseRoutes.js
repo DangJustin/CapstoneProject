@@ -261,7 +261,7 @@ router.get("/userStreak/:userId", async (req, res) => {
     const userStreak = await UserStreak.findOne({ user: user._id });
     if (!userStreak) {
       // If no streak information is found, return default values
-      return res.json({ currentStreak: 1, maxStreak: 1 });
+      return res.json({ currentStreak: 0, maxStreak: 0 });
     }
 
     // Return the user's streak information as JSON
