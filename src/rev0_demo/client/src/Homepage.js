@@ -22,15 +22,12 @@ function HomePage() {
   const [upcomingTasks, setUpcomingTasks] = useState([]);
   const [events, setEvents] = useState([]);
   const [userInfo, setUserInfo] = useState([]);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [streakInfo, setStreakInfo] = useState({
     currentStreak: 0,
     maxStreak: 0,
   });
 
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -63,10 +60,10 @@ function HomePage() {
         console.error("Error fetching user info:", error);
       }
     };
-
     // Call the fetchUserInfo function
     fetchUserInfo();
   }, [currentUser]);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -289,9 +286,8 @@ function HomePage() {
 
   return (
     <div>
-      <Sidebar className={sidebarCollapsed ? "collapsed" : ""} />
+      <Sidebar />
       {/* Render the toggle button */}
-      <button className="toggle-btn" onClick={toggleSidebar}></button>
 
       <div className="homepage">
         <div className="wrapper">

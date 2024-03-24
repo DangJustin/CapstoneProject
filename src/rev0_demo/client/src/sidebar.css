@@ -11,7 +11,7 @@
         height: 100vh;
     }
 
-    .sidebar {
+    .sidebar.collapsed {
         max-width: 190px;
         height: 100%;
         border-right: 5px solid #7B61FF;
@@ -20,18 +20,23 @@
         left: 0;
         bottom: 0;
         width: 190px; /* Adjust width as needed */
-        background-color: #0D1117;
-        border-right: 5px solid #7B61FF;
         z-index: 1000; /* Ensure the sidebar is on top */
         overflow-y: auto; /* Add scroll if content overflows */
         transition: all 0.5s;
     }
 
-    .sidebar.collapsed {
+    .sidebar {
         max-width: 0;
+        position: fixed;
         overflow: hidden;
         border-right: 0;
-        width: 70px; /* Adjust width as needed */
+        z-index: 1000; /* Ensure the sidebar is on top */
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 190px; /* Adjust width as needed */
+        background-color: #0D1117;
+        transition: all 0.5s;
     }
 
     .content {

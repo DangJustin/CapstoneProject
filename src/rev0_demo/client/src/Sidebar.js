@@ -25,10 +25,6 @@ function Sidebar() {
       .catch((error) => console.log(error));
   }
 
-  const goToAccount = () => {
-    navigate("/account");
-  };
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
