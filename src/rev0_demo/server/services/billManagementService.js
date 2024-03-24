@@ -10,7 +10,7 @@ const splitExpense = async ({
   participants,
   groupID,
   individualAmounts, // Added parameter for individual expense amounts
-  category
+  category,
 }) => {
   try {
     // Find the user initiating the expense (User A)
@@ -29,7 +29,10 @@ const splitExpense = async ({
     }
 
     if (!individualAmounts) {
-      individualAmounts = Array.from({ length: participants.length }, () => amount / (participants.length + 1));
+      individualAmounts = Array.from(
+        { length: participants.length },
+        () => amount / (participants.length + 1)
+      );
     }
 
     // Create a new bill
@@ -39,11 +42,13 @@ const splitExpense = async ({
       users: [
         {
           user: userA._id,
-          amountOwed: amount - (individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0)), // Adjusted amount owed for User A
+          amountOwed:
+            amount -
+            individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0), // Adjusted amount owed for User A
         },
       ],
       group: groupID || null,
-      category: category
+      category: category,
     });
 
     // Add participants to the bill
@@ -65,6 +70,19 @@ const splitExpense = async ({
             { $inc: { amount: parseFloat(individualAmounts[index]) } }, // Increment debt amount by individual amount
             { upsert: true }
           );
+          const existingDebt = await UserDebt.findOne({
+            from: participant._id,
+            to: userA._id,
+          });
+
+          if (!existingDebt) {
+            // If the document doesn't exist, create a new one with amount set to 0
+            await UserDebt.create({
+              from: participant._id,
+              to: userA._id,
+              amount: 0,
+            });
+          }
         }
       })
     );
@@ -76,7 +94,10 @@ const splitExpense = async ({
     await newBill.save();
 
     // Update user's amount
-    userA.amount += (individualAmounts.reduce((acc, val) => acc + parseFloat(val), 0)); // Adjust user's amount
+    userA.amount += individualAmounts.reduce(
+      (acc, val) => acc + parseFloat(val),
+      0
+    ); // Adjust user's amount
     await userA.save();
 
     // Update participants' amounts
@@ -120,6 +141,11 @@ const deleteExpense = async (billId) => {
         { from: firstUserId, to: user.user },
         { $inc: { amount: -user.amountOwed } }
       );
+
+      await UserDebt.findOneAndUpdate(
+        { from: user.user, to: firstUserId},
+        { $inc: { amount: user.amountOwed } }
+      );
     }
 
     // Delete the bill ID from the user's bills array
@@ -140,13 +166,12 @@ const deleteExpense = async (billId) => {
 
     // Return a value to indicate that the deletion was successful
     return { message: "Bill deleted successfully" };
-
   } catch (error) {
     // Log the error and rethrow it to be caught in the controller
     console.error("Error deleting bill:", error);
     throw error;
   }
-}
+};
 
 const getExpenses = async (userId) => {
   try {
@@ -159,17 +184,16 @@ const getExpenses = async (userId) => {
     const bills = await Bill.find({ "users.user": user })
       .populate("users.user")
       .populate("group", "groupName");
-      
+
     return { bills }; // Return an object with bills property
   } catch (error) {
     console.error("Error fetching user bills:", error);
     throw error; // Rethrow the error to be handled by the controller
   }
-}
+};
 
 const editBill = async (billId, updatedData) => {
   try {
-
     // Find the bill by ID
     let bill = await Bill.findById(billId).populate("users.user", "amountOwed");
 
@@ -197,7 +221,10 @@ const editBill = async (billId, updatedData) => {
       );
 
       const usersNotInOldList = newUsers.filter(
-        (newUser) => !oldUsers.some((oldUser) => oldUser.user._id.toString() === newUser.user.toString())
+        (newUser) =>
+          !oldUsers.some(
+            (oldUser) => oldUser.user._id.toString() === newUser.user.toString()
+          )
       );
 
       // Find users present in both oldUsers and newUsers using filter and includes
@@ -276,14 +303,17 @@ const editBill = async (billId, updatedData) => {
       const userA = await User.findById(firstUserId);
       const usersAmountOwedSum = updatedData.users.reduce((total, user) => {
         // Convert the amountOwed to a number (if it's a string)
-        const amountOwed = typeof user.amountOwed === 'string' ? parseFloat(user.amountOwed) : user.amountOwed;
+        const amountOwed =
+          typeof user.amountOwed === "string"
+            ? parseFloat(user.amountOwed)
+            : user.amountOwed;
         // Add the amountOwed to the total
         return total + amountOwed;
       }, 0);
-      
+
       // Calculate the total amount minus the sum of all user amounts owed
       const remainingAmount = usersAmountOwedSum;
-      
+
       if (userA) {
         newAmount = remainingAmount;
         oldAmount = bill.totalAmount - bill.users[0].amountOwed;
@@ -294,7 +324,10 @@ const editBill = async (billId, updatedData) => {
       // Update each user's amount owed
       bill.users = updatedData.users.map((user, index) => ({
         user: index === 0 ? bill.users[0].user : user.user, // Change the first user's ID manually
-        amountOwed: index === 0 ? updatedData.totalAmount - remainingAmount : user.amountOwed,
+        amountOwed:
+          index === 0
+            ? updatedData.totalAmount - remainingAmount
+            : user.amountOwed,
       }));
 
       // Update user amounts
@@ -306,17 +339,19 @@ const editBill = async (billId, updatedData) => {
     // Save the updated bill
     const updatedBill = await bill.save();
     const populateBill = await Bill.findById(updatedBill._id)
-    .populate("users.user")
-    .populate("group");
+      .populate("users.user")
+      .populate("group");
 
     // res.json(updatedBill);
   } catch (error) {
     console.error("Error updating bill:", error);
     throw error;
   }
-}
-
+};
 
 module.exports = {
-  splitExpense, deleteExpense, getExpenses, editBill
+  splitExpense,
+  deleteExpense,
+  getExpenses,
+  editBill,
 };

@@ -125,6 +125,7 @@ function BillManagement() {
           setUpdatedUserAmount(updatedUserAmount + settlementAmount);
         }
       }
+
       const updatedDebt = {
         owedUserEmail: currentUser.email,
         settlementAmount: settlementAmount,

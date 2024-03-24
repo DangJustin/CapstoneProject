@@ -173,10 +173,11 @@ router.get("/userDebts/:userID", async (req, res) => {
 router.put("/updateUserAmount/:userId", async (req, res) => {
   const { userId } = req.params.userId;
   const { owedUserEmail, settlementAmount, owingUserEmail } = req.body;
+  console.log(owingUserEmail, owedUserEmail);
 
   try {
 
-    const owingUser = await User.findOne({ email: owingUserEmail });
+    const owingUser = await User.findOne({ username: owingUserEmail });
     if (!owingUser) {
         console.log("Owing user not found");
         return;
