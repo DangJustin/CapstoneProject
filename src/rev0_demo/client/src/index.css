@@ -126,23 +126,26 @@ code {
   }
 }
 
-.task-card-row.child-expanded {
-    .task-card.expanded {
-        .collapse-content {
-            visibility: hidden;
-            height: 0;
-        }
-        .expand-content {
-            visibility: visible;
-            margin-top: 2rem;
-            font-size: 3rem;
-        }
-    }
-    .task-card:not(.expanded) {
-      width: 0;
-      padding: 0;
-      margin: 0;
-    }
+.task-card-row.child-expanded .task-card.expanded .collapse-content {
+  visibility: hidden;
+  height: 0;
+}
+
+.task-card-row.child-expanded .task-card.expanded .expand-content {
+  visibility: visible;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%; /* Use entire width */
+  text-align: center; /* Center content horizontally */
+  font-size: 3rem;
+}
+
+.task-card-row.child-expanded .task-card:not(.expanded) {
+  width: 0;
+  padding: 0;
+  margin: 0;
 }
 
 @media (max-width: 377px) {
