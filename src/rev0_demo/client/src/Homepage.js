@@ -27,8 +27,6 @@ function HomePage() {
     maxStreak: 0,
   });
 
-
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -55,7 +53,6 @@ function HomePage() {
         }
 
         setUserInfo(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
@@ -63,7 +60,6 @@ function HomePage() {
     // Call the fetchUserInfo function
     fetchUserInfo();
   }, [currentUser]);
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -180,7 +176,6 @@ function HomePage() {
           currentStreak: response.data.currentStreak,
           maxStreak: response.data.maxStreak,
         });
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching streak information:", error);
       }
@@ -216,7 +211,6 @@ function HomePage() {
           (a, b) => new Date(a.datetime) - new Date(b.datetime)
         );
         setEvents(upcomingEvents);
-        console.log(upcomingEvents);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -298,7 +292,7 @@ function HomePage() {
             <div className="outerBox">
               <div className="innerBox" ref={innerBoxRef}>
                 {debtRelations.map((relation, index) => (
-                  <Card key={index} className="cardView">
+                  <Card key={index} className="cardView card-custom">
                     <Card.Body>
                       <div className="d-flex justify-content-between">
                         <div className="d-flex">
@@ -316,7 +310,7 @@ function HomePage() {
                           </div>
                         </div>
                         <div>
-                          <div className="ms-3 text-secondary">
+                          <div className="text-secondary">
                             <span className="userOweText">
                               {relation.amount < 0 ? "You owe" : "Owes you"}
                             </span>
@@ -369,7 +363,7 @@ function HomePage() {
               {/* Display upcoming tasks */}
               <h4 className="my-2 mx-3 choreText">Chores for the week</h4>
               {upcomingTasks.map((task, index) => (
-                <Card key={index} className="mt-3 mb-3 mx-3">
+                <Card key={index} className="mt-3 mb-3 mx-3  card-custom">
                   <Card.Body>
                     <div className="d-flex justify-content-between">
                       <div>
@@ -486,8 +480,8 @@ function HomePage() {
             <h3 className="eventsText">Upcoming events</h3>
             <div className="innerBox3 d-flex flex-wrap justify-content-center">
               {events.slice(0, 3).map((event, index) => (
-                <div key={index} className="card eventCard">
-                  <div className="card-body d-flex flex-column">
+                <div key={index} className="card eventCard card-custom">
+                  <div className="card-body">
                     <div className="ms-3 mb-4">
                       <div className="display-4">
                         {new Date(event.datetime).toLocaleDateString("en-US", {
@@ -500,7 +494,7 @@ function HomePage() {
                         })}
                       </div>
                     </div>
-                    <div className="ms-3 mt-5 pt-1">
+                    <div className="ms-3 mt-5">
                       <h5 className="card-title fw-bold mt-5">
                         {event.eventname}
                       </h5>

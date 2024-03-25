@@ -62,7 +62,7 @@ function Sidebar() {
 
   return (
     <div className="container sidebarPage">
-      <div className="content">
+      <div className="content mt-2">
         <button
           onClick={() =>
             document

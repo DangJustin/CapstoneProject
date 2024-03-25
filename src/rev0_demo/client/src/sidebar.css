@@ -1,5 +1,6 @@
 .sidebarPage {
     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,700&display=swap');
+
     body {
         margin: 0;
         font-family: 'Poppins', sans-serif;
@@ -19,9 +20,12 @@
         top: 0;
         left: 0;
         bottom: 0;
-        width: 190px; /* Adjust width as needed */
-        z-index: 1000; /* Ensure the sidebar is on top */
-        overflow-y: auto; /* Add scroll if content overflows */
+        width: 190px;
+        /* Adjust width as needed */
+        z-index: 1000;
+        /* Ensure the sidebar is on top */
+        overflow-y: auto;
+        /* Add scroll if content overflows */
         transition: all 0.5s;
     }
 
@@ -30,11 +34,13 @@
         position: fixed;
         overflow: hidden;
         border-right: 0;
-        z-index: 1000; /* Ensure the sidebar is on top */
+        z-index: 1000;
+        /* Ensure the sidebar is on top */
         top: 0;
         left: 0;
         bottom: 0;
-        width: 190px; /* Adjust width as needed */
+        width: 190px;
+        /* Adjust width as needed */
         background-color: #0D1117;
         transition: all 0.5s;
     }
@@ -83,7 +89,8 @@
 
     .list li {
         margin: 5px;
-        padding: 5px 20px; /* Adjust padding to your liking */
+        padding: 5px 20px;
+        /* Adjust padding to your liking */
     }
 
     .list li:hover {
@@ -101,7 +108,8 @@
         background-color: #7B61FF;
         border: none;
         border-radius: 2px;
-        display: none; /* Hide button initially */
+        display: none;
+        /* Hide button initially */
     }
 
     .toggle-btn div {
@@ -112,39 +120,46 @@
     }
 
     .btnCheck {
-        border-radius: 50%; /* Use 50% to make it a circle */
+        border-radius: 50%;
+        /* Use 50% to make it a circle */
         display: flex;
-        justify-content: center; /* Horizontally center the content */
-        align-items: center; /* Vertically center the content */
-        transition: all 0.3s ease; /* Add smooth transition */
-      }
-      
-      .btnCheck:hover {
-        background-color: black; /* Change background color on hover */
-      }
-      
-      .btnCheck img {
+        justify-content: center;
+        /* Horizontally center the content */
+        align-items: center;
+        /* Vertically center the content */
+        transition: all 0.3s ease;
+        /* Add smooth transition */
+    }
+
+    .btnCheck:hover {
+        background-color: black;
+        /* Change background color on hover */
+    }
+
+    .btnCheck img {
         width: 100%;
         height: 100%;
-      }
+    }
 
-      .close-btn {
+    .close-btn {
         position: absolute;
         top: 10px;
         right: 10px;
         background: none;
         border: none;
         cursor: pointer;
-      }
+    }
 
     /* Media query to show/hide toggle button based on screen width */
     @media (max-width: 768px) {
         .toggle-btn {
-            display: block; /* Show button on smaller screens */
+            display: block;
+            /* Show button on smaller screens */
         }
 
         .list li {
-            padding: 5px 10px; /* Adjust padding for smaller screens */
+            padding: 5px 10px;
+            /* Adjust padding for smaller screens */
         }
     }
 }

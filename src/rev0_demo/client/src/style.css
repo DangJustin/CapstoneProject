@@ -5,6 +5,27 @@
   font-family: 'Dosis', sans-serif;
 }
 
+.card-custom {
+  -webkit-transition: none;
+  /* Remove transition */
+  transition: none;
+  /* Remove transition */
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  /* Example of border property */
+  -webkit-box-shadow: none;
+  /* Remove box shadow */
+  box-shadow: none;
+  /* Remove box shadow */
+}
+
+.card-custom:hover {
+  transform: none;
+  /* Remove hover effect */
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  /* Example of border property */
+}
+
+
 .homepage .wrapper {
   overflow: hidden;
   position: relative;
@@ -19,9 +40,12 @@
   max-width: 90%;
   /* min-width: 1350px; */
   width: 100%;
-  margin: 0 auto; /* Center horizontally */
-  background-color: #9290C3; /* Change background color */
-  border-radius: 10px; /* Round the edges */
+  margin: 0 auto;
+  /* Center horizontally */
+  background-color: #9290C3;
+  /* Change background color */
+  border-radius: 10px;
+  /* Round the edges */
 }
 
 .homepage .innerBox {
@@ -29,8 +53,10 @@
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
 }
 
 .homepage .innerBox::-webkit-scrollbar {
@@ -40,8 +66,10 @@
 
 .homepage .card {
   word-wrap: normal;
-  flex: 0 0 25%; /* Each card takes up 35% of the screen width */
-  margin-right: 15px; /* Adjust spacing between cards */
+  flex: 0 0 25%;
+  /* Each card takes up 35% of the screen width */
+  margin-right: 15px;
+  /* Adjust spacing between cards */
 }
 
 .homepage .cardView {
@@ -67,8 +95,10 @@
 }
 
 .homepage .outerBox .btn {
-  width: 70px; /* Adjust the width of the button */
-  height: 60px; /* Adjust the height of the button */
+  width: 70px;
+  /* Adjust the width of the button */
+  height: 60px;
+  /* Adjust the height of the button */
 }
 
 .homepage .outerBox2 {
@@ -78,10 +108,13 @@
   justify-content: space-between;
   max-height: 45vh;
   max-width: 90%;
-  margin: 0 auto; /* Center horizontally */
+  margin: 0 auto;
+  /* Center horizontally */
 }
 
-.homepage .username, .homepage .useremail, .homepage .userOweText {
+.homepage .username,
+.homepage .useremail,
+.homepage .userOweText {
   color: #ddcbee;
 }
 
@@ -90,7 +123,8 @@
   display: flex;
   justify-content: space-between;
   max-width: 90%;
-  margin: 0 auto; /* Center horizontally */
+  margin: 0 auto;
+  /* Center horizontally */
   color: #ebddf7;
 }
 
@@ -106,8 +140,10 @@
   width: 50%;
   max-width: 50%;
   overflow-y: scroll;
-  background-color: #9290C3; /* Change background color */
-  border-radius: 10px; /* Round the edges */
+  background-color: #9290C3;
+  /* Change background color */
+  border-radius: 10px;
+  /* Round the edges */
 }
 
 .homepage .outerBox2 .card {
@@ -129,7 +165,8 @@
   max-width: 50%;
   margin-left: 20px;
   /* background-color: #b9c2d1; Change background color */
-  border-radius: 10px; /* Round the edges */
+  border-radius: 10px;
+  /* Round the edges */
 }
 
 .homepage .outerBox3 .card {
@@ -148,23 +185,28 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .homepage .taskBox {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .homepage .outerBox3 {
   padding-top: 30px;
   padding-bottom: 30px;
   max-width: 90%;
-  margin: 0 auto; /* Center horizontally */
+  margin: 0 auto;
+  /* Center horizontally */
 }
 
 .homepage .innerBox3 {
   display: flex;
   flex-wrap: wrap;
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
 }
 
 .homepage .eventCard {
@@ -172,6 +214,7 @@
   min-width: 300px;
   margin-bottom: 20px;
 }
+
 .homepage .streakImage {
   width: 150px;
   height: auto;
@@ -180,17 +223,24 @@
 .homepage .btnCheck {
   width: 35px;
   height: 35px;
-  border-radius: 50%; /* Use 50% to make it a circle */
+  border-radius: 50%;
+  /* Use 50% to make it a circle */
   display: flex;
-  justify-content: center; /* Horizontally center the content */
-  align-items: center; /* Vertically center the content */
-  transition: all 0.3s ease; /* Add smooth transition */
+  justify-content: center;
+  /* Horizontally center the content */
+  align-items: center;
+  /* Vertically center the content */
+  transition: all 0.3s ease;
+  /* Add smooth transition */
 }
 
 .homepage .btnCheck:hover {
-  width: 50px; /* Increase width on hover */
-  height: 50px; /* Increase height on hover */
-  background-color: #20c446; /* Change background color on hover */
+  width: 50px;
+  /* Increase width on hover */
+  height: 50px;
+  /* Increase height on hover */
+  background-color: #20c446;
+  /* Change background color on hover */
 }
 
 .homepage .btnCheck img {
@@ -208,26 +258,33 @@
   .homepage body {
     font-size: 0.9em;
   }
+
   .homepage .streakImage {
     width: 100px;
     height: auto;
   }
+
   .homepage .streakText {
     font-size: 0.5rem;
   }
+
   .homepage .leftBtnBox {
     left: 100%;
   }
-  
+
   .homepage .rightBtnBox {
     right: 100%;
   }
-  
+
   .homepage .outerBox .btn {
-    width: 70px; /* Adjust the width of the button */
-    height: 60px; /* Adjust the height of the button */
+    width: 70px;
+    /* Adjust the width of the button */
+    height: 60px;
+    /* Adjust the height of the button */
   }
-  .editModal .form, .editModal .participants {
+
+  .editModal .form,
+  .editModal .participants {
     width: 0px;
   }
 }
@@ -237,14 +294,18 @@
   .homepage body {
     font-size: 0.9em;
   }
+
   .homepage .streakImage {
     width: 60px;
     height: auto;
   }
+
   .homepage .streakText {
     font-size: 0.8rem;
   }
-  .editModal .form, .editModal .participants {
+
+  .editModal .form,
+  .editModal .participants {
     width: 200px;
   }
 }
@@ -254,26 +315,33 @@
   .homepage body {
     font-size: 1em;
   }
+
   .homepage .streakImage {
     width: 80px;
     height: auto;
   }
+
   .homepage .streakText {
     font-size: 1rem;
   }
+
   .homepage .leftBtnBox {
     left: -7%;
   }
-  
+
   .homepage .rightBtnBox {
     right: -7%;
   }
-  
+
   .homepage .outerBox .btn {
-    width: 60px; /* Adjust the width of the button */
-    height: 50px; /* Adjust the height of the button */
+    width: 60px;
+    /* Adjust the width of the button */
+    height: 50px;
+    /* Adjust the height of the button */
   }
-  .editModal .form, .editModal .participants {
+
+  .editModal .form,
+  .editModal .participants {
     width: 400px;
   }
 }
@@ -283,26 +351,33 @@
   .homepage body {
     font-size: 1.2em;
   }
+
   .homepage .streakImage {
     width: 100px;
     height: auto;
   }
+
   .homepage .streakText {
     font-size: 1.2rem;
   }
+
   .homepage .leftBtnBox {
     left: -6%;
   }
-  
+
   .homepage .rightBtnBox {
     right: -6%;
   }
-  
+
   .homepage .outerBox .btn {
-    width: 60px; /* Adjust the width of the button */
-    height: 50px; /* Adjust the height of the button */
+    width: 60px;
+    /* Adjust the width of the button */
+    height: 50px;
+    /* Adjust the height of the button */
   }
-  .editModal .form, .editModal .participants {
+
+  .editModal .form,
+  .editModal .participants {
     width: 400px;
   }
 }
@@ -312,26 +387,33 @@
   .homepage body {
     font-size: 1.3em;
   }
+
   .homepage .streakImage {
     width: 120px;
     height: auto;
   }
+
   .homepage .streakText {
     font-size: 1.5rem;
   }
+
   .homepage .leftBtnBox {
     left: -6%;
   }
-  
+
   .homepage .rightBtnBox {
     right: -6%;
   }
-  
+
   .homepage .outerBox .btn {
-    width: 65px; /* Adjust the width of the button */
-    height: 55px; /* Adjust the height of the button */
+    width: 65px;
+    /* Adjust the width of the button */
+    height: 55px;
+    /* Adjust the height of the button */
   }
-  .editModal .form, .editModal .participants {
+
+  .editModal .form,
+  .editModal .participants {
     width: 650px;
   }
 }
@@ -341,22 +423,29 @@
   .homepage body {
     font-size: 1.3em;
   }
+
   .homepage .streakImage {
     width: 150px;
     height: auto;
   }
+
   .homepage .leftBtnBox {
     left: -4%;
   }
-  
+
   .homepage .rightBtnBox {
     right: -4%;
   }
+
   .homepage .outerBox .btn {
-    width: 70px; /* Adjust the width of the button */
-    height: 60px; /* Adjust the height of the button */
+    width: 70px;
+    /* Adjust the width of the button */
+    height: 60px;
+    /* Adjust the height of the button */
   }
-  .editModal .form, .editModal .participants {
+
+  .editModal .form,
+  .editModal .participants {
     width: 650px;
   }
 }
@@ -364,4 +453,3 @@
 .editModal {
   color: black;
 }
-

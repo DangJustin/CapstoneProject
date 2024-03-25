@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
   height: 100%;
 }
 
@@ -16,9 +17,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background: #141E30;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #141E30, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #141E30, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #141E30;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #141E30, #141E30);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #141E30, #141E30);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 code {
@@ -52,8 +56,8 @@ code {
   -webkit-transition: all 100ms ease-in-out;
   transition: all 100ms ease-in-out;
   border: none;
-  -webkit-box-shadow: 0 1px 7px rgba(0,0,0,.05);
-  box-shadow: 0 1px 7px rgba(0,0,0,.05);
+  -webkit-box-shadow: 0 1px 7px rgba(0, 0, 0, .05);
+  box-shadow: 0 1px 7px rgba(0, 0, 0, .05);
 }
 
 .card:hover {
@@ -66,26 +70,35 @@ code {
 }
 
 .overdue-tasks {
-  background: #CB356B;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #BD3F32, #CB356B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: black;  
+  background: #CB356B;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #BD3F32, #CB356B);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #BD3F32, #CB356B);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: black;
 }
 
 .done-tasks {
-  background: #134E5E;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #71B280, #134E5E);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #71B280, #134E5E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #134E5E;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #71B280, #134E5E);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #71B280, #134E5E);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: black;
 }
 
 .due-tasks {
-  background: #ADA996;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #ADA996;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.ant-picker-dropdown{
+.ant-picker-dropdown {
   z-index: 1056;
 }
 
@@ -102,8 +115,9 @@ code {
 /* CSS for initial 3 task cards */
 .task-card-row {
   @media (min-width: 650px) {
-      white-space: nowrap;
+    white-space: nowrap;
   }
+
   height: 8rem;
 }
 
@@ -120,9 +134,10 @@ code {
   font-size: 1.3rem;
   line-height: 1;
   transition: font-size .25s ease-out;
+
   &.expand-content {
-      visibility: hidden;
-      line-height: 1.7rem;
+    visibility: hidden;
+    line-height: 1.7rem;
   }
 }
 
@@ -137,8 +152,10 @@ code {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%; /* Use entire width */
-  text-align: center; /* Center content horizontally */
+  width: 100%;
+  /* Use entire width */
+  text-align: center;
+  /* Center content horizontally */
   font-size: 3rem;
 }
 
@@ -150,16 +167,16 @@ code {
 
 @media (max-width: 377px) {
   .task-card-row.child-expanded {
-  .task-card.expanded {
-  .task-wrap {
-      visibility: visible;
-      line-height: 1;
-      height: auto;
-      margin-top: auto;
-      font-size: 3rem;
+    .task-card.expanded {
+      .task-wrap {
+        visibility: visible;
+        line-height: 1;
+        height: auto;
+        margin-top: auto;
+        font-size: 3rem;
+      }
     }
   }
-}
 }
 
 .expand-right {
@@ -316,18 +333,23 @@ code {
 }
 
 .hvr-sweep-to-right:before {
-  background: #CB356B;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #BD3F32, #CB356B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #CB356B;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #BD3F32, #CB356B);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #BD3F32, #CB356B);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .hvr-sweep-to-left:before {
-  background: #134E5E;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #71B280, #134E5E);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #71B280, #134E5E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #134E5E;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #71B280, #134E5E);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #71B280, #134E5E);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .hvr-shutter-out-horizontal:before {
   background: #0d6efd;
 }
-
