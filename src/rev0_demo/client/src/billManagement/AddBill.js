@@ -172,7 +172,7 @@ function AddBill({ closeModal }) {
       >
         <div className="mb-3">
           <label className="text-danger">*</label>
-          <label className="form-label">Amount:</label>
+          <label className="form-label exo-bold">Amount:</label>
           <input
             type="text"
             className="form-control"
@@ -189,7 +189,7 @@ function AddBill({ closeModal }) {
         </div>
         <div className="mb-3">
           <label className="text-danger">*</label>
-          <label className="form-label">Describe your expense:</label>
+          <label className="form-label exo-bold">Describe your expense:</label>
           <input
             type="text"
             className="form-control"
@@ -200,7 +200,7 @@ function AddBill({ closeModal }) {
         </div>
         <div className="mb-3">
           <label className="text-danger">*</label>
-          <label className="form-label">Group:</label>
+          <label className="form-label exo-bold">Group:</label>
           <select
             className="form-select"
             value={selectedGroup}
@@ -217,7 +217,7 @@ function AddBill({ closeModal }) {
         </div>
         <div className="mb-3">
           <label className="text-danger">*</label>
-          <label className="form-label">Participants:</label>
+          <label className="form-label exo-bold">Participants:</label>
           <Multiselect
             options={allParticipants.map((user) => ({
               value: user._id,
@@ -253,7 +253,7 @@ function AddBill({ closeModal }) {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Category:</label>
+          <label className="form-label exo-bold">Category:</label>
           <select
             className="form-select"
             value={selectedCategory}
@@ -268,10 +268,10 @@ function AddBill({ closeModal }) {
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-check-label">Split Unevenly:</label>
+          <label className="form-check-label exo-bold">Split Unevenly:</label>
           <input
             type="checkbox"
-            className="form-check-input"
+            className="form-check-input ms-1"
             checked={splitUnevenly}
             onChange={() => setSplitUnevenly(!splitUnevenly)}
           />

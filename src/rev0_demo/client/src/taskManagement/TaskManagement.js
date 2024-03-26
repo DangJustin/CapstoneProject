@@ -346,10 +346,10 @@ function TaskManagement() {
               <div className={`card bg-white task-card hvr-sweep-to-right ${expandedOverdue ? 'expanded expand-left' : 'me-2'}`} style={{ cursor: 'pointer' }} onClick={() => toggleExpand(1)}>
                 <div className="content collapse-content">
                   <div className="card-header">
-                    <h5 className="card-title">Overdue Tasks</h5>
+                    <h5 className="card-title text-danger">Overdue Tasks</h5>
                   </div>
                   <div className="card-body fs-1">
-                    <p className="card-text">{overdueTasks.length}</p>
+                    <p className="card-text text-danger">{overdueTasks.length}</p>
                   </div>
                 </div>
                 <div className="card-body content expand-content">Overdue Tasks</div>
@@ -357,10 +357,10 @@ function TaskManagement() {
               <div className={`card bg-primary bg-white task-card hvr-shutter-out-horizontal ${expandedDue ? 'expanded expand-both' : 'mx-2'}`} style={{ cursor: 'pointer' }} onClick={() => toggleExpand(2)}>
                 <div className="content collapse-content">
                   <div className="card-header">
-                    <h5 className="card-title">Due Tasks</h5>
+                    <h5 className="card-title text-primary">Due Tasks</h5>
                   </div>
                   <div className="card-body fs-1">
-                    <p className="card-text">{incompleteTasks.length}</p>
+                    <p className="card-text text-primary">{incompleteTasks.length}</p>
                   </div>
                 </div>
                 <div className="card-body content expand-content">Due Tasks</div>
@@ -368,10 +368,10 @@ function TaskManagement() {
               <div className={`card bg-white task-card hvr-sweep-to-left ${expandedCompleted ? 'expanded expand-right' : 'ms-2'}`} style={{ cursor: 'pointer' }} onClick={() => toggleExpand(3)}>
                 <div className="content collapse-content">
                   <div className="card-header">
-                    <h5 className="card-title">Completed Tasks</h5>
+                    <h5 className="card-title text-success">Completed Tasks</h5>
                   </div>
                   <div className="card-body fs-1">
-                    <p className="card-text">{completeTasks.length}</p>
+                    <p className="card-text text-success">{completeTasks.length}</p>
                   </div>
                 </div>
                 <div className="card-body content expand-content task-wrap">Completed Tasks</div>
@@ -389,7 +389,7 @@ function TaskManagement() {
                         <div className="card-header">
                           <h2 className="card-title">{task.taskName}</h2>
                           <h4 className="card-subtitle mb-2">Due: {displayDate(task.deadlineDate)}</h4>
-                          <h6 className="card-subtitle mb-2 text-muted">{task.groupID}</h6>
+                          <h6 className="card-subtitle mb-2 text-mute">{task.groupID}</h6>
                         </div>
                         <div className="card-body">
                           <p className="card-text" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description}</p>

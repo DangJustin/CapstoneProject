@@ -65,8 +65,32 @@ code {
   border: none;
 }
 
+.card-custom {
+  -webkit-transition: none;
+  /* Remove transition */
+  transition: none;
+  /* Remove transition */
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  /* Example of border property */
+  -webkit-box-shadow: none;
+  /* Remove box shadow */
+  box-shadow: none;
+  /* Remove box shadow */
+}
+
+.card-custom:hover {
+  transform: none;
+  /* Remove hover effect */
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  /* Example of border property */
+}
+
 .modal {
   color: black;
+}
+
+.text-mute {
+  color: #bfbfbf;
 }
 
 .overdue-tasks {
@@ -76,7 +100,7 @@ code {
   /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to bottom, #BD3F32, #CB356B);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: black;
+  color: #ebebeb;
 }
 
 .done-tasks {

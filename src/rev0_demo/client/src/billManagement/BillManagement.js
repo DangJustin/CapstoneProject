@@ -207,7 +207,7 @@ function BillManagement() {
             .map(([user, amount]) => (
               <div key={user} className="col">
                 <div
-                  className={`card ${
+                  className={`card card-custom ${
                     amount < 0 ? "bg-danger" : "bg-success"
                   } text-white`}
                 >
@@ -250,10 +250,10 @@ function BillManagement() {
             >
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Settle Expense</h5>
+                  <h5 className="modal-title exo-bold">Settle Expense</h5>
                   <button
                     type="button"
-                    className="close"
+                    className="btn-close"
                     data-dismiss="modal"
                     aria-label="Close"
                     onClick={() => setShowSettlementModal(false)}
@@ -281,13 +281,6 @@ function BillManagement() {
                   />
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowSettlementModal(false)}
-                  >
-                    Close
-                  </button>
                   <button
                     type="button"
                     className="btn btn-success"
