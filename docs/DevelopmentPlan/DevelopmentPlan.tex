@@ -24,6 +24,7 @@
 \midrule
 9/25/23 & All & Revision 0\\
 11/1/23 & Justin Dang & Update to POC demo\\
+4/4/24 & Justin Dang & Revision 1\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -43,55 +44,85 @@ The team will primarily communicate through Microsoft Teams group chat. Discussi
 
 \section{Team Member Roles}
 
+These roles are subject to change throughout the course of the development of \progname{}. All team members are expected to contribute to each of the three subsystems of \progname{} (Bill Management, Task Management, Scheduling).
+
 \subsection*{Justin Dang}
 
+Scrum Master
 \begin{itemize}
-	\item Database Engineer
-    \item Latex Documentation
+    \item Make sure group is on track to finishing deliverables
+    \item Schedule meetings
+    \item Create meeting agendas
 \end{itemize}
 
 \subsection*{Harris Hamid}
 
+Team Liaison
 \begin{itemize}
-	\item Full stack Developer
-	\item Team Liaison
+	\item Handle external communications
+    \item Inform group of any new announcements from Instructor
+    \item Handle any internal communication issues in the group
 \end{itemize}
 
 \subsection*{Fady Marcos}
 
+Database Engineer
 \begin{itemize}
-    \item UI Designer
-	\item  Back-end Developer
+    \item Setup database for \progname{}
+    \item Design database schema for \progname{}
+    \item Troubleshoot issues with the database for \progname{}
 \end{itemize}
 
 \subsection*{Rizwan Ahsan}
 
+UI/UX Design Expert
 \begin{itemize}
-    \item Scrum-master
-	\item Developer
+    \item Design the simple and intuitive UI of \progname{}
+    \item Ensure that the visual design of \progname{} is appealing to users
+    \item Create surveys to get feedback on user experience for \progname{}
 \end{itemize}
 
 \subsection*{Sheikh Afsar}
 
+DevOps Engineer
 \begin{itemize}
-	\item UX Developer
-    \item Front-end Developer
+	\item Set up the CI of \progname{}
+    \item Set up project structure for \progname{}
+    \item If possible implement CD of \progname{}
 \end{itemize}
 
 
 \section{Workflow Plan}
-    For the duration of the project, our team will adhere to established guidelines to track and manage all of the code and document modifications. We will also leverage GitHub Actions as our CI tool to automatically build, run tests and enforce coding standards within PRs, which determine whether it passes or fails. The workflow is as follows:
-    \begin{itemize}
-        \item Open and describe a GitHub issue
-        \item Create a new branch to work on the feature/bug
-        \item Work on this feature/bug branch
-        \item Commit changes to new branch
-        \item Create a Pull request for changes
-        \item CI pipeline is triggered
-        \item Review and Approve PR if no test failures
-        \item Merge changes with main branch
-        \item Close GitHub issue
-    \end{itemize}
+
+For the duration of the project, our team will adhere to established guidelines to track and manage all of the code and document modifications. We will also leverage GitHub Actions as our CI tool to automatically build, run tests within PRs and any commits, which determine whether it passes or fails. The workflow is as follows:
+\begin{itemize}
+    \item Open and describe a GitHub issue
+    \item Create a new branch to work on the feature/bug
+    \item Work on this feature/bug branch
+    \item Commit changes to new branch
+    \item Create a Pull request for changes
+    \item CI pipeline is triggered
+    \item Review and Approve PR if no test failures
+    \item Merge changes with main branch
+    \item Close GitHub issue 
+\end{itemize}
+
+\noindent Issue Tags
+\begin{itemize}
+    \item Bill Management: Issue deals with bill management system of \progname{}
+    \item Task Management: Issue deals with task management system of \progname{}
+    \item Scheduling: Issue deals with scheduling system of \progname{}
+    \item Account: Issue deals with account system of \progname{}
+    \item Miscellaneous: Miscellaneous issue that deals with \progname{} that do not fit with the above system tags.
+    \item Documentation: Issue deals with documentation of \progname{}
+    \item Deliverable: Deliverable for SFWRENG 4G06
+    \item Review-Team06: Document review from team 6
+    \item Meeting: Team meeting details
+\end{itemize}
+
+
+    
+
     
 % \begin{itemize}
 % 	\item How will you be using git, including branches, pull request, etc.?
@@ -114,18 +145,20 @@ The team will primarily communicate through Microsoft Teams group chat. Discussi
 
 \begin{itemize}
 \item MongoDB: NoSQL database to store user information.
+\item Firebase: Backend database for authentication.
 \item React: JavaScript library for front-end development.
 \item Express: JavaScript framework for back-end development.
 \item Node: JavaScript run-time environment for server.
 \item JavaScript: Core programming language of the internet.
 \item VSCode: Convenient, good quality IDE to be used for front and back end development.
 \item GitHub: To be used for version control, CI, and collaboration.
+\item ESLint: Static code analysis tool used to find issues in JavaScript code.
 
 \end{itemize}
 
 \section{Coding Standard}
 
-The coding standard we will be following will be similar to Java style coding. This means that all variable and function names will be written in CamelCase and will have neat accurate comments describing functionality. 
+The coding standard we will be following will be similar to Java style coding. This means that all variable and function names will be written in CamelCase and will have neat accurate comments describing functionality. ESLint will be the linter the used to enforce this coding standard.
 
 \section{Project Scheduling}
 
@@ -142,9 +175,9 @@ Proof of Concept Demonstration & November 13--24 \\
 Design Document Revision 0 & January 17 \\
 Revision 0 Demonstration & February 5--February 16\\
 V\&V Report Revision 0 & March 6 \\
-Final Demonstration (Revision 1) & March 18--March 29 \\
-EXPO Demonstration & April TBD \\
+Final Demonstration (Revision 1) & March 24 \\
 Final Documentation (Revision 1) & April 4 \\
+EXPO Demonstration & April 9 \\
  \hline
 \end{tabular}
 \end{center}

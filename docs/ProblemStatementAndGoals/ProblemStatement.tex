@@ -9,8 +9,8 @@
 
 \date{}
 
-\input{../Comments}
-\input{../Common}
+\input{Comments}
+\input{Common}
 
 \begin{document}
 
@@ -23,7 +23,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 9/25/23 & All & Revision 0\\
-
+4/4/24 & Justin Dang & Revision 1\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -38,13 +38,13 @@
 
 \subsection{Problem}
 
-With the ongoing affordable housing shortage in Canada many people have been forced to find roommates in order to have a place to live in. This is especially common at universities like McMaster where its extremely common to have housemates while in student housing. While having roommates may help ease financial pressures it can lead to a lot of stress in dealing with them. These stresses can include things like dealing with splitting household tasks and grocery costs. An application that helps deal with these common stresses in the roommate life would make it more convenient  for the housemates to live together and overall simplify their lives.
+With the ongoing affordable housing shortage in Canada many people have been forced to find roommates in order to have a place to live in. This is especially common at universities like McMaster where its extremely common to have housemates while in student housing. While having roommates may help ease financial pressures it can lead to lots of stress. Communication issues can be a huge problem. An application that helps with these common stresses in the roommate life would make it more convenient  for the housemates to live together and overall simplify their lives.
 
-% Amidst the persistent affordable housing shortage in Canada, a growing number of individuals are compelled to seek cohabitation arrangements as a means to secure housing. This phenomenon is particularly prevalent in academic settings, such as McMaster University, where the presence of housemates in student housing has become exceedingly commonplace. While the presence of roommates can alleviate financial constraints, it also introduces a range of stressors associated with navigating shared living arrangements. These challenges encompass issues such as the equitable division of household responsibilities and the management of collective grocery expenditures. The development of a dedicated application designed to address these prevalent challenges in the realm of shared living can significantly enhance the convenience and overall quality of life for cohabitating individuals.
 
 \subsection{Inputs and Outputs}
 
 \subsubsection{Inputs}
+The main input for Housemates will be a user entering an information for a chore, bill, or event.
 \begin{center}
 \begin{tabular}{|p{4cm}|p{4.5cm}|p{3.5cm}|}
 \hline
@@ -54,20 +54,19 @@ Chore Assignments & Details of assigned household tasks and responsibilities. & 
 \hline
 Bill Information & Details of shared expenses, such as rent, internet, utilities, groceries, etc. & Bill amounts, due dates, responsible users. \\
 \hline
-Messages & Communication between housemates regarding general household matters. & Text messages, notifications. \\
+Event Information & Details of an event & name, time\\
 \hline
 \end{tabular}
 \end{center}
 
 \subsubsection{Outputs}
+The main output for Housemates will be webpages that display information for user about their current chores, bills and scheduled events.
 \begin{center}
 \begin{tabular}{|p{4cm}|p{4.5cm}|p{3.5cm}|}
 \hline
 \textbf{Category} & \textbf{Description} & \textbf{Format} \\
 \hline
-Automated Notification for an Event & Automatic alerts and reminders for important events, such as bill due dates, chore deadlines, or house quiet hours. & Notifications, emails, text messages. \\
-\hline
-Report & Summarized information on expenses, chore completion, and any other house details. & PDF or HTML document. \\
+Report & Information on  chores, bills, or events for a user & HTML Web page \\
 \hline
 \end{tabular}
 \end{center}
@@ -82,7 +81,7 @@ Report & Summarized information on expenses, chore completion, and any other hou
 
 \subsection{Environment}
 
-The expected environment for this application will be mobile devices (Android, iOS), providing a user-friendly and intuitive application that is really simple to use. With goals of expanding to web application, so that we can cater to a much diverse user base using computers with Windows, Max or Linux and web browsers such as Chrome, Edge, Firefox, etc. Users would then have the convenience to access the solution/product on any device they want that suits their needs. 
+The expected environment for this application will be in web-browsers in the form of a web-app. Users would then have the convenience to access the solution/product on any device they want that suits their needs. 
 % \wss{Hardware and software}
 
 \section{Goals}
@@ -91,7 +90,7 @@ The expected environment for this application will be mobile devices (Android, i
 \begin{tabular}{|p{6cm}|p{6cm}|}
 \hline
 \textbf{Goals} & \textbf{Importance}\\
-\hline The application will have a straightforward and user-friendly interface that is simple to use for all users, regardless of technical ability. & This allows first time users to be interested in our product and a good experience with the overall product. \\
+
 \hline
 The application will simplify household task management through a task management system. & This allows streamlining the allocation of chores which in return will reduce conflicts and misunderstandings between housemates. \\
 \hline
@@ -101,10 +100,11 @@ The application will have a scheduling system that will allow for users to sched
 \hline
 The application will have a calendar to see scheduled events & This allows users to coordinate their schedules and help them in managing their time in a better way. \\
 \hline
+The application should integrate the task management, expense sharing, and scheduling system together in an intuitive way  & Integrating these systems together would allow users to better make use of these systems. For example, setting a task to remind a roommate of an expense they should remember to pay. \\
+\hline The application will have a straightforward and user-friendly interface that is simple to use for all users, regardless of technical ability. & This allows first time users to be interested in our product and a good experience with the overall product. \\
+\hline
 \end{tabular}
 \end{center}
-
-
 
 \section{Stretch Goals}
 
@@ -115,9 +115,8 @@ The application will have a calendar to see scheduled events & This allows users
 \hline
 The finished product will have Google account integration &  The application having google account integration will allow for users to be able to see events scheduled on the app in their Google calendar.\\
 \hline
-Have the final product be available as a web application & Having the final product be available as a web application will allow users with an even wider range of devices being able to use the final product. \\
-\hline
 \end{tabular}
 \end{center}
+
 
 \end{document}
