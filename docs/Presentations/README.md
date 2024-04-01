@@ -2,4 +2,5 @@
 
 The folders and files for this folder are as follows:
 
-- <fill in details>
+- EXPO: The folder containing the EXPO poster and video for Housemates
+- FinalPresentation: The presentation for the rev 1 demo of Housemates

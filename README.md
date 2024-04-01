@@ -3,10 +3,9 @@
 Developer Names: \
 Justin Dang - dangj15 \
 Harris Hamid - hamidh1 \
-Fady Marcos - morocof2 \
+Fady Mircos - morocof2 \
 Rizwan Ahsan - ahsanm7 \
 Sheikh Afsar - afsars
-
 
 
 Date of project start: September 18 2023
@@ -16,10 +15,10 @@ With the ongoing affordable housing shortage in Canada many people have been for
 The main features of this platform would be to:
 - A chore management system that allows for the assignment and tracking of weekly/monthly tasks amongst housemates
 - A cost management system that allows for costs to split amongst housemates
+- A scheduling system that allows for users to schedule events
 
 The development scope of the platform would be:
-- A mobile app for Android/IOS
-- Potentially a web app
+- A web app
 
 
 The folders and files for this project are as follows:
