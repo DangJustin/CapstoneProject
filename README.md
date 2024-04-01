@@ -3,7 +3,7 @@
 Developer Names: \
 Justin Dang - dangj15 \
 Harris Hamid - hamidh1 \
-Fady Mircos - morocof2 \
+Fady Morcos - morocof2 \
 Rizwan Ahsan - ahsanm7 \
 Sheikh Afsar - afsars
 
