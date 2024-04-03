@@ -21,7 +21,7 @@
 
 \title{Verification and Validation Plan for \progname{}} 
 \author{\authname}
-\date{March 6, 2024}
+\date{April 4, 2024}
 	
 \maketitle
 
@@ -34,6 +34,7 @@
 \midrule
 Nov 3 2023 & 0 & Revision 0\\
 Mar 6 2024 & 1 & Update with Unit Testing\\
+Apr 4 2024 & 2 & Update for Revision 1 \\
 \bottomrule
 \end{tabularx}
 
@@ -100,9 +101,9 @@ Mar 6 2024 & 1 & Update with Unit Testing\\
 
 The objective of this verification and validation plan is to
 \begin{enumerate}
-    \item Ensure that the requirements listed in the SRS for the Housemates application are correct.
-    \item Ensure that the design of the Housemates application satisfies the requirements listed in the SRS.
-    \item Ensure the usability of the Housemates application for its prospective users.
+    \item Verify the functionality of the major features of \progname{} (bill management, task management, scheduling) as described in the SRS.
+    \item Verify the usability of \progname{}, specifically focusing on the ease of navigation and learnability of \progname{}.
+    \item Verify the performance of \progname{}, specifically how \progname{} is affected by a large number of users.
 \end{enumerate}
 
 % \wss{State what is intended to be accomplished.  The objective will be around
@@ -134,7 +135,7 @@ The objective of this verification and validation plan is to
     \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/SRS-Volere/SRS.pdf}{SRS}: The software requirements specification contains the functional and non-functional requirements of the Housemates application. These requirements will be tested for in the VnV plan under system testing. 
     \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/HazardAnalysis/HazardAnalysis.pdf}{Hazard Analysis}: The hazard analysis document contains the hazards associated with the application. These hazards will need to be tested for in the VnV plan in order to be sure that they are mitigated.
     \item \href{https://github.com/DangJustin/CapstoneProject/tree/main/docs/Design}{Design}: The design document will contain the underlying design of the Housemates application. The elements of this design will be tested in the unit testing section of this VnV plan.
-    \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Repor}t: The VnV report will document the results of the VnV plan used in this document.
+    \item \href{https://github.com/DangJustin/CapstoneProject/blob/main/docs/VnVReport/VnVReport.pdf}{VnV Report}: The VnV report will document the results of the VnV plan used in this document.
 \end{itemize}
 
 
@@ -170,8 +171,8 @@ This section contains the different verification and validation plans that will 
 \begin{itemize}
     \item Classmates will review the SRS documentation.
     \item A TA for SFWRENG 4G06 will review the SRS documentation.
-    \item The SRS checklist listed in the Checklists folder will be used by the verification and validation team to review the SRS documentation.
-    \item A focus group with potential users of the application will be shown a wire-frame version of the Housemates to see if fits user needs.
+    \item Traceability between the SRS and the other documents will be checked to ensure correctness.
+    \item Ad-hoc discussions with potential stakeholders to discuss what features they would want in a roommate management app.
 \end{itemize}
 
 % \wss{List any approaches you intend to use for SRS verification.  This may include
@@ -215,9 +216,11 @@ This section contains the different verification and validation plans that will 
 
 \subsection{Implementation Verification Plan}
 
-Verification of the implementation will be conducted through performing the system tests described in the VnV plan.
+Verification of the implementation will be conducted through performing the system and unit tests described in this VnV plan. \\
 
-% After the completion of the Housemates application a code inspection and walkthrough will be conducted on the source code of the application. This will be used to identify any potential errors in the source code that prevent the application from satisfying its requirements.
+The source code of \progname{} will also be inspected using ESLint, which is a static analysis tool that helps identify issues in javascript code. ESLint will automatically be run every time that \progname{} compiles. This should help identify issues in the source code of \progname{}.
+
+%After the completion of the Housemates application a code inspection and walkthrough will be conducted on the source code of the application. This will be used to identify any potential errors in the source code that prevent the application from satisfying its requirements.
 
 % \wss{You should at least point to the tests listed in this document and the unit
 %   testing plan.}
@@ -228,7 +231,8 @@ Verification of the implementation will be conducted through performing the syst
 
 \subsection{Automated Testing and Verification Tools}
 
-Automatic testing of the document will be done through the jest.
+Automated testing was conducted using jest and GitHub actions. Automated testing mainly covers the unit testing of \progname{} and is performed automatically whenever a commit is added to the main branch. The purpose of automated testing of \progname{} is to ensure that any changes made to the main branch do not break the overall functionality of \progname{}. More details on how automated unit tests are performed can be found in the unit testing section of this VnV plan.
+
 
 % \wss{What tools are you using for automated testing.  Likely a unit testing
 %   framework and maybe a profiling tool, like ValGrind.  Other possible tools
@@ -247,7 +251,9 @@ Automatic testing of the document will be done through the jest.
 
 \subsection{Software Validation Plan}
 
-We plan to conduct user testing on a focus group of potential users of the Housemates application after the Revision 0 version is complete. The user testing will be using the usability survey questions as described in the appendix.
+We plan to conduct user testing on a focus group of potential users of the Housemates application after the Revision 0 version is complete. The user testing will be using the usability survey questions as described in the appendix. The results of these usability survey will be used to get feedback on revision 0 specifically focusing on the appearance and usability of \progname{}. This feedback will then be used on to create the revision 1 of \progname{}.
+
+A demo of the revision 0 of \progname{} will also be shown to the instructor of SFWRENG 4G06. Their feedback will also be useful in determining the changes needed for revision 1 of \progname{}.
 
 % \wss{If there is any external data that can be used for validation, you should
 %   point to it here.  If there are no plans for validation, you should state that
@@ -334,18 +340,18 @@ Description: Verify creation of a new task.
 					
 Initial State: Task Management page is open.
 					
-Input: Task Name: "Clean the Living Room"
+Input: Task Name: ``Clean the Living Room"
 Due Date: 2024-4-05
 					
-Output: New task "Clean the Living Room" is added to the list of tasks.
+Output: New task ``Clean the Living Room" is added to the list of tasks.
 
 Test Case Derivation: Users need to be able to add new chores/tasks as needed.
 
 How test will be performed: 
 Open the Task Management page.
-Click on "Create New Task" button.
+Click on ``Create New Task" button.
 Fill out the task creation form with the provided input.
-Click "Create" button.
+Click ``Create" button.
 Verify that the new task appears in the list of tasks.
 
 
@@ -357,7 +363,7 @@ Description: Verify assigning a task to a roommate.
 					
 Initial State: Task Management page is open.
 					
-Input: Task Name: "Take out the garbage".
+Input: Task Name: ``Take out the garbage".
 Due Date: 2024-4-05
 Roommate Assignment: Fardeen Afsar.
 					
@@ -368,7 +374,7 @@ Test Case Derivation: This feature enables users to divide tasks among roommates
 How test will be performed: 
 Open the Task Management page.
 Create a task.
-Choose roommate "Fardeen" from the list of roommates.
+Choose roommate ``Fardeen" from the list of roommates.
 Login as Fardeen
 Verify that the task is now assigned to Fardeen and Fardeen can see task.
 
@@ -403,7 +409,7 @@ This subsection covers the tests for the bill management system of the Housemate
 
 \begin{enumerate}
 
-\item{test-BM1-1/2-1\\}
+\item{test-BM1-1\\}
 
 This test checks whether a user is able to create a new bill and assign housemates to it
 
@@ -419,7 +425,7 @@ Test Case Derivation: The system expects a positive value in a specified format 
 					
 How test will be performed: A tester will be provided instructions to follow with a valid bill amount and associated housemates. The tester will then determine by cross-checking whether the result provided by the system matches with the actual result in the instructions.
 					
-\item{test-BM3-1\\}
+\item{test-BM2-1\\}
 
 This test ensures whether a user (bill issuer) is able to modify an already existing bill
 
@@ -435,7 +441,7 @@ Test Case Derivation: The system expects a positive value in a specified format 
 
 How test will be performed: A tester will be provided instructions to follow with a valid bill amount and associated housemates. The tester will then determine by cross-checking whether the result provided by the system matches with the actual result in the instructions. 
 
-\item{test-BM4-1\\}
+\item{test-BM3-1\\}
 
 This test checks whether a user is able to categorize a bill (e.g. food, utilities etc) when created. 
 
@@ -451,7 +457,7 @@ Test Case Derivation: The system expects the user to choose the type of expense 
 					
 How test will be performed: A tester will be provided instructions to follow with a valid bill amount and associated housemates and the chosen bill category. The tester will then determine by cross-checking whether the category of the bill matches with the actual category generated by the bill.
 
-\item{test-BM5.1/7.1\\}
+\item{test-BM4-1\\}
 
 This test ensures that previously issued bills can be accessed and can verify the status of expense whether it has been paid or not.
 
@@ -467,21 +473,37 @@ Test Case Derivation: The system expects to show an updated bill of all the user
 
 How test will be performed: A tester will be provided instructions to follow. It will include instructions to first view the bill and observe the current status of what user owes what, then log in as a user associated to that bill and settle the expense. Now check the previous bill again and verify whether bill has been updated.
 
-\item{test-BM6.1\\}
+\item{test-BM5-1\\}
 
-This test ensures that users are able to attach relevant receipts to the bill as an image and view at a later period.
+This test ensures that split expenses are correctly calculated.
 
 Control: Manual
 					
 Initial State: The bill management system is active and ready to handle events the user provides.
 					
-Input: User selects option to add attachment and adds total amount with users who to split among.
+Input: User unevenly splits a bill with price \$ $\mu$ in a group with 2 members (one with an expense of $\mu/3$ and one with an expense of $2\mu/3$).
 					
-Output: A bill is shown with the total amount split evenly amongst users and an accessible attachment in form of an image as proof of purchase.
+Output: A bill is shown with the total amount split unevenly between the 2 users as described in the input.
 
-Test Case Derivation: The system expects to show the bill with the original receipt and proof of purchase.
+Test Case Derivation: The system expects to show the bill split unevenly as described.
 
-How test will be performed: A tester will be provided instructions to follow. It will include instructions to first create a new bill and provide required information in the fields. The tester will then add an image as an attachment and save the bill. Tester will then access the bill from previous bill section and verify whether attachment can be seen. 
+How test will be performed: A tester will be provided instructions to follow. It will include instructions to first create a new bill and provide required information in the fields. The tester will then verify that both users see the correct expense. 
+
+\item{test-BM6-1\\}
+
+This test ensures that a user can settle an expense.
+
+Control: Manual
+					
+Initial State: The bill management system is active and ready to handle events the user provides.
+					
+Input: User inputs a bill with same inputs as in test-BM1-1. Then the user will pay off their portion of the bill.
+					
+Output: The bill will show that the user's portion of the bill has paid off (i.e. amount owed for that user is 0).
+
+Test Case Derivation: The system expects to show that the user should owe \$ 0 once they pay their portion of the bill.
+
+How test will be performed: A tester will be provided instructions to follow. It will include instructions to first create a new bill and provide required information in the fields. The tester will then pay off the users portion of the bill. The amount owed for that user should now be 0 as expected. 
 
 \end{enumerate}
 
@@ -653,13 +675,13 @@ This test is to ensure users are able to recover their account in case they for 
 
 Initial State: The user account already exists in the system.
 					
-Input: User selects the "forget password" option and enters username of an existing user account.
+Input: User selects the ``forget password" option and enters username of an existing user account.
 					
 Output: The system sends an email to the email associated with the user account.
 
 Test Case Derivation: The test case is derived from the requirements of the housemates app which is that user should be able to recover their account.
 
-How test will be performed: Tester will open app, select login feature, then select "forget password" feature and enters a username of an account. The email of the associated account will receive an email from the system.
+How test will be performed: Tester will open app, select login feature, then select ``forget password" feature and enters a username of an account. The email of the associated account will receive an email from the system.
 
 \end{enumerate}
 
@@ -705,7 +727,7 @@ Initial State: The application is run on a phone.
 					
 Input/Condition: Users will be shown the  application and be asked if it is visually appealing and intuitively designed. 
 					
-Output/Result: 90 \% of users will say that the application is visually appealing and intuitively designed. 
+Output/Result: $\delta$ \% of users will say that the application is visually appealing and intuitively designed. 
 					
 How test will be performed: A focus of group of users will be shown the application after its development is complete. They will be then given a usability survey (located in the appendix). During this usability survey they will be asked if they find the interface of the application visually appealing and intuitively designed.
 					
@@ -726,7 +748,7 @@ Initial State: The application is run on a phone.
 					
 Input/Condition: The user will be asked to navigate to one of the main features of the application.
 					
-Output/Result: The user will be able to navigate to the function within 5 taps.
+Output/Result: The user will be able to navigate to the function within $\sigma$ taps.
 					
 How test will be performed: A focus group of users will be given a phone running the application. They  will be asked to navigate to one of the main features of the application. The number of taps to navigate to the asked feature will be recorded. 
 
@@ -738,7 +760,7 @@ Initial State: The application is run on a phone.
 					
 Input/Condition: Users will be shown the application and be asked if it they find the application easy to navigate. 
 					
-Output/Result: 90 \% of users will say that the application is easy to navigate. 
+Output/Result: $\delta$ \% of users will say that the application is easy to navigate. 
 					
 How test will be performed: A focus of group of users will be shown the application after its development is complete. They will be then given a usability survey (located in the appendix). During this usability survey they will be asked if they find the application easy to navigate.
 					
@@ -752,7 +774,7 @@ Input: The developers will observe the interface of the application.
 					
 Output: The developers of the application will observe that the interface is in Canadian English.
 					
-How test will be performed: Once the development of the application is complete, the developers will go through all of the various pages/interfaces of the application. They will then confirm that they are in Canadian English.
+How test will be performed: Once the development of the application is complete, the developers will go through all of the various pages/interfaces of the application. They will then confirm that they are in Canadian English. The interface of \progname{} will also be checked with a spell checker in the browser.
 
 \item{test-UH-L1-1\\}
 
@@ -774,7 +796,7 @@ Initial State: The application is run on a phone.
 					
 Input/Condition: Users will be shown the application in a walkthrough and be asked to use it. Afterwards they will be asked if it they found the application easy to learn. 
 					
-Output/Result: 90 \% of users will say that the application is easy to learn. 
+Output/Result: $\delta$ \% of users will say that the application is easy to learn. 
 					
 How test will be performed: A focus of group of users will be shown the application after its development is complete. They will be then given a usability survey (located in the appendix). During this usability survey they will be asked if they find the application easy to learn.
 
@@ -808,7 +830,7 @@ Initial State: The application is run on a phone.
 					
 Input/Condition: The developers will observe the interface of the application. 
 					
-Output/Result: The developers of the application will go through all of the various pages/interfaces of the application. They will confirm the response time to user input is within 0.5 s for all interactions.
+Output/Result: The developers of the application will go through all of the various pages/interfaces of the application. They will confirm the response time to user input is within $\epsilon$ s for all interactions.
 					
 How test will be performed: Once the development of the application is complete, the developers will go through all of the various pages/interfaces of the application. They will record the response time for all possible user interactions.
 
@@ -832,7 +854,7 @@ Initial State: The application is run on a phone.
 					
 Input/Condition: The developers will disconnect the phone from the server. They will then attempt to use the features of the application.
 					
-Output/Result: The features of the application will continue to work for at least 10 minutes after losing connection.
+Output/Result: The features of the application will continue to work for at least $\theta$ minutes after losing connection.
 					
 How test will be performed: Once the development of the application is complete, the developers will disconnect the phone from the server. They will then attempt to use the features of the application. They will observe how the application performs without connection, and how it performs when connection is resumed.
 
@@ -842,11 +864,11 @@ Type: Non-functional, Dynamic, Manual
 					
 Initial State: The application is run on a phone.
 					
-Input/Condition: 100 users will be simulated trying to use the application at the same time.
+Input/Condition: $\zeta$ users will be simulated trying to use the application at the same time.
 					
 Output/Result: The application servers will be able to process their requests.
 					
-How test will be performed: Once the development of the application is complete, the developers will simulate 100 people trying to use the application at the same time. The application servers should show no slow down. This will be done using Jmeter.
+How test will be performed: Once the development of the application is complete, the developers will simulate $\zeta$ people trying to use the application at the same time. The application servers should still able to process user requests. This will be done using Jmeter.
 
 
 \end{enumerate}
@@ -973,19 +995,19 @@ How test will be performed: Once the development of the application is complete,
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c | c c c c c c c c c c|}
 \hline
 FR ID & TM1 & TM2 & TM3 & TM4 & TM5 & BM1 & BM2 & BM3 & BM4 & BM5 \\
 \hline 
-test-TM1-1 & $\times$ & & & & & & & & & \\
-test-TM2-1 & & $\times$ & & & & & & & & \\
-test-TM3-1 & & & $\times$ & & & & & & & \\
-test-TM4-1 & & & & $\times$ & & & & & & \\
-test-TM5-1 & & & & & $\times$ & & & & & \\
-test-BM1-1/2-1 & & & & & & $\times$ & $\times$ & & & \\
-test-BM3-1 & & & & & & & & $\times$ & & \\
-test-BM4-1 & & & & & & & & & $\times$ & \\
-test-BM5-1 & & & & & & & & & & $\times$ \\
+test-TM1-1 & $\times$ & & & & & & & & & \\ \hline
+test-TM2-1 & & $\times$ & & & & & & & & \\ \hline
+test-TM3-1 & & & $\times$ & & & & & & & \\ \hline
+test-TM4-1 & & & & $\times$ & & & & & & \\ \hline
+test-TM5-1 & & & & & $\times$ & & & & & \\ \hline
+test-BM1-1 & & & & & & $\times$ & $\times$ & & & \\ \hline
+test-BM2-1 & & & & & & & & $\times$ & & \\ \hline
+test-BM3-1 & & & & & & & & & $\times$ & \\ \hline
+test-BM4-1 & & & & & & & & & & $\times$ \\ \hline
 
 \hline
 \end{tabular}
@@ -994,22 +1016,22 @@ test-BM5-1 & & & & & & & & & & $\times$ \\
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c c c c c c c c c c|}
 \hline
 FR ID & BM6 & BM7 & SS1 & SS2 & SS3 & AS1 & AS2 & AS3 & AS4 & AS5 \\
 \hline 
-test-BM6-1 & $\times$ & & & & & & & & & \\
-test-BM7-1 & & $\times$ & & & & & & & & \\
-test-SS1-1 & & & $\times$ & & & & & & & \\
-test-SS2-1 & & & & $\times$ & & & & & & \\
-test-SS3-1 & & & & & $\times$ & & & & & \\
-test-AS-1-1 & & & & & &  $\times$ & & &  & \\
-test-AS-1-2 & & & & & &  $\times$ & & &  & \\
-test-AS-1-3 & & & & & &  $\times$ & & &  & \\
-test-AS-2 & & & & & &   & $\times$ & &  & \\
-test-AS-3 & & & & & & & & $\times$ &  & \\
-test-AS-4 & & & & & & & & & $\times$ & \\
-test-AS-5 & & & & & & & & & & $\times$ \\
+test-BM5-1 & $\times$ & & & & & & & & & \\ \hline
+test-BM6-1 & & $\times$ & & & & & & & & \\ \hline
+test-SS1-1 & & & $\times$ & & & & & & & \\ \hline
+test-SS2-1 & & & & $\times$ & & & & & & \\ \hline
+test-SS3-1 & & & & & $\times$ & & & & & \\ \hline
+test-AS-1-1 & & & & & &  $\times$ & & &  & \\ \hline
+test-AS-1-2 & & & & & &  $\times$ & & &  & \\ \hline
+test-AS-1-3 & & & & & &  $\times$ & & &  & \\ \hline
+test-AS-2 & & & & & &   & $\times$ & &  & \\ \hline
+test-AS-3 & & & & & & & & $\times$ &  & \\ \hline
+test-AS-4 & & & & & & & & & $\times$ & \\ \hline
+test-AS-5 & & & & & & & & & & $\times$ \\ \hline
 
 
 \hline
@@ -1020,20 +1042,20 @@ test-AS-5 & & & & & & & & & & $\times$ \\
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c c c c c c c c|}
 \hline
 NFR ID & LF-A1 & UH-E1 & UH-P1 & UH-L1 & UH-A1 & P-SL1 & P-PA1 & P-RFT1 \\
 \hline 
-test-LF-A1-1 & $\times$ & & & & & & &   \\
-test-LF-A1-2 & $\times$  & & & & & & &   \\
-test-UH-E1-1 &  & $\times$  & & & & & &   \\
-test-UH-E1-2 &  & $\times$  & & & & & &   \\
-test-UH-P1 &  &  & $\times$  & & & & &   \\
-test-UH-L1-1 &  & & & $\times$  & & & &   \\
-test-UH-L1-2 &  & & & $\times$  & & & &   \\
-test-UH-A1 &  &  & & & $\times$   & & &   \\
-test-P-SL1 &  &  & & &    & $\times$ & &   \\
-test-P-PA1 &  &  & & &    &  & $\times$ &   \\
+test-LF-A1-1 & $\times$ & & & & & & &   \\ \hline
+test-LF-A1-2 & $\times$  & & & & & & &   \\ \hline
+test-UH-E1-1 &  & $\times$  & & & & & &   \\ \hline
+test-UH-E1-2 &  & $\times$  & & & & & &   \\ \hline
+test-UH-P1 &  &  & $\times$  & & & & &   \\ \hline
+test-UH-L1-1 &  & & & $\times$  & & & &   \\ \hline
+test-UH-L1-2 &  & & & $\times$  & & & &   \\ \hline
+test-UH-A1 &  &  & & & $\times$   & & &   \\ \hline 
+test-P-SL1 &  &  & & &    & $\times$ & &   \\ \hline
+test-P-PA1 &  &  & & &    &  & $\times$ &   \\ \hline
 test-P-RFT1 &  &  & & &    &  &  & $\times$  \\
 \hline
 \end{tabular}
@@ -1046,14 +1068,14 @@ test-P-RFT1 &  &  & & &    &  &  & $\times$  \\
 \hline
 NFR ID & P-C1 & OE-PE1 & OE-PR1 & M-M1 & S-A1 & S-IN1 & S-P1 & C-SC1 \\
 \hline 
-test-P-C1 & $\times$ & & & & & & &   \\
-test-OE-PE1 &  & $\times$  & & & & & &   \\
-test-OE-PR1 &  &  & $\times$  & & & & &   \\
-test-M-M1 &  & & & $\times$  & & & &   \\
-test-S-A1 &  &  & & & $\times$   & & &   \\
-test-S-IN1 &  &  & & &    & $\times$ & &   \\
-test-S-P1 &  &  & & &    &  & $\times$ &   \\
-test-C-SC1 &  &  & & &    &  &  & $\times$  \\
+test-P-C1 & $\times$ & & & & & & &   \\ \hline
+test-OE-PE1 &  & $\times$  & & & & & &   \\ \hline
+test-OE-PR1 &  &  & $\times$  & & & & &   \\ \hline
+test-M-M1 &  & & & $\times$  & & & &   \\ \hline
+test-S-A1 &  &  & & & $\times$   & & &   \\ \hline
+test-S-IN1 &  &  & & &    & $\times$ & &   \\ \hline
+test-S-P1 &  &  & & &    &  & $\times$ &   \\ \hline
+test-C-SC1 &  &  & & &    &  &  & $\times$  \\ 
 \hline
 \end{tabular}
 \caption{\bf Non-Functional Requirements Traceability Part 2}
@@ -1119,6 +1141,11 @@ Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src
     \item UT-S3: Get Events for Group
     \item UT-S4: Get Events for a user
     \item UT-S5: Delete Event
+    \item UT-S6: Adding Event to Non-existing Group
+    \item UT-S7: Editing Non-existing Event
+    \item UT-S8: Deleting Non-existing Event
+    \item UT-S9: Get Events for Non-existing Group
+    \item UT-S10: Get Events for Group with no Events
 \end{enumerate}
 
 
@@ -1131,6 +1158,10 @@ Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src
     \item UT-A2: Get User based off userID
     \item UT-A3: Get Group
     \item UT-A4: Get User Groups
+    \item UT-A5: Error Condition for get User Groups
+    \item UT-A6: Error Condition for get User
+    \item UT-A7: Error Condition for get User off built in ID
+    \item UT-A8: Error Condition for get Group
 \end{enumerate}
 
 
@@ -1250,7 +1281,23 @@ This is where you can place additional information.
 
 \subsection{Symbolic Parameters}
 
-N/A
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        Symbolic Parameter & Value \\ \hline
+        $\mu$ & 30 \\
+        $\sigma$ & 5  \\
+        $\delta$ & 90  \\
+        $\epsilon$ & 0.5 \\
+        $\theta$ & 10 \\
+        $\zeta$ & 100 \\
+         \hline
+    \end{tabular}
+    \caption{Symbolic Parameters}
+    \label{tab:my_label}
+\end{table}
+
 
 % The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
 % Their values are defined in this section for easy maintenance.
