@@ -8,6 +8,7 @@ const billSchema = new mongoose.Schema({
   billName: {
     type: String,
     required: true,
+    default: "Unnamed"
   },
   totalAmount: {
     type: Number,
