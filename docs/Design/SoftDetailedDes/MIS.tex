@@ -52,6 +52,7 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 January 17, 2024 & 1.0 & Revision 0\\
+April 03, 2024 & 2.0 & Revision 1\\
 \bottomrule
 \end{tabularx}
 
@@ -165,13 +166,13 @@ The following table is taken directly from the Module Guide document for this pr
 
 \subsection{Module}
 
-taskManagementModule
+TaskManagement
 
 % \wss{Short name for the module}
 
 \subsection{Uses}
 
-accountModule, interfaceDesignModule, databaseInterfaceModule
+Account, InterfaceDesign, DatabaseInterface
 
 \subsection{Syntax}
 
@@ -186,15 +187,17 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-addTask & taskData: Tuple(users: seq of $\mathbb{Z}$ uID, details: seq of char)  & tID: $\mathbb{Z}$  & TaskConflictError, ValidationError \\
+addTask & taskName: string, groupID: string, deadlineDate: Date, description: string, usersResponsible: seq of string  & seq of string & TaskAddError \\
 \hline
-updateTask & tID: $\mathbb{Z}$, details: seq of string  & -  & - \\
+getTask & taskID: string & seq of string  & NotFoundError \\
 \hline
-findTasks & - & tIDs: seq of $\mathbb{Z}$  & - \\
+getUserTasks & userID: string & seq of string  & NotFoundError \\
 \hline
-getTaskDetails & tID: $\mathbb{Z}$ & details: seq of string & DocumentNotFoundError \\
+completeTask & taskID: string & -  &  NotFoundError \\
 \hline
-completeTask & tID: $\mathbb{Z}$ & -  &  - \\
+reopenTask & taskID: string & - & NotFoundError \\
+\hline
+editTask & taskData: seq of string & - & NotFoundError \\
 \hline
 \end{tabular}
 \end{center}
@@ -219,44 +222,48 @@ None
 
 \subsubsection{Assumptions}
 
-All tIDs are unique.
+All taskIDs and userIDs are unique.
 
 % \wss{Try to minimize assumptions and anticipate programmer errors via
 %   exceptions, but for practical purposes assumptions are sometimes appropriate.}
 
 \subsubsection{Access Routine Semantics}
 
-\noindent addTask(taskData):
+\noindent addTask(taskName, groupID, deadlineDate, description, usersResponsible):
 \begin{itemize}
-\item transition: Once the function validates the input data, task is added into the database using taskData.
-\item out:  tID := tID returned by database
-\item exception: Task is not added due to conflict, or due to invalid input
+\item transition: input data == valid $\Rightarrow$ add task to database
+\item output: out := new task returned by database
+\item exception:  exc := (invalid input $\vert\vert$ database error $\Rightarrow$ TaskAddError)
 \end{itemize}
 
-\noindent updateTask(tID, details):
+\noindent getTask(taskID):
 \begin{itemize}
-\item transition: update task in the database associated with tID in database with details parameter.
-\item exception: none
+\item output: out := task data from taskID
+\item exception: exc := (taskID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
-\noindent findTasks():
+\noindent getUserTasks(userID):
 \begin{itemize}
-\item output: tIDs := tIDs of tasks associated with current uID from account module.
-\item exception: none
+\item output: out := taskIDs of tasks associated with the current userID
+\item exception: exc := (userID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
-\noindent getTaskDetails(tID):
+\noindent completeTask(taskID):
 \begin{itemize}
-\item transition: Function will find task with the associated tID.
-\item output: details := details of task associated with tID stored in database.
-\item exception: Task does not exist
+\item transition: taskID $\in$ database $\Rightarrow$ remove from active tasks
+\item exception: exc := (taskID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
-\noindent completeTask(tID):
+\noindent reopenTask(taskID):
 \begin{itemize}
-\item transition: Function will remove task from list of current tasks.
-\item output: details := details of task associated with tID given in database.
-\item exception: none
+\item transition: taskID $\in$ database $\Rightarrow$ add to active tasks
+\item exception: exc := (taskID $\notin$ database $\Rightarrow$ NotFoundError)
+\end{itemize}
+
+\noindent editTask(taskData):
+\begin{itemize}
+\item transition: Edit the details of the task
+\item exception: exc := (taskID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
 
@@ -287,13 +294,13 @@ None
 
 \subsection{Module}
 
-billManagementModule
+BillManagement
 
 % \wss{Short name for the module}
 
 \subsection{Uses}
 
-accountModule, interfaceDesignModule, databaseInterfaceModule
+Account, InterfaceDesign, DatabaseInterface
 
 \subsection{Syntax}
 
@@ -308,15 +315,13 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-addBill & billData: Tuple of (billName: string, billDescription: string, gID: $\mathbb{Z}$, amount: $\mathbb{R}$) & bID:  $\mathbb{Z}$ & ValidationError \\
+splitExpense & userID: string, amount: $\mathbb{Z}$, billName: string, participants: seq of string, groupID: string, individualAmounts: seq of $\mathbb{Z}$, category: string & - & BillAddError \\
 \hline
-updateBill & - & bID: $\mathbb{Z}$ & ValidationError \\
+deleteExpense & billID: string & - & NotFoundError \\
 \hline
-findBills & - & bIDs: seq of $\mathbb{Z}$ & DocumentNotFoundError\\
+getExpenses & userID: string & seq of string & NotFoundError\\
 \hline
-getBillDetails & bID: $\mathbb{Z}$ & details: seq of string & DocumentNotFoundError \\
-\hline
-completeBill & bID: $\mathbb{Z}$ & - & - \\
+editBill & billID: string, updatedData: seq of string & - & NotFoundError, ValidationError \\
 \hline
 \end{tabular}
 \end{center}
@@ -340,66 +345,43 @@ None
 
 \subsubsection{Assumptions}
 
-All bIDs are unique.
+All billIDs and userIDs are unique.
 
 % \wss{Try to minimize assumptions and anticipate programmer errors via
 %   exceptions, but for practical purposes assumptions are sometimes appropriate.}
 
 \subsubsection{Access Routine Semantics}
 
-\noindent addBill(billData):
+\noindent splitExpense(userID, amount, billName, participants, groupID, individualAmounts, category):
 \begin{itemize}
-\item transition: Once the function validates the input data, bill is added into the database
-using billData.
-\item output: bID := bID returned by database
-\item exception: ValidationError
+\item transition: Once the function validates the input data, bill is added into the database using provided parameters.
+\item exception: exc := (invalid input $\vert\vert$ database error $\Rightarrow$ BillAddError)
 \end{itemize}
 
-\noindent updateBill(billData):
+\noindent deleteExpense(billID):
 \begin{itemize}
-\item transition: Once the function validates the input data which can be null, bill is updated into the database
-using billData.
-\item output: bID := bID returned by database
-\item exception: ValidationError
+\item transition: Remove appropriate amount from the user's total expense and add/remove amount from associated user's.
+\item exception: exc := (billID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
-\noindent findBills():
+\noindent getExpenses(userID):
 \begin{itemize}
-\item output: bID := bID tasks associated with current uID from account module.
-\item exception: none
+\item output: out := billIDs of bills associated with current userID from account module.
+\item exception: exc := (billID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
-\noindent getBillDetails(bID):
+\noindent editBill(billID, updatedData):
 \begin{itemize}
-\item transition: Function will find bill with associated bID.
-\item output: details := details of bill associated with bID stored in database
-\item exception: bill does not exist
+\item transition: Edit the details of the bill
+\item exception: exc := (billID $\notin$ database $\Rightarrow$ NotFoundError $\vert$$\vert$ updatedData == invalid $\Rightarrow$ ValidationError)
 \end{itemize}
 
-\noindent completeBill(bID):
-\begin{itemize}
-\item transition: Function will remove bill from list of current bills.
-\item output: details := details of bill associated with bID given in database.
-\item exception: none
-\end{itemize}
 % \wss{A module without environment variables or state variables is unlikely to
 %   have a state transition.  In this case a state transition can only occur if
 %   the module is changing the state of another module.}
 
 % \wss{Modules rarely have both a transition and an output.  In most cases you
 %   will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\begin{center}
-\begin{tabular}{p{3cm} p{4cm} p{2cm} p{3cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-addAttachment & img: 2D seq of pixels & - & ValidationError \\
-\hline
-\end{tabular}
-\end{center}
 
 % \wss{As appropriate} \wss{These functions are for the purpose of specification.
 %   They are not necessarily something that is going to be implemented
@@ -416,13 +398,13 @@ addAttachment & img: 2D seq of pixels & - & ValidationError \\
 
 \subsection{Module}
 
-schedulingModule
+Scheduling
 
 % \wss{Short name for the module}
 
 \subsection{Uses}
 
-databaseInterfaceModule, interfaceDesignModule, accountModule
+DatabaseInterface, InterfaceDesign, Account
 
 \subsection{Syntax}
 
@@ -437,13 +419,15 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-addEvent & eventData: Tuple of (eventName: string, gID: $\mathbb{Z}$, date: string, time: string) & eID:  $\mathbb{Z}$ & ValidationError \\
+addEvent & eventName: string, dateTime: Date, endDateTime: Date, groupID: string & seq of string & EventAddError \\
 \hline
-updateEvent & eID: $\mathbb{Z}$, details: seq of string & - & ValidationError, DocumentNotFoundError \\
+editEvent & eventID: string, updateData: seq of string & seq of string & NotFoundError,  ValidationError \\
 \hline
-findEvents & - & eIDs: seq of $\mathbb{Z}$ & ValidationError, DocumentNotFoundError\\
+deleteEvent & eventID: string & - & NotFoundError\\
 \hline
-getEventDetails & eID: $\mathbb{Z}$ & details: seq of string & DocumentNotFoundError\\
+getGroupEvents & groupID: string & seq of string & NotFoundError\\
+\hline
+getUserEvents & userID: string & seq of string & NotFoundError\\
 \hline
 \end{tabular}
 \end{center}
@@ -467,38 +451,44 @@ None
 
 \subsubsection{Assumptions}
 
-All EventIDs (eID) are unique.
+All eventIDs, groupIDs and userIDs are unique.
 
 % \wss{Try to minimize assumptions and anticipate programmer errors via
 %   exceptions, but for practical purposes assumptions are sometimes appropriate.}
 
 \subsubsection{Access Routine Semantics}
 
-\noindent addEvent(eventData):
+\noindent addEvent(eventName, dateTime, endDateTime, groupID):
 \begin{itemize}
-\item transition: create event in database using eventData parameter.
-\item output: eID := EventID returned by database.
-\item exception: ValidationError
+\item transition: create event in database using parameter.
+\item output: out := eventID returned by database.
+\item exception:  exc := (invalid input $\vert\vert$ database error $\Rightarrow$ EventAddError)
 \end{itemize}
 
-\noindent updateEvent(eID, details):
+\noindent editEvent(eventID, updateData):
 \begin{itemize}
-\item transition: update event associated to eID in database with details parameter.
-\item exception: ValidationError, DocumentNotFoundError
+\item transition: eventID $\in$ database \&\& updateData == valid $\Rightarrow$ update event
+\item output: out := event data returned by database.
+\item exception: exc := (eventID $\notin$ database $\Rightarrow$ NotFoundError $\vert$$\vert$ updateData == invalid $\Rightarrow$ ValidationError)
 \end{itemize}
 
-\noindent findEvents():
+\noindent deleteEvent(eventID):
 \begin{itemize}
-\item output: eIDs:= EventIDs of events associated with uID from accountModule, sorted by date and time.
-\item exception: ValidationError, DocumentNotFoundError
+\item transition: eventID $\in$ database $\Rightarrow$ delete event
+\item exception: exc := (eventID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
-\noindent getEventDetails(eID):
+\noindent getGroupEvents(groupID):
 \begin{itemize}
-\item output: details := details of Event associated with eID in the database.
-\item exception: DocumentNotFoundError
+\item output: out := details of Events associated with groupID in the database.
+\item exception: exc := (groupID $\notin$ database $\Rightarrow$ NotFoundError)
 \end{itemize}
 
+\noindent getUserEvents(userID):
+\begin{itemize}
+\item output: out := details of Events associated with userID in the database.
+\item exception: exc := (userID $\notin$ database $\Rightarrow$ NotFoundError)
+\end{itemize}
 
 % \wss{A module without environment variables or state variables is unlikely to
 %   have a state transition.  In this case a state transition can only occur if
@@ -526,13 +516,13 @@ None
 
 \subsection{Module}
 
-accountModule
+Account
 
 % \wss{Short name for the module}
 
 \subsection{Uses}
 
-databaseInterfaceModule, interfaceDesignModule
+DatabaseInterface, InterfaceDesign
 
 \subsection{Syntax}
 
@@ -547,25 +537,19 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-createAccount & userData: Tuple of (userName: string, password: string, firstName: string, lastName: string, phone: string, email: string) & uID: $\mathbb{Z}$ & ValidationError \\
+createAccount & userData: Tuple of (userName: string, password: string, firstName: string, lastName: string, phone: string, email: string) & - & UserCreationError \\
 \hline
-login & username: string, password: string & uID: $\mathbb{Z}$ & ValidationError, DocumentNotFoundError \\
+login & email: string, password: string & string & ValidationError \\
 \hline
-getUserID & - & uID: $\mathbb{Z}$ & - \\
+getUserGroups & userID: string & seq of string  & NotFoundError \\
 \hline
-getUserDetails & - & details: seq of string & - \\
+getUser & userID: string & seq of string & NotFoundError \\
 \hline
-updateDetails & details: seq of string & - & ValidationError \\
-\hline
-createGroup & groupData: Tuple of (uIDs: seq of $\mathbb{Z}$, groupName: string) & gID: $\mathbb{Z}$   & ValidationError \\
-\hline
-getGroups & -  & gIDs: seq of $\mathbb{Z}$  & - \\
-\hline
-getGroupDetails & gID: $\mathbb{Z}$ & details: seq of string & DocumentNotFoundError \\
+getGroup & groupID: string & seq of string & NotFoundError \\
 \hline
 logout & - & - & - \\
 \hline
-deleteAccount & username: string, password: string & - & ValidationError \\
+deleteAccount & email: string, password: string & - & ValidationError \\
 \hline
 \end{tabular}
 \end{center}
@@ -574,7 +558,7 @@ deleteAccount & username: string, password: string & - & ValidationError \\
 
 \subsubsection{State Variables}
 
-uID: $\mathbb{Z}$
+None
 
 % \wss{Not all modules will have state variables.  State variables give the module
 %   a memory.}
@@ -589,7 +573,7 @@ None
 
 \subsubsection{Assumptions}
 
-All UserIds (uID) and GroupIds (gID) are unique
+All UserIDs and GroupIDs are unique
 
 % \wss{Try to minimize assumptions and anticipate programmer errors via
 %   exceptions, but for practical purposes assumptions are sometimes appropriate.}
@@ -598,59 +582,45 @@ All UserIds (uID) and GroupIds (gID) are unique
 
 \noindent createAccount(userData):
 \begin{itemize}
-\item transition: create user in database using userData parameter; self.uID := uID returned by database
-\item ouput: uID := self.uID
-\item exception: ValidationError
+\item transition: create user in database using userData parameter
+\item exception:  exc := (invalid input $\vert\vert$ database error $\Rightarrow$ UserCreationError)
 \end{itemize}
 
-\noindent login(username, password):
+\noindent login(email, password):
 \begin{itemize}
-\item transition: login user in database; self.uID := uID associated with username and password in database.
-\item ouput: uID := self.uID
-\item exception: ValidationError, DocumentNotFoundError
+\item transition: email $\in$ database \&\& correct password $\Rightarrow$ login user
+\item ouput: out := userID
+\item exception: exc := (email $\notin$ database $\vert\vert$ wrong password $\Rightarrow$ ValidationError)
 \end{itemize}
 
-\noindent getUserID():
+\noindent getUserGroups(userID):
 \begin{itemize}
-\item output: uID := self.uID
+\item output: out := (userID $\in$ database $\Rightarrow$ group data)
+\item exception: exc := (userID $\notin$ database $\Rightarrow$ NotFoundError)
+\end{itemize}
+
+\noindent getUser(userID):
+\begin{itemize}
+\item output: out := (userID $\in$ database $\Rightarrow$ user data)
+\item exception: exc := (userID $\notin$ database $\Rightarrow$ NotFoundError)
+\end{itemize}
+
+\noindent getGroup(groupID):
+\begin{itemize}
+\item output: out := (groupID $\in$ database $\Rightarrow$ group data)
+\item exception: exc := (groupID $\notin$ database $\Rightarrow$ NotFoundError)
+\end{itemize}
+
+\noindent logout():
+\begin{itemize}
+\item transition: log out user in database
 \item exception: none
 \end{itemize}
 
-\noindent getUserDetails():
+\noindent deleteAccount(email, password):
 \begin{itemize}
-\item output: details := details of user in database associated with self.uID in database.
-\item exception: none
-\end{itemize}
-
-\noindent updateDetails(details):
-\begin{itemize}
-\item transition: update details of user in database associated with self.uID in database with the parameter userDetails.
-\item exception: ValidationError
-\end{itemize}
-
-\noindent createGroup(groupData):
-\begin{itemize}
-\item transition: create group in database using self.uID and groupData parameter;
-\item output: gID := gID returned by database.
-\item exception: ValidationError
-\end{itemize}
-
-\noindent getGroupDetails(gID):
-\begin{itemize}
-\item output: details := details of user in database associated with gID in database.
-\item exception: ValidationError, DocumentNotFoundError
-\end{itemize}
-
-\noindent logout(username, password):
-\begin{itemize}
-\item transition: log out user in database; self.uID := none;
-\item exception: none
-\end{itemize}
-
-\noindent deleteAccount(username, password):
-\begin{itemize}
-\item transition: delete user associated with username, password parameters in database; self.uID := none.
-\item exception: ValidationError
+\item transition: email $\in$ database \&\& correct password $\Rightarrow$ delete user
+\item exception: exc := (email $\notin$ database $\vert\vert$ wrong password $\Rightarrow$ ValidationError)
 \end{itemize}
 
 % \wss{A module without environment variables or state variables is unlikely to
@@ -767,44 +737,43 @@ In this section, the description of the user interface of \progname{} will be pr
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.25\textwidth]{Homescreen.png}
-\caption{Homescreen of \progname{}}
-\label{FigHome}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.25\textwidth]{Login.png}
+\includegraphics[width=\textwidth]{Login.png}
 \caption{Login screen of \progname{}}
 \label{FigLogin}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.25\textwidth]{Account.png}
-\caption{Account screen of \progname{}}
+\includegraphics[width=\textwidth]{Homescreen.png}
+\caption{Homescreen of \progname{}}
+\label{FigHome}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Task.png}
+\caption{Task screen of \progname{}}
 \label{FigAccount}
 \end{figure}
 
-
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.25\textwidth]{Bills.png}
-\caption{Bills screen of \progname{}}
-\label{FigBills}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.25\textwidth]{Task.png}
+\includegraphics[width=\textwidth]{AddTask.png}
 \caption{Add tasks screen of \progname{}}
 \label{FigTasks}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.25\textwidth]{Events.png}
-\caption{Events screen of \progname{}}
+\includegraphics[width=\textwidth]{Bills.png}
+\caption{Bills screen of \progname{}}
+\label{FigBills}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Events.png}
+\caption{Scheduling screen of \progname{}}
 \label{FigEvents}
 \end{figure}
 

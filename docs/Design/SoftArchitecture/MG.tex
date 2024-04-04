@@ -47,6 +47,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 January 17, 2024 & 1.0 & Revision 0\\
+April 03, 2024 & 2.0 & Revision 1\\
 \bottomrule
 \end{tabularx}
 
@@ -169,11 +170,10 @@ The module design should be as general as possible. However, a general system is
 decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.
 
 \begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucReact}:] Changes in the use of the interface design module.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucDatabase}:] Changes in the use of the database  module.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Inputting data requires mouse or touch screen, output data are displayed to the device screen
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucDatabase}:] The database will be MongoDB
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucNetwork}:] Changes in the network libraries used.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucServer}:] The server will run on NodeJS
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -189,10 +189,8 @@ actually be implemented.
 \item [\refstepcounter{mnum} \mthemnum \label{mB}:] Bill Management Module
 \item [\refstepcounter{mnum} \mthemnum \label{mS}:] Scheduling Module
 \item [\refstepcounter{mnum} \mthemnum \label{mA}:] Account Module
-\item [\refstepcounter{mnum} \mthemnum \label{mI}:] Interface Design Module
-\item [\refstepcounter{mnum} \mthemnum \label{mC}:] Cryptography Module
-\item [\refstepcounter{mnum} \mthemnum \label{mD}:] Database Interface Module
-\item [\refstepcounter{mnum} \mthemnum \label{mN}:] Network Interface Module
+\item [\refstepcounter{mnum} \mthemnum \label{mDM}:] Database Model
+\item [\refstepcounter{mnum} \mthemnum \label{mD}:] Database Driver Module
 \end{description}
 
 
@@ -206,19 +204,16 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} 
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} 
 & Task Management Module\\
 & Bill Management Module\\
 & Scheduling Module\\
 & Account Module\\
-& Interface Design Module\\
+& Database Model\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module}
-& Cryptography Module\\
-& Database Interface Module\\
-& Database Module\\
-& Network Interface Module\\
+{Software Decision Module}
+& Database Driver Module\\
 \bottomrule
 
 \end{tabular}
@@ -309,16 +304,14 @@ to be implemented.
 \item[Type of Module:] Library
 \end{description}
 
-\subsubsection{Interface Design Module (\mref{mI})}
+\subsubsection{Database Model (\mref{mDM})}
+
 \begin{description}
-\item[Secrets:] The specific algorithms used in the user interface.
-\item[Services:] The user interface of the application.
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
-\item[Implemented By:]  React, \progname{}
+\item[Secrets:] The data structures for representing the database schema
+\item[Services:] Provides data to be inputted into the database using the same schema defined.
+\item[Implemented By:] \progname{}
+\item[Type of Module:] Library
 \end{description}
-
-
 
 \subsection{Software Decision Module}
 
@@ -333,31 +326,12 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Cryptography Module (\mref{mC})}
+\subsubsection{Database Driver Module (\mref{mD})}
 \begin{description}
-\item[Secrets:] The specific details of the cryptographic algorithms.
-\item[Services:] Cryptographic algorithms used in the application. 
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
-\item[Implemented By:] Crypto (node.js)
-\end{description}
-
-\subsubsection{Database Interface Module (\mref{mD})}
-\begin{description}
-\item[Secrets:] The specific details of connecting to database.
-\item[Services:] Object Modelling, Connecting to database. 
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
-\item[Implemented By:] Mongoose, \progname{}
-\end{description}
-
-\subsubsection{Network Interface Module (\mref{mN})}
-\begin{description}
-\item[Secrets:] The specific details of implementing RESTful API.
-\item[Services:] Allows for creation of RESTful API to use in application and connecting to that API. 
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
-\item[Implemented By:] Axios, Express
+\item[Secrets:] The specific details of making changes to the data in the database.
+\item[Services:] Facilitates communication between the database and the other modules.
+\item[Implemented By:] \progname{}, MongoDB
+\item[Type of Module:] Library
 \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
@@ -376,19 +350,19 @@ TM1-5 & \mref{mT}\\
 BM1-7 & \mref{mB}\\
 SS1-3 & \mref{mS}\\
 AS1-5 & \mref{mA}\\
-LF-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
-UH-E1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
-UH-P1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
-UH-L1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
-UH-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}\\
-P-SL1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mI}, \mref{mC}, \mref{mD}, \mref{mN}\\
+LF-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+UH-E1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+UH-P1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+UH-L1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+UH-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+P-SL1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}\\
 P-PA1 & \mref{mB}\\
-P-RFT1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}, \mref{mN}\\
-P-C1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}, \mref{mN}\\
+P-RFT1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}\\
+P-C1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}\\
 OE-PE1 & \mref{mHH}\\
-S-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mC}\\
-S-IN1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mD}, \mref{mC}\\
-S-P1 & \mref{mI}\\
+S-A1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+S-IN1 & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mDM}, \mref{mD}\\
+S-P1 & \mref{mA}, \mref{mD}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -402,7 +376,7 @@ S-P1 & \mref{mI}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}\\
+\acref{acInput} & \mref{mT}, \mref{mB}, \mref{mS}, \mref{mA}, \mref{mDM}\\
 \acref{acAccount} & \mref{mA}\\
 \acref{acBillManagement} & \mref{mB}\\
 \acref{acTaskManagement} & \mref{mT}\\
@@ -421,7 +395,7 @@ because they use modules from the lower levels.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=\textwidth]{UsesHierarchy.png}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
@@ -468,16 +442,29 @@ Though team members are designated to specific modules and tasks, it's crucial t
 The information in this section will be used to evaluate the team members on the graduate attribute of Problem Analysis and Design.  Please answer the following questions:
 
 \begin{enumerate}
-  \item What are the limitations of your solution?  Put another way, given unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)
+  \item \textbf{What are the limitations of your solution?  Put another way, given unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)}
   \\
   \\
-  The main limitations of the Housemates application right now is the lack of integration that Housemates has with other software at the current moment. For example, the scheduling feature of the Housemates application could be integrated with popular calendar services like Google calendar. With unlimited resources the Housemates application would have these types of integrations with other software, which would make it more useful to our stakeholders.
+  The main limitations of the Housemates application right now is the lack of integration that Housemates has with other software at the current moment. For example, the scheduling feature of the Housemates application could be integrated with popular calendar services like Google calendar. Many features had to be scoped down to meet the time constraint we had and many other features had to be cut together. Some of the features and ideas we had discussed are:
+  \begin{itemize}
+      \item Implementing a way to attach pictures or pdf to bills and tasks
+      \item Adding natural language processing (NLP) in our application e.g. add receipt picture to automatically add the bill, same for tasks
+      \item Further optimizations in terms of performance
+      \item More emphasis and support for accessibility settings
+  \end{itemize}
+  We believe these features would be nice to include in our application and would greatly improve its quality, however many of them are not feasible given the limited development time frame we have.
   \\
   \\
-  \item Give a brief overview of other design solutions you considered.  What are the benefits and tradeoffs of those other designs compared with the chosen design?  From all the potential options, why did you select documented design? (LO\_Explores)
+  Additionally, monetary limitations have led to further constraints on the development of our application.
+  Given unlimited money, improvements could be made to our database and server. In particular,
+  a greater capacity database and higher bandwidth server would have been nice in terms of scalability of our
+  project. With the additional funds, we would be able to create an application that better aligns with our goal
+  by allowing more users to use the application.
+  \\
+  \item \textbf{Give a brief overview of other design solutions you considered.  What are the benefits and tradeoffs of those other designs compared with the chosen design?  From all the potential options, why did you select documented design? (LO\_Explores)}
   \\
   \\
-  The first design solution that we considered for this Housemates application was creating a native mobile version of the application using Kotlin. This would have the advantage of having better performance for users on mobile devices as well as having a more adaptable UI for different mobile devices. The main reason that we went with a web app using React is that it allows stakeholders to access the Housemates application on a variety of different devices (desktop and mobile). Additionally, we already have familiarity with creating webapps, which means that we can focus more on specifics of Housemates rather than learning Kotlin.
+  The first design solution that we considered for this Housemates application was creating a native mobile version of the application using Kotlin. This would have the advantage of having better performance for users on mobile devices as well as having a more adaptable UI for different mobile devices. The only downside with using Kotlin is that users must have an Android device to use the application and it cannot be used on an iPhone or any other devices. The main reason that we went with a web app using React is that it allows stakeholders to access the Housemates application on a variety of different devices (desktop and mobile). It won't be contrainted on the type of OS they are using anymore. Additionally, we already have familiarity with creating web applications, which means that we can focus more on specifics of Housemates rather than learning Kotlin.
 
   \end{enumerate}
 
