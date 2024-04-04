@@ -42,6 +42,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 Oct 20 2023 & All & Revision 0\\
+Apr 4 2024 & Sheikh Fardeen Afsar & Revision 1\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -65,8 +66,21 @@ The housemates app will allow for its users to better communicate with their hou
 The purpose of this document is to identify any potential hazards that could exist in the housemates application and to provide elimination/mitigation strategies to help reduce these risks to manageable levels.
 
 \subsection{Scope of Hazard Analysis}
-The scope of this hazard analysis is covering all of the subsystems of the housemates application. Each subsystem will have its own safety considerations and hazards. This will be done with an FMEA (Failure Mode and Effect Analysis)
+This hazard analysis focuses on identifying and mitigating risks associated with the functionality and operation of the Housemates app. The following areas are considered within the scope of this analysis:
 
+\begin{itemize}
+    \item \textbf{Software-related hazards} that could impact the app's performance, data integrity, and user interaction.
+    \item \textbf{Network-related hazards} that could affect the app's connectivity and online features.
+    \item \textbf{User interaction-related hazards} that could lead to unintended app behavior or data loss.
+\end{itemize}
+
+The following areas are considered out-of-scope for this hazard analysis:
+
+\begin{itemize}
+    \item \textbf{Device-Related Issues}: Problems stemming from the user's device, such as hardware malfunctions, operating system errors, or issues related to other applications, are outside the scope of this analysis.
+    \item \textbf{External Services}: The functionality and availability of third-party services that the app may interact with, but does not control, are not covered by this analysis.
+    \item \textbf{User Behavior}: Hazards resulting from user behavior that cannot be controlled or predicted by the app, such as physical damage to the device or misuse of the app, are not included.
+\end{itemize}
 \subsection{Definition of Hazard}
 
 In this document a hazard is defined to be, any feature or property of the housemates application that gives incorrect information to the user or otherwise negatively affects the user experience.
@@ -92,8 +106,8 @@ The account system of the housemates application will manage and store user data
 \section{Critical Assumptions}
 
 \begin{itemize}
-    \item The application is running on devices with Android OS
-    \item The devices running the application are in good condition
+    \item The application is running on devices with Android OS.
+    \item The devices running the application are in good condition.
 \end{itemize}
 
 % \wss{These assumptions that are made about the software or system.  You should
@@ -112,19 +126,26 @@ The account system of the housemates application will manage and store user data
 \hline
 \textbf{Ref} & \textbf{Failure Mode} & \textbf{Subsystems} & \textbf{Causes of Failure} & \textbf{Effects of Failure} & \textbf{Recommended Actions} & \textbf{Req} \\
 \hline
-HAZ-1 & No Internet & All  & User network issues such as weak WiFi signal or not being connected to the internet & a. Users won't be able to access certain features of the application, which can lead to frustration. \newline b. Once users regain internet access, any changes made offline may not sync properly & a. Store data locally on the device to ensure users can access and modify tasks even without an internet connection \newline b. Implement an offline mode that allows users to access certain features of the application locally on their device & IR-1 \newline AR-3 \\ \hline
-HAZ-2 & Malicious or Invalid Input & All & Failure to sanitize user input can open the app to potential security risks like SQL injection or cross-site scripting attacks & a. Malicious actors can inject SQL code into input fields, potentially gaining unauthorized access to the app's database or executing harmful actions \newline b. Incorrectly sanitized input may lead to unintended changes or corruption of data in the database &  a. Use proper escaping functions to neutralize special characters in user input to prevent them from being interpreted as code \newline b. Implement strict input validation processes to ensure that user input is free from malicious code & IR-2 \\ \hline
-HAZ-3 & App Closes Unexpectedly & All & Device loses power & Unsaved data lost & Store unsaved data locally and resume progress after app is opened again & IR-1\\ \hline
-HAZ-4 & Incorrect Task Input & Task Management & Users may accidentally enter incorrect information for tasks, which can lead to inaccurate records or calculations & a. The task management system may contain tasks with incorrect details, leading to confusion about deadlines, priorities, and responsibilities.\newline b. Reports based on inaccurate input can provide misleading insights about task completion & allow users to review and confirm task details before finalizing. This can help catch and correct any mistakes before they become part of the system. & IR-2\\ \hline
-HAZ-5 & Accidental task deletion by user & Task Management & Users in a hurry may not pay close attention to their actions, potentially leading to accidental deletions  & Accidental deletion can result in the permanent loss of important task details & a. Implement a confirmation dialog box that asks users to confirm their intent before permanently deleting a task \newline b. Implement an archiving system that allows users to recover deleted tasks within a certain time frame & IR-2 \newline IR-5 \\ \hline
-HAZ-6 & Users credentials lost & Account & Invalid login credentials \newline Database failure  & User cannot access features of the application & Allow users to reset their credentials & AR-2\\ \hline
-HAZ-7 & Bill Split Incorrectly & Bill Management  & a. Miscalculation from bill management system \newline b. It isn't possible to split the bill evenly (e.g. \$ 300 split 7 ways) & Bill amount isn't split up evenly & a. Check that bill splits are even \newline b. If even split isn't possible give one of the users the remainder & IR-6 \\ \hline
-HAZ-8 & Bill Split doesn't add up  & Bill Management & Miscalculation from Bill Management system & Bill amount from splits doesn't add up to actual bill amount & Check that bill split adds up to actual bill & IR-6\\ \hline
-HAZ-9 & Round-off error &  Bill Management &  If data is stored as a float in the database this will cause a 64-bit round off error especially when dealing with multiple transactions.  & This will cause all transaction amounts to add up and overestimate the actual bill  & When storing bill amount to the database multiply by 100 to convert it to an integer to avoid round-off errors and when retrieving it from the database divide by 100. & IR-2 \newline IR-6 \\ \hline
-HAZ-10 & Access of Information without Authentication & Account & Failure of authentication systems \newline No internet connection  & Users allowed unauthorized access & If user is unauthenticated block access to the application until authentication occurs & AR-1 \newline AR-4 \newline PR-1 \\ \hline
-HAZ-11 & Overload of Server & Account &  Too many client requests & Client requests in the application will take significantly longer to fulfill & a. Have rate limiting to limit any unusually high amounts of traffic  & IR-4 \\ \hline
-HAZ-12 & Schedule Data Lost & Scheduling, Account &  Database failure  & Scheduled events missed & Automatically back up database at regular intervals & IR-3 \\ \hline
-HAZ-13 & Task Data Lost &  Task Management, Account &  Database failure  & Task information lost  & see HAZ-12 & IR-3\\ \hline
+HAZ-1 & No Internet & All  & User network issues such as weak WiFi signal or not being connected to the internet. & a. Users won't be able to access certain features of the application, which can lead to frustration. \newline b. Once users regain internet access, any changes made offline may not sync properly.& a. Store data locally on the device to ensure users can access and modify tasks even without an internet connection. \newline b. Implement an offline mode that allows users to access certain features of the application locally on their device. & IR-1 \newline AR-3 \\ \hline
+HAZ-2 & Malicious or Invalid Input & All & Failure to sanitize user input can open the app to potential security risks like SQL injection or cross-site scripting attacks. & a. Malicious actors can inject SQL code into input fields, potentially gaining unauthorized access to the app's database or executing harmful actions. \newline b. Incorrectly sanitized input may lead to unintended changes or corruption of data in the database. &  a. Use proper escaping functions to neutralize special characters in user input to prevent them from being interpreted as code.\newline b. Implement strict input validation processes to ensure that user input is free from malicious code. & IR-2 \\ \hline
+HAZ-3 & App Closes Unexpectedly & All & Device loses power. & Unsaved data lost. & Implement an auto-save feature that periodically saves data locally and allow users to set their preferred auto-save frequency. & IR-1\\ \hline
+HAZ-4 & Incorrect Task Input & Task Management & Users may accidentally enter incorrect information for tasks, which can lead to inaccurate records or calculations. & a. The task management system may contain tasks with incorrect details, leading to confusion about deadlines, priorities, and responsibilities.\newline b. Reports based on inaccurate input can provide misleading insights about task completion. & Allow users to review and confirm task details before finalizing. This can help catch and correct any mistakes before they become part of the system. & IR-2\\ \hline
+HAZ-5 & Accidental task deletion by user & Task Management & Users in a hurry may not pay close attention to their actions, potentially leading to accidental deletions.  & Accidental deletion can result in the permanent loss of important task details. & a. Implement a confirmation dialog box that asks users to confirm their intent before permanently deleting a task. \newline b. Implement an archiving system that allows users to recover deleted tasks within a certain time frame. & IR-2 \newline IR-5 \\ \hline
+HAZ-6 & Users credentials lost & Account & Invalid login credentials. \newline Database failure.  & User cannot access features of the application. & Allow users to reset their credentials. & AR-2\\ \hline
+HAZ-7 & Bill Split Incorrectly & Bill Management  & a. Miscalculation from bill management system. \newline b. It isn't possible to split the bill evenly (e.g. \$ 300 split 7 ways). & Bill amount isn't split up evenly. & a. Check that bill splits are even. \newline b. If even split isn't possible give one of the users the remainder. & IR-6 \\ \hline
+HAZ-8 & Bill Split doesn't add up  & Bill Management & Miscalculation from Bill Management system. & Bill amount from splits doesn't add up to actual bill amount. & Check that bill split adds up to actual bill. & IR-6\\ \hline
+HAZ-9 & Round-off error &  Bill Management &  If data is stored as a float in the database this will cause a 64-bit round off error especially when dealing with multiple transactions.  & This will cause all transaction amounts to add up and overestimate the actual bill.  & When storing bill amount to the database multiply by 100 to convert it to an integer to avoid round-off errors and when retrieving it from the database divide by 100. & IR-2 \newline IR-6 \\ \hline
+HAZ-10 & Access of Information without Authentication & Account & Failure of authentication systems.\newline No internet connection.  & Users allowed unauthorized access. & If user is unauthenticated block access to the application until authentication occurs. & AR-1 \newline AR-4 \newline PR-1 \\ \hline
+HAZ-11 & Overload of Server & Account &  Too many client requests. & Client requests in the application will take significantly longer to fulfill. & Have rate limiting to limit any unusually high amounts of traffic.  & IR-4 \\ \hline
+HAZ-12 & Schedule Data Lost & Scheduling, Account &  Database failure.  & Scheduled events missed. & Automatically back up database at regular intervals. & IR-3 \\ \hline
+HAZ-13 & Task Data Lost &  Task Management, Account &  Database failure.  & Task information lost.  & see HAZ-12 & IR-3\\ \hline
+HAZ-14 & Offline conflict from multiple users &  All &  a. Multiple users accessing and modifying schedules, tasks, or payments in offline mode. \newline
+b. Lack of a system to reconcile changes made by different users once the app goes online.  & a. Inconsistent data across user devices. \newline
+b. User confusion and potential disputes among housemates. \newline
+c. System failures due to conflicting data entries.  & a. Implement a conflict resolution protocol that prompts users to review and resolve discrepancies after reconnecting to the internet. \newline
+b. Introduce a version control system that tracks changes made by each user and merges them intelligently. & IR-1, AR-3, IR-8\\ \hline
+HAZ-15 & Integer overflow &  Bill Management &  Storing large monetary values that exceed the maximum limit of a 32-bit unsigned integer, which is 4,294,967,295.  & Incorrect financial calculations and data corruption.  & Use suitable data type for monetary values to handle very large integers safely. & ER-1\\ \hline
+HAZ-16 & Server downtime leading to service unavailability &  All &  Scheduled maintenance. & Inability for users to access the service.  & Develop a communication strategy to inform users of the issue and expected resolution time. & IR-7\\ \hline
 
 \end{longtable}
 \end{center}
@@ -213,9 +234,16 @@ IR-3: The database should be backed up daily. \\
 IR-4: Client requests to the server should be rate limited. \\
 IR-5: User deleted data should temporarily be stored. \\
 IR-6: System output should be validated before given to user. \\
+IR-7: The application must have a robust mechanism to handle server downtime, ensuring minimal disruption to user activities and maintaining data integrity.
+IR-8: The application should resolve or provide a way to resolve conflicts when saving data offline.
 
 \subsection{Privacy Requirements}
-PR-1: Users should not be able to access other users data. 
+PR-1: Users should not be able to access other users data. \\
+PR-2: The application should receive explicit consent from the users before storing any personal information or allowing usage of the application.
+
+\subsection{Error handling Requirements}
+ER-1: Users should be able to work with large financial numbers.
+ER-2: Users should be able to 
 
 \subsection{Audit Requirements}
 N/A
@@ -228,7 +256,29 @@ N/A
 
 \section{Roadmap}
 
-This hazard analysis has discovered new safety and security requirements from the section above that will be added to the SRS. Most of these requirements will be implemented in the final application (i.e. Revision 1), but some may not be due the time constraints of this project. 
+\subsection{During Capstone Timeline}
+The following requirements will be completed in Capstone timeline.
+\begin{itemize}
+    \item AR-1
+    \item AR-2
+    \item AR-4
+    \item IR-2
+    \item IR-4
+    \item IR-5
+    \item IR-6
+    \item PR-1
+\end{itemize}
+\subsection{Future stretch goals}
+The following requirements are future stretch goals to be completed.
+\begin{itemize}
+    \item AR-3
+    \item IR-1
+    \item IR-3
+    \item IR-7
+    \item IR-8
+    \item PR-2
+    \item ER-1
+\end{itemize}
 
 % \wss{Which safety requirements will be implemented as part of the capstone timeline?
 % Which requirements will be implemented in the future?}
