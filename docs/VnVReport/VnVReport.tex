@@ -21,7 +21,7 @@
 
 \title{Verification and Validation Report: \progname} 
 \author{\authname}
-\date{March 6, 2024}
+\date{April 4, 2024}
 	
 \maketitle
 
@@ -33,6 +33,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 March 6 & 1.0 & Version for Rev 0\\
+April 4 & 2.0 & Version for Rev 1\\
 \bottomrule
 \end{tabularx}
 
@@ -42,12 +43,12 @@ March 6 & 1.0 & Version for Rev 0\\
 
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{l l} 
-  \toprule		
+  \toprule    
   \textbf{symbol} & \textbf{description}\\
   \midrule 
   API & Application Programming Interface\\
-  P & Pass\\
   F & Fail\\
+  P & Pass\\
   \bottomrule
 \end{tabular}\\
 
@@ -85,22 +86,29 @@ The details of the system tests can be found in section 3.1 of the \href{https:/
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{6cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-test-BM1-1/2-1 & $\times$ & \\
-test-BM3-1 & $\times$ & \\
-test-BM4-1 & $\times$ & \\
-test-BM5-1 & $\times$ & \\
-test-BM6-1 & $\times$ & \\
-test-BM7-1 & $\times$ & \\
+test-BM1-1 & $\times$ & & Verify bill creation and equal splitting among users.\\
+\hline 
+test-BM2-1 & $\times$ & & Ensure editing of an existing bill is possible.\\
+\hline 
+test-BM3-1 & $\times$ & & Check if bills can be categorized (e.g., food, utilities).\\
+\hline 
+test-BM4-1 & $\times$ & & Validate viewing past bills and their payment statuses.\\
+\hline 
+test-BM5-1 & $\times$ & & Confirm uneven bill splitting functionality.\\
+\hline 
+test-BM6-1 & $\times$ & & Verify functionality for settling a bill.\\
 \hline
 \end{tabular}
 \caption{\bf Bill Management System Tests}
 \end{table}
 
-All bill management system tasks passed as expected.
+% Explanation of the results for the Bill Management tests
+All tests related to the Bill Management system have passed, indicating that users can create, edit, categorize, view, and settle bills without issues, and the split function operates correctly for both even and uneven divisions.
+
 
 % \begin{enumerate}
 
@@ -172,21 +180,26 @@ All bill management system tasks passed as expected.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{6cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-test-TM1-1 & $\times$ & \\
-test-TM2-1 & $\times$ & \\
-test-TM3-1 & $\times$ & \\
-test-TM4-1 & $\times$ & \\
-test-TM5-1 & $\times$ & \\
+test-TM1-1 & $\times$ & & Verify navigation to Task Management page via tasks icon.\\
+\hline 
+test-TM2-1 & $\times$ & & Ensure that the Task Management page displays a list of tasks with user's chores highlighted.\\
+\hline 
+test-TM3-1 & $\times$ & & Confirm the creation of a new task.\\
+\hline 
+test-TM4-1 & $\times$ & & Validate assigning a task to a roommate.\\
+\hline 
+test-TM5-1 & $\times$ & & Check marking a task as completed updates its status appropriately.\\
 \hline
 \end{tabular}
 \caption{\bf Task Management System Tests}
 \end{table}
 
-All task management system tasks passed as expected.
+All tests related to the Task Management system have passed, confirming that users can create, assign, view, and complete tasks with ease and accuracy.
+
 
 % \begin{enumerate}
 
@@ -256,23 +269,27 @@ All task management system tasks passed as expected.
 % Result: Pass
 
 % \end{enumerate}
-\subsubsection{Scheduling}
+\subsubsection{Scheduling System}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{6cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-test-SS1-1 & $\times$ & \\
-test-SS2-1 & $\times$ & \\
-test-SS3-1 & $\times$ & \\
+test-SS1-1 & $\times$ & & Ensure users can navigate to the scheduling system page.\\
+\hline 
+test-SS2-1 & $\times$ & & Confirm users can create and schedule new events.\\
+\hline 
+test-SS3-1 & $\times$ & & Verify users can view all scheduled events on the calendar.\\
 \hline
 \end{tabular}
 \caption{\bf Scheduling System Tests}
 \end{table}
 
-All scheduling system tasks passed as expected.
+The tests for the Scheduling System demonstrate that the application's scheduling functionalities operate as intended, allowing users to create, view, and manage events effectively.
+
+
 
 % \begin{enumerate}
 
@@ -315,27 +332,33 @@ All scheduling system tasks passed as expected.
 
 % \end{enumerate}
 
-\subsubsection{Account}
+\subsubsection{Account System}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{6cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-test-AS-1-1 & $\times$ & \\
-test-AS-1-2 & $\times$ & \\
-test-AS-1-3 & $\times$ & \\
-test-AS-2 & $\times$ & \\
-test-AS-3 & $\times$ & \\
-test-AS-4 & $\times$ & \\
-test-AS-5 & $\times$ & \\
+test-AS1-1 & $\times$ & & Validate account creation with unique credentials.\\
+\hline 
+test-AS1-2 & $\times$ & & Ensure no duplicate accounts can be created.\\
+\hline 
+test-AS1-3 & $\times$ & & Confirm account creation adheres to specified username and password constraints.\\
+\hline 
+test-AS2 & $\times$ & & Verify that users can log in with valid credentials.\\
+\hline 
+test-AS3 & $\times$ & & Check that users can update profile details.\\
+\hline 
+test-AS4 & $\times$ & & Ensure that users can delete their account.\\
+\hline 
+test-AS5 & $\times$ & & Verify account recovery for forgotten login information.\\
 \hline
 \end{tabular}
 \caption{\bf Account System Tests}
 \end{table}
 
-All account system tasks passed as expected.
+All Account System tests have passed, ensuring that the account management features such as creation, updating, and deletion are functioning correctly, providing users with secure and reliable account handling capabilities.
 
 % \begin{enumerate}
 
@@ -443,80 +466,135 @@ The details of the unit tests can be found in section 4 of the \href{https://git
 
 \subsubsection{Automated Testing}
 
-Automated testing was conducted using jest and GitHub actions. Automated testing mainly covers the unit testing of \progname{} and is performed automatically whenever a commit is added to the main branch. The purpose of automated testing of \progname{} is to insure that any changes made to the main branch do not break the overall functionality of \progname{}.
+Automated testing was conducted using jest and GitHub actions. Automated testing mainly covers the unit testing of \progname{} and is performed automatically whenever a commit is added to the main branch. The purpose of automated testing of \progname{} is to ensure that any changes made to the main branch do not break the overall functionality of \progname{}.
 
 \subsubsection{Bill Management}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{5cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-UT-B1 & $\times$ & \\
-UT-B2 & $\times$ & \\
-UT-B3 & $\times$ & \\
+UT-B1 & $\times$ & & Split expense and create bill.\\
+\hline 
+UT-B2 & $\times$ & & Split expense with equal amounts.\\
+\hline 
+UT-B3 & $\times$ & & Split expense with custom amounts.\\
+\hline 
+UT-B4 & $\times$ & & Error for not found user.\\
+\hline 
+UT-B5 & $\times$ & & Error for not found group.\\
+\hline 
+UT-B6 & $\times$ & & Handle invalid bill ID format.\\
+\hline 
+UT-B7 & $\times$ & & Handle null bill ID.\\
+\hline 
+UT-B8 & $\times$ & & Handle undefined bill ID.\\
+\hline 
+UT-B9 & $\times$ & & Handle empty string bill ID.\\
+\hline 
+UT-B10 & $\times$ & & Delete an existing bill.\\
+\hline 
+UT-B11 & $\times$ & & Handle deleting non-existent bill.\\
+\hline 
+UT-B12 & $\times$ & & Get expenses for user.\\
+\hline 
+UT-B13 & $\times$ & & Handle getting expenses for non-existent user.\\
+\hline 
+UT-B14 & $\times$ & & Edit bill total amount.\\
+\hline 
+UT-B15 & $\times$ & & Error editing non-existent bill.\\
 \hline
 \end{tabular}
 \caption{\bf Bill Management Unit Tests}
 \end{table}
 
-All unit tests for bill management module passed as expected.
+All unit tests for bill management module passed as expected. This was designed to ensure related basic functions of bill are operational. 
 
 \subsubsection{Task Management}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{5cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-UT-T1 & $\times$ & \\
-UT-T2 & $\times$ & \\
-UT-T3 & $\times$ & \\
-UT-T4 & $\times$ & \\
+UT-T1 & $\times$ & & Create a new task.\\
+\hline 
+UT-T2 & $\times$ & & Retrieve a list of tasks.\\
+\hline 
+UT-T3 & $\times$ & & Mark a task as completed.\\
+\hline 
+UT-T4 & $\times$ & & Reopen a completed task.\\
+\hline 
+UT-T5 & $\times$ & & Edit details of a task.\\
 \hline
 \end{tabular}
 \caption{\bf Task Management Unit Tests}
 \end{table}
 
-All unit tests for task management module passed as expected.
+All unit tests for task management module passed as expected. This was designed to ensure related basic functions of assigning tasks and organizing them are operational.
 
 \subsubsection{Scheduling}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{5cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-UT-S1 & $\times$ & \\
-UT-S2 & $\times$ & \\
-UT-S3 & $\times$ & \\
-UT-S4 & $\times$ & \\
-UT-S5 & $\times$ & \\
+UT-S1 & $\times$ & & Add a new event.\\
+\hline 
+UT-S2 & $\times$ & & Edit an existing event.\\
+\hline 
+UT-S3 & $\times$ & & Get events for a group.\\
+\hline 
+UT-S4 & $\times$ & & Get events for a user.\\
+\hline 
+UT-S5 & $\times$ & & Delete an event.\\
+\hline 
+UT-S6 & $\times$ & & Error for adding event to non-existent group.\\
+UT-S7 & $\times$ & & Error for editing non-existent event.\\
+\hline 
+UT-S8 & $\times$ & & Error for deleting non-existent event.\\
+\hline 
+UT-S9 & $\times$ & & Error for getting events for non-existent group.\\
+\hline 
+UT-S10 & $\times$ & & Error for getting events for a group with no events.\\
 \hline
 \end{tabular}
-\caption{\bf Scheduling Unit Tests}
+\caption{\bf Scheduling Management Unit Tests}
 \end{table}
 
-All unit tests for scheduling module passed as expected.
+All unit tests for scheduling module passed as expected. This was designed to ensure related basic functions of scheduling are operational. For example scheduling events and viewing them,
 
 \subsubsection{Account}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|p{5cm}|}
 \hline
-Test ID & P & F\\
+Test ID & P & F & Test\\
 \hline 
-UT-A1 & $\times$ & \\
-UT-A2 & $\times$ & \\
-UT-A3 & $\times$ & \\
-UT-A4 & $\times$ & \\
+UT-A1 & $\times$ & & Get user by built-in ID.\\
+\hline 
+UT-A2 & $\times$ & & Get user by userID.\\
+\hline 
+UT-A3 & $\times$ & & Get group details.\\
+\hline 
+UT-A4 & $\times$ & & Get user groups.\\
+\hline 
+UT-A5 & $\times$ & & Error for user groups retrieval.\\
+\hline 
+UT-A6 & $\times$ & & Error for user retrieval.\\
+\hline 
+UT-A7 & $\times$ & & Error for user by built-in ID.\\
+\hline 
+UT-A8 & $\times$ & & Error for group retrieval.\\
 \hline
 \end{tabular}
-\caption{\bf Account Unit Tests}
+\caption{\bf Account Management Unit Tests}
 \end{table}
 
 All unit tests for account module passed as expected.
@@ -580,7 +658,7 @@ The usability of the app was evaluated by conducting a survey with five particip
 		
 \subsection{Performance}
 
-Performance testing for \progname{} was focused testing the back-end server of the application. This was done using Jmeter, which is a load testing tool that helps analyze the performance of the backend API of \progname{}. The test plan involved creating 100 users for \progname{} and having them make common requests to the backend server API (e.g getting user information after logging in). The results of performance testing can be seen in the graph below.
+Performance testing for \progname{} was focused testing the back-end server of the application. This was done using ``Jmeter'', which is a load testing tool that helps analyze the performance of the backend API of \progname{}. The test plan involved creating 100 users for \progname{} and having them make common requests to the backend server API (e.g getting user information after logging in). The results of performance testing can be seen in the graph below.
 
 
 \begin{figure}[H]
@@ -593,6 +671,14 @@ Performance testing for \progname{} was focused testing the back-end server of t
 
 As can be seen through the above graph the response times to user requests is quite fast ranging from around  40 - 300 ms. This is fast enough so that there should not be noticeable delay in \progname{} on the user end. As such this indicates to us that \progname{} can handle 100 concurrent users and as a result we concluded that the performance of \progname{} is sufficient for our current purposes. In the future if necessary the database of \progname{} could be upgraded in order to handle more users.
 
+Some ways we could further scale up the application in the future could be:
+
+\begin{itemize}
+  \item \textbf{Optimizing the Database:} Add some indexes on the database to speed up frequently used operation like range or equality search. For example by having an range index on the events table we can get even faster data retrievals which would be very beneficial for large databases (very busy schedules). This potential solution can speed up the user experience significantly.
+  \item \textbf{Caching :} Integrating some caching methods for users. This can also greatly speed up the data base as user will not need to reload data.
+  \item \textbf{Server Scaling:} Once number of users increases we can implement more servers in order to more quickly handle the greater load.
+\end{itemize}
+
 
 \subsection{Other Non-functional Tests}
 
@@ -600,35 +686,56 @@ The details of these non-functional tests can be found in section 3.2 of the \hr
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|l|c|c|p{8cm}|}
 \hline
-Test ID & P & F\\
-\hline 
-test-LF-A1-1 & & $\times$ \\\
-test-LF-A1-2 & & $\times$ \\\
-test-UH-E1-1 & $\times$ & \\\
-test-UH-E1-2 & $\times$ & \\\
-test-UH-P1 & $\times$ & \\\
-test-UH-L1-1 & & $\times$ \\\
-test-UH-L1-2 & & $\times$ \\\
-test-UH-A1 & $\times$ & \\\
-test-P-SL1 & $\times$ & \\\
-test-P-PA1 & $\times$ & \\\
-test-P-RFT1 &  & $\times$ \\
-test-P-C1 & $\times$ & \\\
-test-OE-PE1 & $\times$ & \\
-test-OE-PR1 & & $\times$ \\
-test-M-M1 & $\times$ & \\
-test-S-A1 & $\times$ & \\
-test-S-IN1 & $\times$ & \\
-test-S-P1 & $\times$ & \\
-test-C-SC1 & $\times$ & \\
+Test ID & P & F & Description \\
+\hline
+test-LF-A1-1 & & $\times$ & Test application for conformance to material design guidelines. \\
+\hline
+test-LF-A1-2 & & $\times$ & Assess visual appeal and intuitive design. \\
+\hline
+test-UH-E1-1 & $\times$ & & Verify ease of navigation to key features within the app. \\
+\hline
+test-UH-E1-2 & $\times$ & & Confirm the application is easy to navigate according to users. \\
+\hline
+test-UH-P1 & $\times$ & & Ensure the app interface is presented in Canadian English. \\
+\hline
+test-UH-L1-1 & & $\times$ & Check if users can use a feature effectively without external assistance after a brief tutorial. \\
+\hline
+test-UH-L1-2 & & $\times$ & Survey to determine if the app is easy to learn. \\
+\hline
+test-UH-A1 & $\times$ & & Confirm the use of Android accessibility features. \\
+\hline
+test-P-SL1 & $\times$ & & Measure response times and confirm they are within acceptable limits. \\
+\hline
+test-P-PA1 & $\times$ & & Ensure bill-splitting calculations are accurate to two decimal places. \\
+\hline
+test-P-RFT1 & & $\times$ & Test resilience of features upon losing network connection. \\
+\hline
+test-P-C1 & $\times$ & & Evaluate system performance under a simulated load of multiple users. \\
+\hline
+test-OE-PE1 & $\times$ & & Verify the app runs on multiple phones with different Android OS versions. \\
+\hline
+test-OE-PR1 & & $\times$ & Check availability of the app on the Google Play Store. \\
+\hline
+test-M-M1 & $\times$ & & Confirm the presence of documentation on GitHub. \\
+\hline
+test-S-A1 & $\times$ & & Ensure user data is not accessible from other accounts. \\
+\hline
+test-S-IN1 & $\times$ & & Validate prevention of incorrect data entry into the database. \\
+\hline
+test-S-P1 & $\times$ & & Confirm display of the information collection policy on app launch. \\
+\hline
+test-C-SC1 & $\times$ & & Confirm the app's compliance with Google Play development standards. \\
 \hline
 \end{tabular}
-\caption{\bf Non-Functional System Tests}
+\caption{Non-Functional System Tests}
+\label{tab:nonfunctional_tests}
 \end{table}
 
-For the non-functional system tests most passed, but some did not. test-OE-PR1 failed because \progname{} isnt available on Google Play Store, test-P-RFT-1 failed because \progname{} doesn't work well offline yet, test-LF-A1-1, test-LF-A1-2, test-UH-L1-1, and test-UH-L1-2 failed because of reasons described in usability section of this VnV report.
+For the non-functional system tests most passed, but some did not. test-OE-PR1 failed because \progname{} isn't available on Google Play Store, test-P-RFT-1 failed because \progname{} doesn't work well offline yet, testLF-A1-1, test-LF-A1-2, test-UH-L1-1, and test-UH-L1-2 failed because of
+reasons described in usability section of this VnV report.
+
 
 
 % \subsubsection{Look and Feel Requirements}
@@ -897,12 +1004,27 @@ The main area of improvement for \progname{} is in the usability department. As 
 
 \subsection{Planned Changes due to Revision 0 Feedback}
 
-For the Revision 0 demo, the main piece of feedback that we received was that the user interface of the \progname{} felt very unpolished (e.g. dollar amounts not being rounded correctly, requiring a lot of typing which is undesirable for a mobile application) and that users were unlikely to use \progname{} in this state. To help address these issues we plan to improve the UI of all the main features of \progname{} (Bill Management, Task Management, Scheduling) by presenting the user information in a card layout, which is more user-digestible. This new UI will also require less typing, which should make it more efficient to the end user.  Additionally, some features were suggested such as having presets for tasks and reoccurring tasks that we plan to implement in revision 1 of \progname{}.
+For the Revision 0 demo, the main piece of feedback that we received was that the user interface of the \progname{} felt very unpolished (e.g. dollar amounts not being rounded correctly, requiring a lot of typing which is undesirable for a mobile application) and that users were unlikely to use \progname{} in this state. To help address these issues we plan to improve the UI of all the main features of \progname{} (Bill Management, Task Management, Scheduling) by presenting the user information in a card layout, which is more user-digestible. This new UI will also require less typing (detailed plans in the next section), which should make it more efficient to the end user.  Additionally, some features were suggested such as having presets for tasks and reoccurring tasks that we plan to implement in revision 1 of \progname{}.
+\newline Plans to fix common problems/issues:
+
+\begin{itemize}
+  \item \textbf{Incentivize completing tasks and paying bills } Add a reward system that rewards users for staying on track with paying bills and completing tasks. Users can be able to have a streak and be awarded according to a star system. Users may be award different statuses like "good roommate", etc.
+    \item \textbf{Incentivize staying truthful to marking tasks complete and payed bills } Implement a photo system where users can upload photos and other roomates can check them. Also, implement a reporting system that will tarnish a users account.
+\end{itemize}
 
 \subsection{Planned Changes due to Usability Feedback}
 
 One of the major feedback we got was regarding the design and layout of the application. Comments included phrases like "bland", "generic" and "not eye catching". So for revision 1 we plan to improve the current layout by introducing a more desirable color scheme rather than being black and white. Another pain point described by the user was that the application did not provide feedback if a mistake was made by the user. To remedy this problem, instead of providing feedback to the problem, we will reduce the chance of the user going into that state by introducing more guards in our application. 
-
+\newline Plans to fix/address usability issues:
+\begin{itemize}
+ \item \textbf{Plans to implement less typing/manual entry:} 
+    \begin{itemize}
+    \item Have preset labelled buttons for certain tasks, events and bills that are quick, easy and attractive to see and use.
+    \item Add drop downs and scroll wheels for data and time setting when creating events.
+    \item quick one-click buttons for predicted bill prices to be split
+    \end{itemize}
+  \item \textbf{Plans to address bland UI} Add attractive color schemes that attract users to the app.
+\end{itemize}
 
 \section{Trace to Requirements}
 
@@ -917,10 +1039,10 @@ test-TM2-1 & & $\times$ & & & & & & & & \\
 test-TM3-1 & & & $\times$ & & & & & & & \\
 test-TM4-1 & & & & $\times$ & & & & & & \\
 test-TM5-1 & & & & & $\times$ & & & & & \\
-test-BM1-1/2-1 & & & & & & $\times$ & $\times$ & & & \\
-test-BM3-1 & & & & & & & & $\times$ & & \\
-test-BM4-1 & & & & & & & & & $\times$ & \\
-test-BM5-1 & & & & & & & & & & $\times$ \\
+test-BM1-1 & & & & & & $\times$ & $\times$ & & & \\
+test-BM2-1 & & & & & & & & $\times$ & & \\
+test-BM3-1 & & & & & & & & & $\times$ & \\
+test-BM4-1 & & & & & & & & & & $\times$ \\
 \hline
 \end{tabular}
 \caption{\bf Functional Requirements Traceability Part 1}
@@ -932,8 +1054,8 @@ test-BM5-1 & & & & & & & & & & $\times$ \\
 \hline
 Test ID & BM6 & BM7 & SS1 & SS2 & SS3 & AS1 & AS2 & AS3 & AS4 & AS5 \\
 \hline 
-test-BM6-1 & $\times$ & & & & & & & & & \\
-test-BM7-1 & & $\times$ & & & & & & & & \\
+test-BM5-1 & $\times$ & & & & & & & & & \\
+test-BM6-1 & & $\times$ & & & & & & & & \\
 test-SS1-1 & & & $\times$ & & & & & & & \\
 test-SS2-1 & & & & $\times$ & & & & & & \\
 test-SS3-1 & & & & & $\times$ & & & & & \\
@@ -1007,12 +1129,12 @@ test-TM2-1 & $\times$ & & & & $\times$ & $\times$ & $\times$ &   \\
 test-TM3-1 & $\times$ & & & & $\times$ & $\times$ & $\times$ &   \\
 test-TM4-1 & $\times$ & & & & $\times$ & $\times$ & $\times$ &   \\
 test-TM5-1 & $\times$ & & & & $\times$ & $\times$ & $\times$ &   \\
-test-BM1-1/2-1& & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
+test-BM1-1& & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
+test-BM2-1 & & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
 test-BM3-1 & & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
 test-BM4-1 & & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
 test-BM5-1 & & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
 test-BM6-1 & & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
-test-BM7-1 & & $\times$ & & & $\times$ & $\times$ & $\times$ &   \\
 test-SS1-1 & & & $\times$  & &  $\times$  &  $\times$  &  $\times$  &   \\
 test-SS2-1 & & & $\times$  & &  $\times$  &  $\times$  &  $\times$  &   \\
 test-SS3-1 & & & $\times$  & &  $\times$  &  $\times$  &  $\times$  &   \\
@@ -1080,6 +1202,9 @@ graduate attribute of Reflection.  Please answer the following question:
   teams will have had to deviate from their original VnV Plan.)
 \end{enumerate}
 
-There were a lot of changes that we made to the original VnV plan that we made back in November. Some of the tests in the original VnV were a bit too implementation specific (e.g. expecting a certain function to exist for the system tests) and had to be changed in order to fit the actual implementation that we made. Additionally, we had to make changes to how we did usability testing and performance testing since in the original VnV plan we didn't know exactly what we were going to do. We think that in future projects these issues would be better be able to be anticipated with more experience in creating VnV plans. Specifically, focusing more on the specifics on usability testing (e.g. determining the target user for the usability surveys) would have improved the VnV process a lot, especially with usability being an important portion of this project. 
+There were a lot of changes that we made to the original VnV plan that we made back in November. Some of the tests in the original VnV were a bit too implementation specific (e.g. expecting a certain function to exist for the system tests) and had to be changed in order to fit the actual implementation that we made. Additionally, we had to make changes to how we did usability testing and performance testing since in the original VnV plan we didn't know exactly what we were going to do. We think that in future projects these issues would be better be able to be anticipated with more experience in creating VnV plans. Specifically, focusing more on the specifics on usability testing (e.g. determining the target user for the usability surveys) would have improved the VnV process a lot, especially with usability being an important portion of this project. Some other kinds of issues we would a anticipate better next time is that users could lie when marking tasks complete ad bills payed. Part of our VnV plan, we should have included that we should get at least 10 groups of housemates and let them try it out each for a month. This would uncovered a lot more issues like this one for example. Thus we will be better equipped to handle issues like those ones relating to usability and functionality.
+
+
 
 \end{document}
+

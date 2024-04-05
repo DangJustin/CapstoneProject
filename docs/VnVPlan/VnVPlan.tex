@@ -1117,7 +1117,8 @@ Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src
     \item UT-T1: Create Task
     \item UT-T2: Get Tasks
     \item UT-T3: Complete Task
-    \item UT-T4: Edit Task
+    \item UT-T4: Reopen Task
+    \item UT-T5: Edit Task
 \end{enumerate}
 
 \subsection{Unit Tests for Bill Management Module}
@@ -1125,9 +1126,21 @@ Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src
 Implemented in \href{https://github.com/DangJustin/CapstoneProject/blob/main/src/rev0_demo/server/tests/billManagement.test.js}{billManagement.test.js}
 
 \begin{enumerate}
-    \item UT-B1: Get Expense
-    \item UT-B2: Delete Bill
-    \item UT-B3: Split Expense
+    \item UT-B1: Should split an expense among users and create a bill.
+    \item UT-B2: Should split an expense among users and create a bill with equal individual amounts.
+    \item UT-B3: Should split an expense among users and create a bill with custom individual amounts.
+    \item UT-B4: Should throw an error if the initiating user is not found.
+    \item UT-B5: Should throw an error if the group is not found.
+    \item UT-B6: Should handle deleting a bill with invalid ID format.
+    \item UT-B7: Should handle deleting a bill with null ID.
+    \item UT-B8: Should handle deleting a bill with undefined ID.
+    \item UT-B9: Should handle deleting a bill with empty string ID.
+    \item UT-B10: Should delete an existing bill.
+    \item UT-B11: Should handle deleting a non-existent bill.
+    \item UT-B12: Should get expenses for an existing user.
+    \item UT-B13: Should handle getting expenses for a non-existent user.
+    \item UT-B14: Should edit bill total amount.
+    \item UT-B15: Should return error when editing a non-existent bill.
 \end{enumerate}
 
 
