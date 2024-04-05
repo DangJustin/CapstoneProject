@@ -7,96 +7,143 @@
 
 \author{\authname}
 
-\date{}
+\date{April 4, 2024}
 
-\input{../Comments}
-\input{../Common}
+\input{Comments}
+\input{Common}
 
 \begin{document}
 
 \maketitle
 
-\plt{Reflection is an important component of getting the full benefits from a
-learning experience.  Besides the intrinsic benefits of reflection, this
-document will be used to help the TAs grade how well your team responded to
-feedback.  In addition, several CEAB (Canadian Engineering Accreditation Board)
-Learning Outcomes (LOs) will be assessed based on your reflections.}
+% \plt{Reflection is an important component of getting the full benefits from a
+% learning experience.  Besides the intrinsic benefits of reflection, this
+% document will be used to help the TAs grade how well your team responded to
+% feedback.  In addition, several CEAB (Canadian Engineering Accreditation Board)
+% Learning Outcomes (LOs) will be assessed based on your reflections.}
 
 \section{Changes in Response to Feedback}
 
-\plt{Summarize the changes made over the course of the project in response to
-feedback from TAs, the instructor, teammates, other teams, the project
-supervisor (if present), and from user testers.}
+% \plt{Summarize the changes made over the course of the project in response to
+% feedback from TAs, the instructor, teammates, other teams, the project
+% supervisor (if present), and from user testers.}
 
-\plt{For those teams with an external supervisor, please highlight how the feedback 
-from the supervisor shaped your project.  In particular, you should highlight the 
-supervisor's response to your Rev 0 demonstration to them.}
+% \plt{For those teams with an external supervisor, please highlight how the feedback 
+% from the supervisor shaped your project.  In particular, you should highlight the 
+% supervisor's response to your Rev 0 demonstration to them.}
 
-\plt{Version control can make the summary relatively easy, if you used issues
-and meaningful commits.  If you feedback is in an issue, and you responded in
-the issue tracker, you can point to the issue as part of explaining your
-changes.  If addressing the issue required changes to code or documentation, you
-can point to the specific commit that made the changes.}
+% \plt{Version control can make the summary relatively easy, if you used issues
+% and meaningful commits.  If you feedback is in an issue, and you responded in
+% the issue tracker, you can point to the issue as part of explaining your
+% changes.  If addressing the issue required changes to code or documentation, you
+% can point to the specific commit that made the changes.}
 
 \subsection{SRS and Hazard Analysis}
 
+For the SRS of \progname{} the documentation was updated to reflect revision 1 of \progname{}. In particular, traceability was added to the SRS in order to make it easier to track the requirements throughout all of the documentation of \progname{}. A planning of development phases was established in order to make it clear, the development phases of \progname{}. More details surrounding these changes can be found in issue \# 150.\\
+
+The hazard analysis documentation for the \progname{} app has been comprehensively updated to include a detailed roadmap, outlining current milestones being completed and future goals. Additionally, the document now clearly specifies the parts of the system that are out of scope for the hazard analysis, ensuring a focused and relevant evaluation of potential risks. New hazards and requirements have also been added, further enhancing the clarity and effectiveness of the hazard analysis process. These updates collectively aim to provide a more comprehensive understanding of the project's risk landscape. More details about the changes made in the hazard analysis can be found in issue \# 151.
+
 \subsection{Design and Design Documentation}
+
+For revision 0 we got feedback through a user survey and a revision 0 demo performed to the instructor of SFWRENG 4G06. Through this feedback we found out the main thing we had to improve from the revision 0 of \progname{} was the UI/UX. Specifically users complained a lot about the appearance of \progname{} and how when entering information there was too much typing. The main way we improved the UI in response to the feedback was changing the UI to card layout that was much more digestible to users as compared to the table layouts that were originally used. Additional features were also added like search bars, drop-down menu and presets that reduced the amount of typing required for \progname{}. A dashboard was also added to \progname{} to give users an ''at a glance" view of all the features of \progname{} (i.e. upcoming tasks, upcoming events, user expenses). We think that these changes leads to revision 1 of \progname{} having a much better user experience than revision 0. \\
+
+The design documentation of \progname{} was also updated to reflect the changes that were made in revision 1. In the module unlikely changes were updated to better match actual unlikely changes for \progname{}. The database module in the original design documentation was decomposed into two different modules. In the MIS, the semantics were updated to state which conditions cause exceptions to be thrown. The MIS was also updated to include the interface as of revision 1. More details surrounding the changes in the design documentation can be found in issue \# 152.
 
 \subsection{VnV Plan and Report}
 
-\section{Design Iteration (LO11)}
+The unit testing plan was added to the VnV plan along with the more details surrounding the automatic testing of Housemates using jest and GitHub actions. More tests were added to the VnV plan completely cover the functional requirements that are in the SRS. For non-functional tests more details surrounding fit criteria was added to the VnV plan in order to make the tests more clear. Additionally more detail was added to the survey that was used to measure the usability of \progname{}. More details surrounding the changes in the VnV plan can be found in issue \# 148. \\
 
-\plt{Explain how you arrived at your final design and implementation.  How did
-the design evolve from the first version to the final version?} 
+For the VnV report of \progname{} more details were included surrounding the improvements that we planned to make going from revision 0 to revision 1 based off user feedback. Additionally, the descriptions of the tests were added to the VnV report in order to make it more clear on which tests were testing which part of \progname{}. More details surrounding the changes in the VnV report can be found in issue \# 153.
+
+\section{Design Iteration (LO11)}
+The original design for \progname{} was in the original design documentation (revision 0 of design doc, appendix of MIS). This design was pretty bare bones and was basically a wire frame that only implemented the main functionalities of \progname{}. This design in the MIS was the basis of the design for the revision 0 of \progname{}. As such the implementation for revision 0 was kind of bare bones. From revision 0 we got a lot of feedback from users as well as the instructor of SFWRENG 4G06. This feedback mainly revolved around the user experience of \progname{} not being good enough to suggest using it over competing apps. Thus the main improvements that we made in revision 1 (the final design and implementation of \progname{}) were surrounding improving the user experience of \progname{}. This led to us redeveloping the UI of \progname{} in order to improve the user experience. For example, changing the display of information to a card layout, which better allows users to digest information as compared to a simple table. These changes led to the final version (revision 1) of \progname{} having a much better user experience compared to the original version.
+
+
+% \plt{Explain how you arrived at your final design and implementation.  How did
+% the design evolve from the first version to the final version?} 
 
 \section{Design Decisions (LO12)}
 
-\plt{Reflect and justify your design decisions.  How did limitations,
- assumptions, and constraints influence your decisions?}
+One of the main things that we a group debated about when creating \progname{} was whether to make it a native smartphone app or to have it as a web app. The main reason that we chose creating a web app over a native web app was that our group already had experience creating web apps. Additionally, a web app allows \progname{} to reach a larger range of devices than a single native smartphone app that only works on one platform (e.g. Android/IOS). Another thing that constraint on this project was the time constraints that we had to develop \progname{}. If given more time, we would had have a much more thorough interview process for stakeholders. That would have given us a much better basis to build \progname{} on. Additionally, the time frame of this project led to us not implementing every feature that we would want to for \progname{}. For example notifications, external app interactions, image attachments, would be features that would be implemented in \progname{} if we had more time.
+% \plt{Reflect and justify your design decisions.  How did limitations,
+%  assumptions, and constraints influence your decisions?}
 
 \section{Economic Considerations (LO23)}
 
-\plt{Is there a market for your product? What would be involved in marketing your 
-product? What is your estimate of the cost to produce a version that you could 
-sell?  What would you charge for your product?  How many units would you have to 
-sell to make money? If your product isn't something that would be sold, like an 
-open source project, how would you go about attracting users?  How many potential 
-users currently exist?}
+We estimate that there would be a sizable market for \progname{}. Our target users would be:
+
+\begin{itemize}
+  \item People with housemates: People with housemates (like college students young professionals) would be the primary target user of \progname{}. They can use the application to better simplify life with housemates.
+  \item Landlords / Property Manager / Housing Association:  Landlords might be interested in using an application like \progname{} for their tenants so that they will better be able to communicate with them with respects to household tasks that are required.
+  \item Families: Families can also benefit from the app to have a centralized place for all household matters. They can distribute chores evenly and keep track of bills. It promotes talking openly and encourages users to be more responsible about household duties and bills.
+\end{itemize}
+
+\progname{} would be free to use in order to attract more of our target audience for \progname{}. The main way to monetize \progname{} would be ads that would be displayed in it. Additionally, there would be an option to pay to remove ads for \progname{} through a single time purchase. The main way that we would advertise \progname{} would be through social media. Social media advertising would primarily aimed towards people with housemates, like college students or young professionals, as they are the ones who stand to benefit the most from \progname{}.  The main costs for \progname{} would be the costs for hosting \progname{} and paying for the databases of \progname{} (Firebase and MongoDB Atlas).
+
+% \plt{Is there a market for your product? What would be involved in marketing your 
+% product? What is your estimate of the cost to produce a version that you could 
+% sell?  What would you charge for your product?  How many units would you have to 
+% sell to make money? If your product isn't something that would be sold, like an 
+% open source project, how would you go about attracting users?  How many potential 
+% users currently exist?}
 
 \section{Reflection on Project Management (LO24)}
 
-\plt{This question focuses on processes and tools used for project management.}
+% \plt{This question focuses on processes and tools used for project management.}
 
 \subsection{How Does Your Project Management Compare to Your Development Plan}
 
-\plt{Did you follow your Development plan, with respect to the team meeting plan, 
-team communication plan, team member roles and workflow plan.  Did you use the 
-technology you planned on using?}
+We did not really follow the development plan that closely. The reason we did not follow it is that at the time that we created the development plan we did not really have a good idea on what exactly we were going to do with \progname{}. We did use most of technology as specified in the development plan as well as the communication plan. However, we did not really follow the workflow plan, the meeting plan, or use the team member roles as specified in the development plan. We also changed the POC demo plan from the original development plan. We probably should have created a more development plan that we were actually going to follow.
+
+% \plt{Did you follow your Development plan, with respect to the team meeting plan, 
+% team communication plan, team member roles and workflow plan.  Did you use the 
+% technology you planned on using?}
 
 \subsection{What Went Well?}
 
-\plt{What went well for your project management in terms of processes and 
-technology?}
+I think that once we got our CI set up it was very useful in ensuring that any commits made did not break the functionality of \progname{}. Additionally once we actually started using GitHub issue tracking it was useful in tracking what everyone needed to do for each deliverable.
+
+% \plt{What went well for your project management in terms of processes and 
+% technology?}
 
 \subsection{What Went Wrong?}
 
-\plt{What went wrong in terms of processes and technology?}
+In terms of the processes, we probably should have started the deliverables much earlier than we actually did. Often we started the deliverables pretty close to the deadlines, which kind of forced us to rush to complete them. There was also some communication issues in our group where some group members did not respond to messages for an extended period of time. Additionally we could have made better use of CI and maybe could have included CD.
+
+% \plt{What went wrong in terms of processes and technology?}
 
 \subsection{What Would you Do Differently Next Time?}
 
-\plt{What will you do differently for your next project?}
+For our next project we would use a much more structured approach. We would create a detailed development plan (with team meeting plans, team communication plans, workflow plan, etc.) that we would actually follow. In particular a more focused workflow plan would have be helpful. This would give more structure to the project and would help us avoid rushing for deliverables.   For a user-based application like \progname{} we would also incorporate the stakeholders more often during the design process (e.g. interviews during the requirements elicitation process). This would allow for \progname{} to better meet user needs. We would also incorporate CI/CD more heavily throughout the project. For example, using CD to continuously deploy the front-end and back-end of \progname{}. 
+
+% \plt{What will you do differently for your next project?}
 
 \section{Reflection on Capstone}
 
-\plt{This question focuses on what you learned during the course of the capstone project.}
+% \plt{This question focuses on what you learned during the course of the capstone project.}
 
 \subsection{Which Courses Were Relevant}
 
-\plt{Which of the courses you have taken were relevant for the capstone project?}
+\begin{itemize}
+    \item SFWRENG 3S03: Software Testing
+    \item SFWRENG 3RA3: Software Requirements
+    \item SFWRENG 3A04: Large System Design
+    \item SFWRENG 3DB3: Databases
+    \item SFWRENG 4HC3: Human Computer Interfaces
+\end{itemize}
+
+% \plt{Which of the courses you have taken were relevant for the capstone project?}
 
 \subsection{Knowledge/Skills Outside of Courses}
 
-\plt{What skills/knowledge did you need to acquire for your capstone project
-that was outside of the courses you took?}
+\begin{itemize}
+    \item Team Management
+    \item Web Development (Specifically using React)
+    \item Presentation skills
+\end{itemize}
+
+% \plt{What skills/knowledge did you need to acquire for your capstone project
+% that was outside of the courses you took?}
 
 \end{document}
