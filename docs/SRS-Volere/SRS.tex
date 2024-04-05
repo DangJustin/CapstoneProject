@@ -11,6 +11,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{soul}
+\usepackage{tikz}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -24,12 +26,12 @@
 
 \newcommand{\lips}{\textit{Insert your content here.}}
 
-\input{../Comments}
-\input{../Common}
+\input{Comments}
+\input{Common}
 
 \begin{document}
 
-\title{Software Requirements Specification for \progname: Housemates App} 
+\title{Software Requirements Specification for \progname \\ (Volere)}
 \author{\authname}
 \date{\today}
 	
@@ -48,17 +50,30 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\textbf{Date}} & {\textbf{Version}} & {\textbf{Notes}}\\
 \midrule
-October 6th 2023 & 0 & First Revision\\
+6 October 2023 & 1.0 & Initial Draft\\
+2 April 2024 & 1.1 & First Revision \\
 \bottomrule
 \end{tabularx}
 
 ~\\
 
 ~\newpage
+
+\section{Template and Changes}
+
+This SRS follows the Volere SRS template. A traceability section was added to ensure that the requirements of \progname{} are traceable with the other \progname{} documentation.  Some sections were removed from this document if they didn't apply to the SRS of \progname{} (e.g. Open Issues, New Problems, User Documentation and Training, Waiting Room, etc.). 
+
+\section{Naming Conventions and Terminology}
+\subsection{Glossary of all terms used by stakeholders}
+\begin{itemize}
+    \item Housemates: The main application being developed.
+    \item Roommates: People living in the same household.
+    \item Group: Users who share common expenses, tasks or schedule for a particular purpose.
+\end{itemize}
 \section{Purpose of the Project}
 \subsection{User Business}
 
-With the ongoing affordable housing shortage in Canada many people have been forced to find roommates in order to have a place to live in. This is especially common at universities like McMaster where its extremely common to have housemates while in student housing. While having roommates may help ease financial pressures it can lead to a lot of stress in dealing with them. These stresses can include things like dealing with splitting household tasks and grocery costs. An application that helps deal with these common stresses in the roommate life would make it more convenient  for the housemates to live together and overall simplify their lives.
+With the ongoing affordable housing shortage in Canada many people have been forced to find roommates in order to have a place to live in. This is especially common at universities like McMaster where its extremely common to have roommates while in student housing. While having roommates may help ease financial pressures it can lead to a lot of stress in dealing with them. These stresses can include things like dealing with splitting household tasks and grocery costs. An application that helps deal with these common stresses in the roommate life would make it more convenient  for the roommates to live together and overall simplify their lives.
 
 \subsection{Goals of the Project}
 
@@ -68,9 +83,9 @@ With the ongoing affordable housing shortage in Canada many people have been for
 \textbf{Goals} & \textbf{Importance}\\
 \hline The application will have a straightforward and user-friendly interface that is simple to use for all users, regardless of technical ability. & This allows first time users to be interested in our product and a good experience with the overall product. \\
 \hline
-The application will simplify household task management through a task management system. & This allows streamlining the allocation of chores which in return will reduce conflicts and misunderstandings between housemates. \\
+The application will simplify household tasks through a task management system. & This allows streamlining the allocation of chores which in return will reduce conflicts and misunderstandings between roommates. \\
 \hline
-The application will streamline expense sharing through a cost management system. & This makes it possible for roommates to monitor their expenditure and prevent overspending. Additionally, it encourages each person to make a fair financial contribution. \\
+The application will streamline expense sharing through a bill management system. & This makes it possible for roommates to monitor their expenditure and prevent overspending. Additionally, it encourages each person to make a fair financial contribution. \\
 \hline
 The application will have a scheduling system that will allow for users to schedule quiet hours & This allows users to focus on their work, sleep, or studies without any interruption. \\
 \hline
@@ -80,14 +95,14 @@ The application will have a calendar to see scheduled events & This allows users
 \end{center}
 
 \section{Stakeholders}
-\subsection{Client}
+% \subsection{Client}
 
-N/A
+% N/A
 
 \subsection{Customer}
 
 \begin{itemize}
-    \item People with housemates: People with housemates are the primary stakeholders of this application. They can use the application to better simplify life with housemates. As such they will have the greatest influence out of the stakeholders on the requirements of the application during the development process.
+    \item People with roommates: People with roommates are the primary stakeholders of this application. They can use the application to better simplify life with roommates. As such they will have the greatest influence out of the stakeholders on the requirements of the application during the development process.
 \end{itemize}
 
 \subsection{Other Stakeholders}
@@ -100,17 +115,17 @@ N/A
 \subsection{Hands-On Users of the Project}
 
 \begin{itemize}
-    \item People with housemates
+    \item People with roommates
     \item Landlords / Property Manager / Housing Association
     \item Families
 \end{itemize}
 
 \subsection{Personas}
-Andrew is a student at McMaster University. He lives off-campus in student housing with four other housemates. He and his roommates have to buy groceries and supplies for the house. They also have to do various household chores and pay for utilities and internet. Sometimes Andrew and his roommates have trouble communicating with one another on this. Additionally, Andrew gets annoyed when his roommates decide to have a party the day before Andrew has an exam.
+Andrew is a student at McMaster University. He lives off-campus in student housing with four other roommates. He and his roommates have to buy groceries and supplies for the house. They also have to do various household chores and pay for utilities and internet. Sometimes Andrew and his roommates have trouble communicating with one another on this. Additionally, Andrew gets annoyed when his roommates decide to have a party the day before Andrew has an exam.
 
 \subsection{Priorities Assigned to Users}
 
-The primary stakeholders for this project are people with housemates and as such they will have the highest priority during the development process. The other stakeholders will be considered during the development process, but overall will have a lower priority.
+The primary stakeholders for this project are people with roommates and as such they will have the highest priority during the development process. The other stakeholders will be considered during the development process, but overall will have a lower priority.
 
 \subsection{User Participation}
 
@@ -121,39 +136,25 @@ During the development process we plan to test the application with the stakehol
 During the development of this project the project will be maintained by the development team.
 
 \section{Mandated Constraints}
-\subsection{Solution Constraints}
 
-N/A
 
 \subsection{Implementation Environment of the Current System}
 
-The expected environment for this application will be mobile devices (Android, iOS), providing a user-friendly and intuitive application that is really simple to use. With goals of expanding to web application, so that we can cater to a much diverse user base using computers with Windows, Max or Linux and web browsers such as Chrome, Edge, Firefox, etc. Users would then have the convenience to access the solution/product on any device they want that suits their needs. 
+The expected environment for this application will be a browser-supported device providing a user-friendly and intuitive application that is really simple to use. With goals of expanding as a mobile app, so that we can cater to a much diverse user base using mobiles with Android or iOS. Users would then have the convenience to access the solution/product on any device they want that suits their needs. 
 
-\subsection{Partner or Collaborative Applications}
 
-N/A
 
-\subsection{Off-the-Shelf Software}
 
-N/A
 
 \subsection{Anticipated Workplace Environment}
-The anticipated workplace environment for this application is in users' homes since this application deals with roommates. However, as this app is on mobile devices there could be a wide variety of places where this application could be used.
+The anticipated workplace environment for this application is in users' homes since this application deals with roommates. However, as this app is also on mobile devices there could be a wide variety of places where this application could be used.
 
 \subsection{Schedule Constraints}
 This project is being developed from September 2023 - April 2024.
 \subsection{Budget Constraints}
 This project has a budget constraint of \$750.
-\subsection{Enterprise Constraints}
-N/A
 
-\section{Naming Conventions and Terminology}
-\subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
-involved in the Project}
-\begin{itemize}
-    \item Android: A mobile operating system designed for mobile devices.
-    \item Google Play Store: The most common app store on Android. 
-\end{itemize}
+
 
 \section{Assumptions}
 % \subsection{Relevant Facts}
@@ -161,7 +162,7 @@ involved in the Project}
 % \subsection{Business Rules}
 % N/A
 \begin{itemize}
-    \item The users of this application are expected to have a basic understanding of how to use mobile devices with a touchscreen.
+    \item The users of this application are expected to have a basic understanding of how to access a website through a browser.
 \end{itemize}
 
 % \section{The Scope of the Work}
@@ -185,17 +186,16 @@ involved in the Project}
 \section{Scope}
 \subsection{Product Context}
 The following diagram depicts the main application interacting with external systems and users and the relation between them in terms of data flow.
+
+\subsubsection*{Database:}This acts as the storage for all the information that the application will receive, process and save.
+
+\subsubsection*{Housemates App:} This is the main software application that the user will interact with to achieve their goals by making requests to different components of the application.
+
+\subsubsection*{App User:} This is the user interacting with the Housemates app in order to trigger events to request for information to be displayed.
 \begin{figure}[H]
     \centering
 	\includegraphics[width=15cm]{ContextDiagram.png}
 	\caption{Context Diagram}
- \label{}
-\end{figure}
-\subsection{Product Use Case Diagram}
-\begin{figure}[H]
-    \centering
-	\includegraphics[width=6.5cm]{UseCase.png}
-	\caption{Usecase Diagram}
  \label{}
 \end{figure}
 \subsection{Individual Product Use Cases (PUC's)}
@@ -219,7 +219,7 @@ The following diagram depicts the main application interacting with external sys
     \item[PUC3:]
         \begin{itemize}
             \item \textbf{\textit{Title}: Add household chores}
-            \item \textit{Precondition}: User is logged in and has housemates added.
+            \item \textit{Precondition}: User is logged in and is present in a group.
             \item \textit{Trigger}: User selects the option to add a new household chore.
             \item \textit{Description}: Enables users to create a new household chore with details like name, description, frequency and assign it.
     \end{itemize}
@@ -253,7 +253,7 @@ The following diagram depicts the main application interacting with external sys
             \item \textbf{\textit{Title}: Add expense}
             \item \textit{Precondition}: User is logged in.
             \item \textit{Trigger}: User selects the option to add a new household expense.
-            \item \textit{Description}: Enables users to record a new expense between all or specific housemates, including details like item name, cost, date of purchase, etc.
+            \item \textit{Description}: Enables users to record a new expense between all or specific roommates, including details like item name, cost, date of purchase, etc.
     \end{itemize}
 
     \item[PUC8:]
@@ -307,7 +307,7 @@ The following diagram depicts the main application interacting with external sys
     \item[PUC14:]
         \begin{itemize}
             \item \textbf{\textit{Title}: Set quiet hours}
-            \item \textit{Precondition}: User is logged in and has housemates added.
+            \item \textit{Precondition}: User is logged in and has roommates added.
             \item \textit{Trigger}: User selects the option to set quiet hours.
             \item \textit{Description}: Allows users to define specific time periods for quiet hours in the living space.
     \end{itemize}
@@ -323,6 +323,15 @@ The following diagram depicts the main application interacting with external sys
 
 \end{itemize}
 
+\subsection{Product Use Case Diagram}
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=6.5cm]{UseCase.png}
+	\caption{Usecase Diagram}
+ \label{}
+\end{figure}
+
+
 
 
 \section{Functional Requirements}
@@ -330,48 +339,28 @@ The following diagram depicts the main application interacting with external sys
 \noindent \begin{itemize}
     \item[TM1:] 
     \begin{itemize}
-        \item \textit{Description}: Housemates app will have a tile like interface where user can select tasks icon as one of the options to then navigate to the task management page
-        \item \textit{Rationale}: This is to be able to navigate to the task management page of the app instead of utilizing one of the other features
-        \item \textit{Fit Criterion}: User can tap on the tasks icon and reach the page for task management
+        \item \textit{Description}: User tasks will be displayed in task management page.
+        \item \textit{Rationale}: This is to be able to clearly view the tasks which the user must complete.
     \end{itemize}
     \item[TM2:] 
     \begin{itemize}
-        \item \textit{Description}: The task management page will have a list-like interface presenting to the user their chores that they need to completed highlighted amongst other roommates tasks.
-        \item \textit{Rationale}: This is to be able to clearly view the tasks which the user must complete
-        \item \textit{Fit Criterion}: User can clearly understand which chores they need to complete
+    \item \textit{Description}: Users are able to create new tasks.
+    \item \textit{Rationale}: Users need to be able to add new tasks as needed.
+    \item \textit{Fit Criterion}: User able to see task added to bill management page.
+    
     \end{itemize}
-    \item[TM3:] 
+    \item[TM3:]
     \begin{itemize}
-    \item \textit{Description}: In the task management page, users are able to create new tasks/chores and add them to the task management page.
-    \item \textit{Rationale}: Users need to be able to add new chores/tasks as needed.
-    \item \textit{Fit Criterion}: 
-    \begin{enumerate}
-        \item Users are able to access a "Create New Task" button on the task management page.
-        \item A task creation form is shown after the user presses on this button.
-        \item The form fields have a spot for task name, due date, and roommate assignment (if applicable).
-        \item After the user filling out the form and presses the "Create," button the new task now appears in the list of tasks.
-    \end{enumerate}
+    \item \textit{Description}: Users are able to assign tasks to roommates.
+    \item \textit{Rationale}: This feature enables users to divide tasks among roommates.
+    \item \textit{Fit Criterion}: Other users are able to see task on their end.
+    
     \end{itemize}
     \item[TM4:]
     \begin{itemize}
-    \item \textit{Description}: In the task management page, users can assign tasks to roommates if the chore is shared.
-    \item \textit{Rationale}: This feature enables users to divide tasks among roommates.
-    \item \textit{Fit Criterion}: 
-    \begin{enumerate}
-        \item Users can select a task from the list by pressing on the task.
-        \item Users can assign the task to other roommates from their list of roommates.
-    \end{enumerate}
-    \end{itemize}
-    \item[TM5:]
-    \begin{itemize}
-    \item \textit{Description}: In the task management page, users can mark tasks as completed.
+    \item \textit{Description}: Users can mark tasks as completed.
     \item \textit{Rationale}: Users need to be allowed to track the progress of tasks and mark them as completed when they are done.
-    \item \textit{Fit Criterion}: 
-    \begin{enumerate}
-        \item Users is able to select a task from the list.
-        \item Users is able to mark the task as completed.
-        \item The user can see that the task is marked as completed on the task management page.
-    \end{enumerate}
+    \item \textit{Fit Criterion}: Task is removed from current tasks and moved to completed tasks.
     \end{itemize}
     
 \end{itemize}
@@ -381,16 +370,15 @@ The following diagram depicts the main application interacting with external sys
     \begin{itemize}
         \item \textit{Description}: Users are able to create a new bill.
         \item \textit{Rationale}: This requirement allows users to create new bills as needed.
-        \item \textit{Fit Criterion}: Users can add new bills by providing bill name, amount paid, category, due date, etc
     \end{itemize}
     \item[BM2:] 
     \begin{itemize}
-        \item \textit{Description}: Users are able to assign bill to a housemate and split it between them.
+        \item \textit{Description}: Users are able to assign bill to a roommate and split it amongst them evenly.
         \item \textit{Rationale}: This functionality will allow users to keep track of bill splitting easily.
         \item \textit{Fit Criterion}: 
         \begin{enumerate}
-            \item The bill amount is correctly split between the housemates.
-            \item The total bill amount is shown on the screen and the amount required to pay by each housemate is displayed correctly.
+            \item The bill amount is correctly split evenly amongst the roommates.
+            \item The total bill amount is shown on the screen and the amount required to pay by each roommate is displayed correctly.
         \end{enumerate}
     \end{itemize}
     \item[BM3:] 
@@ -403,7 +391,6 @@ The following diagram depicts the main application interacting with external sys
     \begin{itemize}
         \item \textit{Description}: Users are able to categorize the bills.
         \item \textit{Rationale}: This requirements makes it easier for users to differentiate and organize their expenses.
-        \item \textit{Fit Criterion}: Users can assign bills to any specific categories such as utility, rent, groceries, etc
     \end{itemize}
     \item[BM5:] 
     \begin{itemize}
@@ -412,20 +399,26 @@ The following diagram depicts the main application interacting with external sys
         \item \textit{Fit Criterion}: 
         \begin{enumerate}
             \item Users can mark any bill they paid off and the system keeps a record of the history.
-            \item When a bill is paid off, the included housemates are provided with a notification.
         \end{enumerate}
     \end{itemize}
     \item[BM6:] 
     \begin{itemize}
-        \item \textit{Description}: Users are able to attach bill receipts or relevant information as pictures.
-        \item \textit{Rationale}: This functionality will allow users to share any receipts or relevant document if they see fit.
-        \item \textit{Fit Criterion}: Users are able to upload files and images to the specific bill and the app updates it properly.
+        \item \textit{Description}: Users are able to assign bill to a roommate and split it amongst them unevenly.
+        \item \textit{Rationale}: This functionality will allow users to split unevenly if required. E.g. Splitting a dinner bill where each user ordered different items with different prices.
+        \item \textit{Fit Criterion}: 
+        \begin{enumerate}
+            \item The bill amount is correctly split amongst the roommates.
+            \item The total bill amount is shown on the screen and the amount required to pay by each roommate is displayed correctly.
+        \end{enumerate}
     \end{itemize}
     \item[BM7:] 
     \begin{itemize}
-        \item \textit{Description}: Users are able to search for any specific bill.
-        \item \textit{Rationale}: This will allow users to navigate and search for any specific bill allowing them to save time.
-        \item \textit{Fit Criterion}: Users are able to search bills by their name, category, etc
+        \item \textit{Description}: Users are able to settle expenses from bills.
+        \item \textit{Rationale}: This functionality will allow users to remove the expense after they paid it.
+        \item \textit{Fit Criterion}: 
+        \begin{enumerate}
+            \item Once their portion of the bill is paid off the it should show on screen that the amount the user owes for the bill should be 0.
+        \end{enumerate}
     \end{itemize}
 \end{itemize}
 
@@ -435,28 +428,16 @@ The following diagram depicts the main application interacting with external sys
 \noindent \begin{itemize}
     \item[SS1: ]
 \begin{itemize}
-    \item \textit{Description}: Roommates are able to navigate to the scheduling page to use the scheduling feature by tapping the scheduling icon from the home interface to get to the scheduling page.
-    \item \textit{Rationale}: This functionality allows the app to be divided into sections depending on feature for clear usability
-    \item \textit{Fit Criterion}: Users can clearly distinguish from which section they want to utilize.
-\end{itemize}
-    
-    \item[SS2: ]
-\begin{itemize}
-    \item \textit{Description}: Roommates are able to create new events and schedule them within the scheduling feature.
-    \item \textit{Rationale}: This functionality allows roommates to plan and coordinate activities efficiently.
-    \item \textit{Fit Criterion}:
-    \begin{enumerate}
-        \item Users can tap on "Create New Event"  within the Housemates app on the scheduling page.
-        \item Users are able fill out an event creation form with details such as event name, date, time, duration, and a brief description.
-        \item After creation, the new event is listed in the scheduling feature and is able to be seen be all the users/roommates.
-    \end{enumerate}
+    \item \textit{Description}: Users are able to create new events and schedule them within the scheduling feature.
+    \item \textit{Rationale}: This functionality allows users to plan and coordinate activities efficiently.
+    \item \textit{Fit Criterion}: Assigned users are able to see event on scheduling page.
 \end{itemize}
 
-\item[SS3: ]
+\item[SS2: ]
 \begin{itemize}
-    \item \textit{Description}: Users can view all the events scheduled by other roommates on their calendar within the scheduling feature.
-    \item \textit{Rationale}: Event visibility ensures that all roommates are aware of shared activities and can plan accordingly.
-    \item \textit{Fit Criterion}: Users can clearly see and distinguish between their personal events and shared roommate events on the calendar.
+    \item \textit{Description}: Users can view all the events scheduled by other users on their calendar within the scheduling feature.
+    \item \textit{Rationale}: Event visibility ensures that all users are aware of shared activities and can plan accordingly.
+    \item \textit{Fit Criterion}: Users can clearly see and distinguish between their personal events and shared user events on the calendar.
 \end{itemize}
     
 \end{itemize}
@@ -470,7 +451,7 @@ The following diagram depicts the main application interacting with external sys
     \end{itemize}
     \item[AS2:] 
     \begin{itemize}
-        \item \textit{Description}: Users are able to log in to the system by providing their email address/username and password.
+        \item \textit{Description}: Users are able to log in to the system by providing their email address and password.
         \item \textit{Rationale}: This requirement ensures that only authorized users are able to access their accounts and the features available in the app.
         \item \textit{Fit Criterion}: 
         \begin{enumerate}
@@ -495,21 +476,21 @@ The following diagram depicts the main application interacting with external sys
         \end{enumerate}
     \end{itemize}
     \item[AS5:] 
-    \begin{itemize}
+   \begin{itemize} \st{
         \item \textit{Description}: Users are able to recover their account in case of forgetting their log in information
         \item \textit{Rationale}: This requirement allows users a way to recover their account and seek support.
-        \item \textit{Fit Criterion}: Users are able to click a "Forgot Password" button if they forgot their password which sends an email to their provided email address.
+        \item \textit{Fit Criterion}: Users are able to click a "Forgot Password" button if they forgot their password which sends an email to their provided email address.}
     \end{itemize}
 \end{itemize}
-\subsection{Formal Specification of Cost Management System}
+\subsection{Formal Specification of Bill Management System}
 
-A critical aspect of this project involves calculating expenses associated to every housemate. In order to represent all costs and expense associated to every housemate in an accurate and timely fashion, we will formally represent this system using Module Interface Specification. \\
+A critical aspect of this project involves calculating expenses associated to every roommate. In order to represent all bills and expense associated to every roommate in an accurate and timely fashion, we will formally represent this system using Module Interface Specification. \\
 
 Let:
 
 \begin{itemize}
-    \item $I$ be the set of all individual items or bills.
-    \item $U$ be the set of all users. (Housemates/Roommates etc)
+    \item $I$ be the set of all individual items.
+    \item $U$ be the set of all users. 
     \item $C$ be the cost associated with each item.
     \item $S$ be a function that maps an item to its sharers.
     \item $P$ be a function that maps an item to its payment division.
@@ -543,7 +524,7 @@ The function $P$ assigns a portion of the item's cost to each user:
 P: I \times U \rightarrow R^+
 \]
 
-This means for each item $i$ and user $u$ in $U_i$, $P(i, u)$ returns the amount $u$ owes for $i$. For users not in $U_i$, $P(i, u) = 0$.
+This means for each item $i$ and user $u$ in $U_i$, $P(i, u)$ returns the amount $u$ owes for $i$. If a user $u$ does not share the cost of some item $i$, that is $u \not\in S(i)$, then $P(i, u) = 0$.
 
 \subsubsection*{Constraints}
 
@@ -589,16 +570,15 @@ The total amount owed by a user for all items is:
 
 \subsection{Style Requirements}
 
-N/A
 
-% \noindent \begin{itemize}
-%     \item[LF-S1:] 
-%     \begin{itemize}
-%         \item \textit{Description}: 
-%         \item \textit{Rationale}: 
-%         \item \textit{Fit Criterion}: 
-%     \end{itemize}
-% \end{itemize}
+\noindent \begin{itemize}
+    \item[LF-S1:] 
+    \begin{itemize}
+        \item \textit{Description}: All pages in the application must follow a similar user interface
+        \item \textit{Rationale}: This allows for consistency of style and less ambiguity.
+        \item \textit{Fit Criterion}: During beta testing, potential users able to determine whether pages looks are consistent.
+    \end{itemize}
+\end{itemize}
 
 \section{Usability and Humanity Requirements}
 \subsection{Ease of Use Requirements}
@@ -631,18 +611,7 @@ N/A
         \item \textit{Fit Criterion}: During testing a user should able to use all of the features of the application within the first 30 minutes of first opening the application.
     \end{itemize}
 \end{itemize}
-\subsection{Understandability and Politeness Requirements}
 
-N/A
-
-% \noindent \begin{itemize}
-%     \item[UH-UP1:] 
-%         \begin{itemize}
-%            \item \textit{Description}: 
-%             \item \textit{Rationale}: 
-%             \item \textit{Fit Criterion}: 
-%         \end{itemize}
-% \end{itemize}
 \subsection{Accessibility Requirements}
 \noindent \begin{itemize}
     \item[UH-A1:] 
@@ -663,9 +632,7 @@ N/A
             \item \textit{Fit Criterion}: The application should respond to user input within 0.5 seconds.
         \end{itemize}
 \end{itemize}
-\subsection{Safety-Critical Requirements}
 
-N/A
 
 % \noindent \begin{itemize}
 %     \item[P-SC1:] 
@@ -704,28 +671,16 @@ N/A
 \end{itemize}
 \subsection{Scalability or Extensibility Requirements}
 
-N/A
 
-% \noindent \begin{itemize}
-%     \item[P-SE1:] 
-%         \begin{itemize}
-%             \item \textit{Description}: 
-%             \item \textit{Rationale}: 
-%             \item \textit{Fit Criterion}: 
-%         \end{itemize}
-% \end{itemize}
-\subsection{Longevity Requirements}
+\noindent \begin{itemize}
+    \item[P-SE1:] 
+        \begin{itemize}
+            \item \textit{Description}: The application should horizontally scale when the number of users increase.
+            \item \textit{Rationale}: To ensure consistent performance among users.
+            \item \textit{Fit Criterion}: Use performance testing tool to check response times.
+        \end{itemize}
+\end{itemize}
 
-N/A
-
-% \noindent \begin{itemize}
-%     \item[P-L1:] 
-%         \begin{itemize}
-%             \item \textit{Description}: 
-%             \item \textit{Rationale}: 
-%             \item \textit{Fit Criterion}: 
-%         \end{itemize}
-% \end{itemize}
 
 
 \section{Operational and Environmental Requirements}
@@ -733,16 +688,12 @@ N/A
 \noindent \begin{itemize}
     \item[OE-PE1:] 
         \begin{itemize}
-            \item \textit{Description}: The system will be able to run on mobile devices through the Android OS.
-            \item \textit{Rationale}: Being available on mobile devices will allow the application to reach its target audience.
-            \item \textit{Fit Criterion}: The application is able to run on phones using Android OS.
+            \item \textit{Description}: The system will be able to run on devices that support a browser.
+            \item \textit{Rationale}: Being available on such devices will allow the application to reach a wide target audience.
+            \item \textit{Fit Criterion}: The application is able to run on phones, tablets and PCs.
         \end{itemize}
 \end{itemize}
-\subsection{Wider Environment Requirements}
-N/A
-\subsection{Requirements for Interfacing with Adjacent Systems}
 
-N/A
 
 % \noindent \begin{itemize}
 %     \item[OE-I1:] 
@@ -756,14 +707,12 @@ N/A
 \noindent \begin{itemize}
     \item[OE-PR1:] 
         \begin{itemize}
-            \item \textit{Description}: The application should be released on the Google Play store.
-            \item \textit{Rationale}: Being available on the Google Play store will allow the application to reach its target audience.
-            \item \textit{Fit Criterion}: The application is available on the Google Play store.
+            \item \textit{Description}: The application should be deployed on a server.
+            \item \textit{Rationale}: Being deployed entails that anyone on the internet can use the application.
+            \item \textit{Fit Criterion}: The application is accessible through its unique URL.
         \end{itemize}
 \end{itemize}
-\subsection{Release Requirements}
 
-N/A
 
 % \noindent \begin{itemize}
 %     \item[OE-R1:] 
@@ -785,30 +734,6 @@ N/A
         \end{itemize}
 \end{itemize}
 
-\subsection{Supportability Requirements}
-
-N/A
-
-% \noindent \begin{itemize}
-%     \item[M-S1:] 
-%         \begin{itemize}
-%            \item \textit{Description}: 
-%             \item \textit{Rationale}: 
-%             \item \textit{Fit Criterion}: 
-%         \end{itemize}
-% \end{itemize}
-\subsection{Adaptability Requirements}
-
-N/A
-
-% \noindent \begin{itemize}
-%     \item[M-A1:] 
-%         \begin{itemize}
-%            \item \textit{Description}: 
-%             \item \textit{Rationale}: 
-%             \item \textit{Fit Criterion}: 
-%         \end{itemize}
-% \end{itemize}
 
 \section{Security Requirements}
 \subsection{Access Requirements}
@@ -839,39 +764,30 @@ N/A
         \end{itemize}
 \end{itemize}
 
-\subsection{Audit Requirements}
-N/A
-\subsection{Immunity Requirements}
-N/A
 
 \section{Cultural Requirements}
-
-N/A
-
-% \noindent \begin{itemize}
-%     \item[C1:] 
-%         \begin{itemize}
-%             \item \textit{Description}: 
-%             \item \textit{Rationale}: 
-%             \item \textit{Fit Criterion}: 
-%         \end{itemize}
-% \end{itemize}
+\subsection{Neutrality Requirements}
+\noindent \begin{itemize}
+    \item[CR-N1:] 
+        \begin{itemize}
+            \item \textit{Description}: The user interface must not be indicative to any particular culture.
+            \item \textit{Rationale}: The symbols or colors in the app may offend some users.
+            \item \textit{Fit Criterion}: During field testing, users from different backgrounds can approve of the design.
+        \end{itemize}
+\end{itemize}
 
 \section{Compliance Requirements}
-\subsection{Legal Requirements}
-N/A
+
 \subsection{Standards Compliance Requirements}
 \noindent \begin{itemize}
     \item[C-SC1:] 
         \begin{itemize}
-            \item \textit{Description}: The application should follow the \href{https://play.google.com/about/developer-content-policy/}{Google Play development standards}.
-            \item \textit{Rationale}: The application must follow those standards in order to be released on the Google Play Store.
-            \item \textit{Fit Criterion}: The application is approved to be released on the Google Play Store.
+            \item \textit{Description}: The application should inform users beforehand about the data being collected and stored from them.
+            \item \textit{Rationale}: This allows for transparency between provider and users.
+            \item \textit{Fit Criterion}: A terms and condition page is displayed before they are able to interact with the application.
         \end{itemize}
 \end{itemize}
 
-\section{Open Issues}
-N/A
 
 \section{Off-the-Shelf Solutions}
 \subsection{Ready-Made Products}
@@ -897,15 +813,7 @@ Chore-Splitting
     \item \href{https://play.google.com/store/apps/details?id=flatify.com.flatify&pcampaignid=web_share}{Flatify}
 \end{itemize}
 
-\subsection{Reusable Components}
-N/A
-\subsection{Products That Can Be Copied}
 
-N/A
-
-\section{New Problems}
-
-N/A
 
 % \subsection{Effects on the Current Environment}
 % \lips
@@ -943,34 +851,70 @@ Final Documentation (Revision 1) & April 4 \\
 \end{center}
 
 \subsection{Planning of the Development Phases}
-N/A
 
-\section{Migration to the New Product}
+Below is a timeline of the development phases we wish to follow. \\
+\textbf{Phase 1: } Set-up a server in which multiple clients can communicate. This will be presented as POC Demo. \\
+\\
+\textbf{Phase 2: } Start Implementing core functionalities such as Task Management and Bill Management by designing a front-end and setting up a dasebase. \\
+\\
+\textbf{Phase 3:} After feedback front Rev 0 and carrying out testing, we will incorporate those changes into our application. \\
 
-N/A
 
-% \subsection{Requirements for Migration to the New Product}
-%  N/A
-% \subsection{Data That Has to be Modified or Translated for the New System}
-% N/A
 
-\section{Costs}
-N/A
+\begin{tikzpicture}
+% draw a horizontal line
+\draw (0,0) -- (15,0);
 
-\section{User Documentation and Training}
+% draw vertical lines
+\foreach \x in {1,4,7,10,13}
+\draw (\x cm,4pt) -- (\x cm,-4pt);
 
-N/A
+% draw nodes to add events
+\draw (1,0) node[below=3pt] {Nov 13} node[above=20pt] {POC Demo};
+\draw (4,0) node[below=3pt] {Jan 20} node[above=3pt] {Initial App};
+\draw (7,0) node[below=3pt] {Feb 16} node[above=20pt] {Rev 0 Demo};
+\draw (10,0) node[below=3pt] {March 17} node[above=3pt] {2nd Iteration of App};
+\draw (13,0) node[below=3pt] {March 27} node[above=20pt] {Final Demo};
 
-% \subsection{User Documentation Requirements}
-% \lips
-% \subsection{Training Requirements}
-% \lips
+\end{tikzpicture}
 
-\section{Waiting Room}
-N/A
 
-\section{Ideas for Solution}
-N/A
+\section{Traceability Matrices}
+The following traceability matrix provides a mapping of the functional requirements to the non-functional requirements. Req ID dhows the functional requirement IDs and criterion ID shows the non-functional IDs relating to a specific requirement.
+
+\begin{center}
+    \begin{tabular}{ | p{2cm} | p{8cm} | p{3cm} | }
+    \hline
+    Req.ID & Requirement Description & Criterion ID \\ \hline
+    TM1 & Users tasks displayed in task management system. & LF-A1, UH-A1  \\ \hline
+    TM2 & Users can create new tasks. & UH-L1, P-SL1  \\ \hline
+    TM3 & Users can assign tasks. & UH-L1 \\ \hline
+    TM4 & Users can mark tasks as completed. &  UH-A1 \\ \hline
+    BM1 & Users can create a new bill. & UH-L1, P-SL1  \\ \hline
+    BM2 & Users can assign bills among other users and split amongst them evenly. &  UH-E1, P-PA1 \\ \hline
+    BM3 & Users can modify already inputted bill details & P-RFT1  \\ \hline
+    BM4 & Users can categorize the bills. & UH-P1  \\ \hline
+    BM5 & Users can keep track of which bills have been paid off. & P-RFT1  \\ \hline
+    BM6 & Users can assign bills among other users and split amongst them unevenly. & UH-E1, P-PA1  \\ \hline
+    BM7 & Users can settle expenses from bills. & UH-E1, P-PA1  \\ \hline
+    SS1 & Users are able to create new events and schedule them within the scheduling feature. &  UH-P1 \\ \hline
+    SS2 & Users can view all events scheduled by other users on their calendar.  &  UH-A1, LF-S1 \\ \hline
+    AS1 & Users can create new account by providing their personal information. & S-IN1, S-P1  \\ \hline
+    AS2 & Users are able to log in to the system by providing their email address and password. & S-A1  \\ \hline
+    AS3 & Users are able to update their profile information. & UH-P1,S-IN1  \\ \hline
+    AS4 & Users are able to remove their account from the system. & UH-P1  \\ \hline
+
+
+
+
+
+
+
+
+    
+    \hline
+    \end{tabular}
+\end{center}
 
 \newpage{}
 \section*{Appendix --- Reflection}
@@ -1003,4 +947,4 @@ For each of the knowledge areas and skills identified in the previous question, 
 
 
 
-\end{document}
+\end{document} 
