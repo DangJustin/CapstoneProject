@@ -1,0 +1,12 @@
+name: housemates
+services:
+  frontend:
+    build:  ./src/rev0_demo/client
+    image:  dangjustin/housemates-frontend:v1.0
+    ports:
+      - "3000:3000"
+  backend:
+    build:  ./src/rev0_demo/server
+    image: dangjustin/housemates-server:v1.0
+    ports:
+      - "5000:5000"
