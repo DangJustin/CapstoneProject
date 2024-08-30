@@ -2,9 +2,8 @@
 ![image](https://github.com/DangJustin/CapstoneProject/assets/96737543/b62dc6c7-a710-4b41-9aa3-ac9d6f39ffc2)
 
 
-## [Demonstration](https://youtu.be/EKHBSMUGMCI?si=4gXm1RkcmU861mjQ)
-
----
+# Demonstration
+[![Video Link](http://markdown-videos-api.jorgenkh.no/youtube/EKHBSMUGMCI?width=1920&height=1080)](https://www.youtube.com/watch?v=EKHBSMUGMCI)
 
 # App Description
 
